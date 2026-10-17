@@ -1,0 +1,15 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Local runtime files
+*.log
+vendor/
+node_modules/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
