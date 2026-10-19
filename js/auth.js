@@ -12,34 +12,35 @@
   });
 
   form.addEventListener('submit', (event) => {
-    event.preventDefault();
     const message = document.getElementById('formMessage');
     message.className = 'form-message';
     message.textContent = '';
 
-    if (!form.reportValidity()) return;
+    if (!form.reportValidity()) {
+      event.preventDefault();
+      return;
+    }
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     if (!/@[^\s@]+\.[^\s@]+$/.test(email)) {
+      event.preventDefault();
       message.textContent = 'Enter a valid university email address.';
       return;
     }
     if (form.dataset.mode === 'signup') {
       const confirm = document.getElementById('confirmPassword').value;
       if (password.length < 8) {
+        event.preventDefault();
         message.textContent = 'Choose a password with at least 8 characters.';
         return;
       }
       if (password !== confirm) {
+        event.preventDefault();
         message.textContent = 'Your passwords do not match yet.';
         document.getElementById('confirmPassword').focus();
         return;
       }
-      message.textContent = 'Your details look good. Account creation will be connected to UTeM email verification.';
-    } else {
-      message.textContent = 'The sign-in form is ready to connect to your account service.';
     }
-    message.classList.add('success');
   });
 
   document.getElementById('googleButton')?.addEventListener('click', () => {

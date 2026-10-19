@@ -1,0 +1,11 @@
+<?php
+
+// Copy this file to database.local.php and update the local MySQL credentials.
+return [
+    'host' => '127.0.0.1',
+    'port' => '3301',
+    'name' => 'workshop',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8mb4',
+];

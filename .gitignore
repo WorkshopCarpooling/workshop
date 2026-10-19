@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+/config/maps.local.php
+/config/database.local.php
 
 # Local runtime files
 *.log

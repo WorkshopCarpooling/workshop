@@ -1,0 +1,4 @@
+<?php
+
+// Copy this file to maps.local.php and add a restricted Google Maps API key.
+return 'YOUR_GOOGLE_MAPS_API_KEY';

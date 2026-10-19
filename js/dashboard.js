@@ -9,6 +9,8 @@
   };
 
   document.getElementById('swapLocations')?.addEventListener('click', () => notify('Choose a pickup point when the campus locations are set up.'));
-  document.getElementById('searchRides')?.addEventListener('click', () => notify('No ride records are loaded yet. Ride search will work after the interface is connected to a data service.'));
-  document.getElementById('offerRide')?.addEventListener('click', () => notify('Ride publishing is an interface placeholder. Nothing is being saved.'));
+  document.getElementById('searchRides')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.location.assign('findride.php');
+  });
 })();
