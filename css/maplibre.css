@@ -1,0 +1,7 @@
+.pickup-pin-marker{display:block;position:relative;width:20px;height:20px;border:3px solid #fff;border-radius:50%;background:#4f805d;box-shadow:0 2px 8px #1c392d66;cursor:grab}
+.pickup-pin-marker::after{content:"";position:absolute;width:5px;height:5px;left:4px;top:4px;border-radius:50%;background:#fff}
+.pickup-pin-marker:active{cursor:grabbing}
+.booking-pickup-map{width:min(100%,380px);height:210px;margin-top:9px;overflow:hidden;border:1px solid #e6ebe3;border-radius:8px;background:#edf2e9}
+.booking-pickup-map[hidden]{display:none}
+.maplibregl-map{font-family:"DM Sans",sans-serif}
+.maplibregl-ctrl-attrib{font-size:10px}

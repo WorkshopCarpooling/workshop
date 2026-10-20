@@ -15,7 +15,6 @@
   let toastTimer;
   let pickupMap;
   let pickupMarker;
-  let leafletLoadPromise;
   let lastPlaceSearchAt = 0;
   const campusCenter = { lat: 2.3139, lng: 102.3183 };
 
@@ -38,8 +37,7 @@
     const longitude = typeof position.lng === 'function' ? position.lng() : position.lng;
     if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
 
-    const point = [latitude, longitude];
-    if (pickupMarker) pickupMarker.setLatLng(point);
+    if (pickupMarker) pickupMarker.setLngLat([longitude, latitude]);
     document.getElementById('pickupLatitude').value = latitude.toFixed(6);
     document.getElementById('pickupLongitude').value = longitude.toFixed(6);
     document.getElementById('pickupPointLabel').textContent = label;
@@ -54,9 +52,9 @@
       pickupMapPanel.hidden = false;
     }
     try {
-      await loadLeaflet();
+      await window.loadMapLibre();
       if (!pickupMap) initializePickupMap();
-      setTimeout(() => pickupMap.invalidateSize(), 0);
+      setTimeout(() => pickupMap.resize(), 0);
       return true;
     } catch {
       mapLoadError.hidden = false;
@@ -69,31 +67,26 @@
     const savedLat = Number(document.getElementById('pickupLatitude').value);
     const savedLng = Number(document.getElementById('pickupLongitude').value);
     const hasSavedPoint = Number.isFinite(savedLat) && Number.isFinite(savedLng);
-    const startPoint = hasSavedPoint ? [savedLat, savedLng] : [campusCenter.lat, campusCenter.lng];
-    pickupMap = L.map('pickupMap', { scrollWheelZoom: false }).setView(startPoint, hasSavedPoint ? 16 : 14);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const maplibregl = window.maplibregl;
+    const startPoint = hasSavedPoint ? [savedLng, savedLat] : [campusCenter.lng, campusCenter.lat];
+    pickupMap = new maplibregl.Map({
+      container: 'pickupMap',
+      style: window.createOpenStreetMapStyle(),
+      center: startPoint,
+      zoom: hasSavedPoint ? 16 : 14,
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>'
-    }).addTo(pickupMap);
-    pickupMarker = L.marker(startPoint, { draggable: true }).addTo(pickupMap);
-    pickupMarker.on('dragend', () => setPickupPoint(pickupMarker.getLatLng()));
-    pickupMap.on('click', (event) => setPickupPoint(event.latlng));
-    if (hasSavedPoint) setPickupPoint({ lat: savedLat, lng: savedLng }, document.getElementById('pickupPointLabel').textContent);
-  }
-
-  function loadLeaflet() {
-    if (window.L) return Promise.resolve();
-    if (leafletLoadPromise) return leafletLoadPromise;
-    leafletLoadPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-      script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
-      script.crossOrigin = '';
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.append(script);
+      scrollZoom: false,
+      attributionControl: true
     });
-    return leafletLoadPromise;
+    const markerElement = document.createElement('span');
+    markerElement.className = 'pickup-pin-marker';
+    markerElement.setAttribute('aria-label', 'Pickup point marker');
+    pickupMarker = new maplibregl.Marker({ element: markerElement, anchor: 'center', draggable: true })
+      .setLngLat(startPoint)
+      .addTo(pickupMap);
+    pickupMarker.on('dragend', () => setPickupPoint(pickupMarker.getLngLat()));
+    pickupMap.on('click', (event) => setPickupPoint(event.lngLat));
+    if (hasSavedPoint) setPickupPoint({ lat: savedLat, lng: savedLng }, document.getElementById('pickupPointLabel').textContent);
   }
 
   pickupSearchForm.addEventListener('submit', async (event) => {
@@ -131,8 +124,9 @@
         option.textContent = place.display_name;
         option.addEventListener('click', () => {
           const point = { lat: Number(place.lat), lng: Number(place.lon) };
-          pickupMap.setView([point.lat, point.lng], 17);
+          pickupMap.flyTo({ center: [point.lng, point.lat], zoom: 17 });
           setPickupPoint(point, place.display_name);
+          document.getElementById('pickupArea').value = place.display_name.split(',')[0].trim();
           pickupSearchStatus.textContent = 'Pickup point selected.';
           pickupSearchResults.replaceChildren();
         });
@@ -251,8 +245,8 @@
     empty.hidden = filteredRides.length > 0;
     count.textContent = `${filteredRides.length} ${filteredRides.length === 1 ? 'trip' : 'trips'}`;
     if (rides.length === 0) {
-      empty.querySelector('b').textContent = 'No eligible rides available';
-      empty.querySelector('p').textContent = 'Only future scheduled rides from active, admin-approved student or staff drivers appear here. Ask an approved driver to publish a ride, then refresh this page.';
+      empty.querySelector('b').textContent = 'No rides with seats available right now';
+      empty.querySelector('p').textContent = 'Only future scheduled rides from active, approved drivers with open seats appear here. Check again later or ask a driver to publish a future ride.';
     } else if (filteredRides.length === 0) {
       empty.querySelector('b').textContent = 'No rides match those filters';
       empty.querySelector('p').textContent = 'Try another pickup point, destination, departure date or time, or passenger count.';
@@ -276,6 +270,12 @@
       (!destination || ride.destination.toLocaleLowerCase().includes(destination))
     );
     renderRides(matches);
+    results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (matches.length === 0) {
+      notify(rides.length === 0
+        ? 'There are no future rides with open seats right now.'
+        : 'No rides match your search. Try changing the route, departure time, or passenger count.');
+    }
   });
 
   renderRides(rides);

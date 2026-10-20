@@ -20,7 +20,7 @@ Ride publishing, seat requests and decisions, passenger pickup pins, member appr
 
 Use PDO prepared statements for request values, validate on the server, and follow the existing session CSRF-token pattern for state-changing forms. Escape dynamic HTML with `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')`. Never add admin registration to public sign-up or commit credentials, personal data, `.env`, or `config/database.local.php`.
 
-The pickup map uses Leaflet and OpenStreetMap. Keep attribution visible and follow the tile and Nominatim policies linked in `README.md`.
+The pickup map uses MapLibre GL JS with OpenStreetMap tiles and Nominatim place search. Keep attribution visible and follow the tile and Nominatim policies linked in `README.md`.
 
 ## Checks
 
