@@ -4,13 +4,13 @@ Responsive RideUTeM campus carpool prototype with database-backed accounts and s
 
 ## Pages
 
-- `login.php` â€” UTeM community sign-in screen.
-- `signup.php` â€” registration for students and UTeM staff, with Passenger or Driver account selection.
-- `dashboard.php` â€” passenger overview with a scheduled-ride search interface.
-- `findride.php` â€” ride search interface with an OpenStreetMap pickup map.
-- `tracking.php` â€” a simulated route preview that demonstrates the intended driver-location interface without using GPS or storing location data.
-- `driver.php` â€” driver workspace to publish and manage scheduled rides.
-- `admin.php` â€” administrator dashboard with database-backed member approval; ride activity, complaints, and reporting remain interface previews.
+- `login.php` — UTeM community sign-in screen.
+- `signup.php` — registration for students and UTeM staff, with Passenger or Driver account selection.
+- `dashboard.php` — passenger overview with a scheduled-ride search interface.
+- `findride.php` — ride search interface with an OpenStreetMap pickup map.
+- `tracking.php` — a simulated route preview that demonstrates the intended driver-location interface without using GPS or storing location data.
+- `driver.php` — driver workspace to publish and manage scheduled rides.
+- `admin.php` — administrator dashboard with database-backed member approval; ride activity, complaints, and reporting remain interface previews.
 
 The interface follows the supplied car-mobility reference and the proposal's campus-only, scheduled carpooling scope. Driver ride listings, seat requests, passenger pickup pins, sign-up, sign-in, and account approval are saved in the `workshop` database. Live trip tracking remains a preview. Registration and sign-in use the `users` table in the `workshop` database. Email verification is not required; new student and staff accounts remain pending until an administrator approves them in `admin.php`. The admin page is protected by a server-side session role check; public registration cannot create admin accounts.
 
@@ -32,11 +32,12 @@ Place the folder under XAMPP's `htdocs` directory, start Apache, and open `http:
 ### MySQL account setup
 
 1. Start **Apache** and **MySQL** in XAMPP.
-2. For a new setup, import `database/schema.sql`. For an existing setup without driver features, run `database/driver_feature_migration.sql` once. If you already installed the driver feature, run `database/vehicle_details_migration.sql` once to add car type, colour, and number plate. These scripts preserve existing records.
+2. For a new setup, import `database/schema.sql`. For an existing setup without driver features, run `database/driver_feature_migration.sql` once. If you already installed the driver feature, run `database/vehicle_details_migration.sql` once to add car type, colour, and number plate, then run `database/vehicle_approval_migration.sql` once to add the vehicle review workflow. These migrations preserve existing records.
 3. The connection defaults to `127.0.0.1:3301`, database `workshop`, and the XAMPP `root` user with an empty password. If your local MySQL settings differ, copy `config/database.local.php.example` to `config/database.local.php` and edit that ignored local file.
-4. Register as a student or staff member and choose Passenger or Driver. Sign in as an administrator and approve the account from the Account approval section. Approval sets `account_status` to `active`; `email_verified` is not used for sign-in.
+4. Register as a student or staff member and choose Passenger or Driver. Sign in as an administrator and approve the account from the Account approval section. Approval sets `account_status` to `active`; email-link verification is not used for sign-in.
+5. A driver submits a vehicle from **My vehicles**. An administrator approves or declines it from **Vehicle approval**. Only approved vehicles can be selected when publishing rides. A declined vehicle can be corrected and submitted again.
 
-5. To grant admin access, promote a trusted account directly in MySQL. Never add an admin option to public sign-up:
+6. To grant admin access, promote a trusted account directly in MySQL. Never add an admin option to public sign-up:
 
    ```sql
    UPDATE users SET role = 'admin', email_verified = TRUE, account_status = 'active' WHERE email = 'admin@utem.edu.my';
@@ -46,7 +47,7 @@ The app redirects administrators to `admin.php`, drivers to `driver.php`, and pa
 
 ### OpenStreetMap pickup selection
 
-Passengers can search for a place or tap/drag the in-page map to set a pickup pin. The selected pin is saved with a seat request, and drivers can preview it inline in **My driving**. The map uses Leaflet and OpenStreetMap tiles and needs no Google API key. OpenStreetMap attribution remains visible. Place search is a one-time search button, not autocomplete; the public Nominatim service has a strict usage policy and a maximum of one request per second. The standard OpenStreetMap tile service is donation-supported, best-effort, and has usage rules, so use it lightly for this prototype. See the [tile policy](https://operations.osmfoundation.org/policies/tiles/) and [Nominatim policy](https://operations.osmfoundation.org/policies/nominatim/).
+Passengers can search for a place or tap/drag the in-page map to set a pickup pin. The selected pin is saved with a seat request, and drivers can preview it inline in **My driving**. The map uses MapLibre GL JS with OpenStreetMap tiles and does not require React or a Google API key. OpenStreetMap attribution remains visible. Place search is a one-time search button, not autocomplete; the public Nominatim service has a strict usage policy and a maximum of one request per second. The standard OpenStreetMap tile service is donation-supported, best-effort, and has usage rules, so use it lightly for this prototype. See the [tile policy](https://operations.osmfoundation.org/policies/tiles/) and [Nominatim policy](https://operations.osmfoundation.org/policies/nominatim/).
 
 ## Collaborate with GitHub
 
@@ -63,8 +64,9 @@ This local folder does not currently have a GitHub remote. Keep credentials and 
 
 - Access is for UTeM students and staff using an official UTeM email address.
 - Students and UTeM staff can sign up as passengers or drivers. Active, admin-approved driver accounts can publish scheduled trips and update their status; passengers can request seats and share a pickup pin.
+- Driver vehicle details are stored separately and require administrator approval before they can be used for a new ride.
 - Same-gender selection is treated as a matching preference and is not presented as a safety guarantee.
-- The product is for scheduled rides to and from UTeM through agreed pickup points, not door-to-door ride-hailing. Live GPS tracking and passenger booking requests are future work.
+- The product is for scheduled rides to and from UTeM through agreed pickup points, not door-to-door ride-hailing. Seat requests are implemented; live GPS tracking remains a preview.
 
 
 
