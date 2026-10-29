@@ -1,2 +1,3 @@
-﻿<?php
-require __DIR__ . '/app/controllers/dashboard.php';
+<?php
+
+require __DIR__ . '/public/index.php';

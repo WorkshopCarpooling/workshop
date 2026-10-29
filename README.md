@@ -1,53 +1,91 @@
-﻿# RideUTeM prototype screens
+# RideUTeM campus carpooling
 
-Responsive RideUTeM campus carpool prototype with database-backed accounts and scheduled driver ride publishing.
+Laravel campus carpooling for UTeM students.
 
-## Pages
+## Current journey and research features
 
-- `login.php` — UTeM community sign-in screen.
-- `signup.php` — registration for students and UTeM staff, with Passenger or Driver account selection.
-- `dashboard.php` — passenger overview with a scheduled-ride search interface.
-- `findride.php` — ride search interface with an OpenStreetMap pickup map.
-- `tracking.php` — a simulated route preview that demonstrates the intended driver-location interface without using GPS or storing location data.
-- `driver.php` — driver workspace to publish and manage scheduled rides.
-- `admin.php` — administrator dashboard with database-backed member approval; ride activity, complaints, and reporting remain interface previews.
+- The main navigation contains the signed-in name, student and passenger/driver role, and CSRF-protected logout.
+- Passengers allow device location for automatic pickup, then search a destination name and choose a result or drop-off pin. Pickup can be adjusted; denied/unavailable GPS falls back to a manual pickup pin. Drivers still publish their own start and destination using approved vehicles.
+- Driver location planning is visible before vehicle approval; publishing still requires an approved vehicle. The picker prefers Leaflet/OpenStreetMap even when a Google routing key is configured, so it does not wait for the Google Maps SDK.
+- Destination selection automatically searches compatible rides, ranked by straight-line distance to the driver's published starting point, then compatibility. This is scheduled-trip matching, not live driver tracking. Booking and approval recheck route feasibility and seats.
+- Student fares use RM1 + RM0.30/km, minimum RM2 and maximum RM12 per seat, rounded to 10 sen and capped at the driver's advertised contribution (including RM0 free rides). Configure rates in `config/carpool.php`. Driver distance is not charged. Per-seat and total prices are displayed; encrypted 10-minute quotes bind the price to the passenger, ride, coordinates, schedule and seat count. The saved quote is visible to both parties and is confirmed when the driver accepts.
+- Drivers review each passenger’s locations and deadlines. A* search plans the shortest feasible pickup/drop-off order under estimated distances, preserving pickup-before-drop-off and arrival deadlines. Bounded fallback plans are labelled. Google road routing is available with a configured API key.
+- Admin → Live drivers uses a dark map and white cars for active student trips. GPS starts automatically on the driver page. Cars animate between received fixes, with driver details, plate, accuracy and follow controls. Published starting points and stale locations are labelled separately; GPS failure reasons are displayed instead of inventing a live position.
+- Timetable connects weekly classes to one-time or optional recurring ride appointments, using route estimates and an arrival buffer. Weekly plans have an explicit end date and pause/resume controls. Generated appointments appear in Schedule with robot reminders. See [timetable journeys](docs/TIMETABLE_COMMUTES.md).
+- An LSTM training/export pipeline and PHP inference are included. No trained model or fabricated accuracy results are supplied. Collect your own observations, then follow [the research workflow](docs/RESEARCH.md).
 
-The interface follows the supplied car-mobility reference and the proposal's campus-only, scheduled carpooling scope. Driver ride listings, seat requests, passenger pickup pins, sign-up, sign-in, and account approval are saved in the `workshop` database. Live trip tracking remains a preview. Registration and sign-in use the `users` table in the `workshop` database. Email verification is not required; new student and staff accounts remain pending until an administrator approves them in `admin.php`. The admin page is protected by a server-side session role check; public registration cannot create admin accounts.
+## Responsive website and future mobile app
 
+The website includes responsive phone/tablet navigation and touch-friendly controls. App installation controls and prompts have been removed. See [future mobile app notes](docs/MOBILE.md) for the Laravel API and Flutter/native Android approach. Mobile app development is a future option; no mobile app is being built now.
 
-## MVC structure
-
-Application code is organized under `app/`:
-
-- `app/controllers/` handles page requests, validation, access checks, and the data needed by each page.
-- `app/models/` contains database access (`Database.php`).
-- `app/views/` contains the HTML templates rendered by controllers.
-- `app/core/` contains shared session and authorization helpers.
-
-The existing root-level PHP URLs remain as small entry points for compatibility with current links and local XAMPP setup. Static assets, configuration, and SQL files remain in their existing folders.
 ## Run locally
 
-Place the folder under XAMPP's `htdocs` directory, start Apache, and open `http://localhost/workshop/login.php` or `http://localhost/workshop/signup.php`. Open the passenger dashboard at `http://localhost/workshop/dashboard.php`, ride search at `http://localhost/workshop/findride.php`, driver workspace at `http://localhost/workshop/driver.php`, and admin page at `http://localhost/workshop/admin.php`. The location interface preview is at `http://localhost/workshop/tracking.php`.
+## Separate role pages and carbon estimates
 
-### MySQL account setup
+Navigation opens distinct server-rendered pages. Passenger pages are Overview, Find Ride, Bookings, Schedule, History, Carbon, Timetable and Research. Driver pages add Offer Ride, Seat Requests and Vehicles. Admin pages are Overview, Live Drivers, Ride Activity, Members, Vehicles, Carbon Reports and Research. Existing `.php` entry URLs still open the corresponding overview. Active-trip GPS is mounted once on each driver page and continues after moving between those pages.
 
-1. Start **Apache** and **MySQL** in XAMPP.
-2. For a new setup, import `database/schema.sql`. For an existing setup without driver features, run `database/driver_feature_migration.sql` once. If you already installed the driver feature, run `database/vehicle_details_migration.sql` once to add car type, colour, and number plate, then run `database/vehicle_approval_migration.sql` once to add the vehicle review workflow. These migrations preserve existing records.
-3. The connection defaults to `127.0.0.1:3301`, database `workshop`, and the XAMPP `root` user with an empty password. If your local MySQL settings differ, copy `config/database.local.php.example` to `config/database.local.php` and edit that ignored local file.
-4. Register as a student or staff member and choose Passenger or Driver. Sign in as an administrator and approve the account from the Account approval section. Approval sets `account_status` to `active`; email-link verification is not used for sign-in.
-5. A driver submits a vehicle from **My vehicles**. An administrator approves or declines it from **Vehicle approval**. Only approved vehicles can be selected when publishing rides. A declined vehicle can be corrected and submitted again.
+To try the carbon workflow with your own trips:
 
-6. To grant admin access, promote a trusted account directly in MySQL. Never add an admin option to public sign-up:
+1. Driver: **Vehicles** → save fuel type and your reported consumption in L/100 km. No fuel consumption is assumed for existing vehicles. Unsupported fuels can still use the ride system but do not get a carbon estimate.
+2. Passenger: answer the alternative-travel question while requesting seats, or edit it later on **Carbon**. Separate-car alternatives require a car count, fuel and consumption; a booked seat is not automatically an avoided car.
+3. Driver: complete the trip in **Schedule**, then open **Carbon**. Enter whole-trip kilometres including pickup detours, distance source, fuel consumption, and whether you would have travelled anyway. For an original trip that would happen anyway, also enter the original-route distance without pickup detours.
+4. Save the estimate. Admin **Carbon Reports** totals each completed trip once and exports a CSV with source/version information. Passenger Carbon shows whole-trip results for rides they joined, not individual carbon credits.
 
-   ```sql
-   UPDATE users SET role = 'admin', email_verified = TRUE, account_status = 'active' WHERE email = 'admin@utem.edu.my';
-   ```
+Calculation: `kg CO2e = km × L/100 km / 100 × kg CO2e/L`. Net avoided emissions equal the driver's original trip plus supported passenger alternatives minus shared-vehicle emissions. Negative differences are retained. Unknown, bus, motorcycle and other-carpool alternatives leave the comparison incomplete; walking/cycling and not making the journey contribute zero. Passenger alternative-car distances use their reported alternative distance, falling back to the saved fare quote, and may be approximate. These are user-input estimates of fuel combustion, excluding vehicle manufacture and upstream fuel production.
 
-The app redirects administrators to `admin.php`, drivers to `driver.php`, and passengers to `dashboard.php`. A commuter opening `admin.php` is redirected back to the dashboard.
+Fuel factors are pinned to [Capital Markets Malaysia's July 2025 SME GHG Calculator User Guide, page 9](https://www.capitalmarketsmalaysia.com/sedg-ghg-calculator/pdf/User-Guide_SEDG-GHG-Emissions-Calculator.pdf): petrol 2.288, unblended diesel 2.909, diesel B7 2.705, B10 2.618 and B20 2.327 kg CO2e/L. They already include CO2-equivalent conversion. Snapshots preserve their inputs, factor and method `CMM2025-MOBILE-v1`. Updating a passenger alternative marks that trip's comparison for recalculation and removes it from totals until reviewed. Changing a vehicle profile does not rewrite historical snapshots.
 
-### OpenStreetMap pickup selection
+Install the nullable fuel/baseline fields and empty report table with `php artisan commute:install-carbon` (also included in `commute:install-schema`). The installer does not invent historical fuel, travel-mode or carbon results.
 
-Passengers can search for a place or tap/drag the in-page map to set a pickup pin. The selected pin is saved with a seat request, and drivers can preview it inline in **My driving**. The map uses MapLibre GL JS with OpenStreetMap tiles and does not require React or a Google API key. OpenStreetMap attribution remains visible. Place search is a one-time search button, not autocomplete; the public Nominatim service has a strict usage policy and a maximum of one request per second. The standard OpenStreetMap tile service is donation-supported, best-effort, and has usage rules, so use it lightly for this prototype. See the [tile policy](https://operations.osmfoundation.org/policies/tiles/) and [Nominatim policy](https://operations.osmfoundation.org/policies/nominatim/).
+## Local startup
+
+With Laragon, use the project at `C:\laragon\www\workshop`, start Apache and MySQL from Laragon, then open [RideUTeM](http://localhost/workshop/login.php). Laragon's local `.env` uses `DB_PORT=3306`, `DB_DATABASE=workshop`, and the persistent file cache/session drivers. Existing URLs such as dashboard.php, findride.php, driver.php and admin.php are preserved. The separate `C:\xampp\htdocs\workshop` checkout is not served by Laragon; changes must reach the Laragon project before they appear in the browser.
+
+For a fresh database, import database/schema.sql, then run:
+
+```powershell
+php artisan commute:install-schema
+```
+
+The installer adds nullable journey fields and empty research tables. It does not insert accounts, sample routes, bookings or research observations, and preserves existing records. Fresh schema SQL also contains no sample INSERT statements. Legacy survey data remains separate from the new commute_requirement_surveys table.
+
+For an existing installation that already has journey fields, add only the four nullable booking fare columns with `php artisan commute:install-fares`. Existing bookings keep their original advertised contribution; new requests save their quoted distance and price. Requests remain unavailable until these columns exist.
+
+The connection defaults to database workshop at 127.0.0.1:3301. Configure your own credentials in .env or the ignored config/database.local.php. Configure GOOGLE_MAPS_API_KEY to enable Google Maps and Routes; otherwise the picker uses Leaflet/OpenStreetMap and estimates are labelled as approximate. Dates use Asia/Kuala_Lumpur.
+
+Google road routing sends pickup, destination and requested intermediate coordinates to Google's configured Routes API. Road distance is used for fares when available; outages or a missing key produce an explicitly labelled distance estimate (straight-line distance × 1.28). Automatic pickup requires browser location permission and HTTPS or localhost. A* is classical AI search over stop-order states, using straight-line distance × 1.28 and a minimum-spanning-tree lower bound. It does not search a street graph or use a trained model. Road directions still come from the configured provider.
+
+Register your own student account as Passenger or Driver. An existing administrator approves accounts and vehicles. Public registration cannot create administrators. Promote only a trusted account directly in your own database when setting up an initial administrator.
+
+The commuter scope is UTeM students only. Staff registrations and staff commuter access are disabled; existing records are preserved. Student status is reviewed manually by the administrator before approval; the app does not currently verify enrolment through a university identity service.
+
+For live tracking, the driver presses **Start trip**. GPS starts automatically whenever an in-progress trip is open on the driver page, with no separate Share location step. Browser location permission is still required and cannot be bypassed. Admin opens **Live drivers**, which uses a dark map and white car icons. Before GPS arrives, a known published starting point is labelled separately; unknown coordinates are never invented. GPS blocks and permission errors appear on the admin list. Leaving the driver page retains the last fix as stale for up to ten minutes; completing a trip clears it. Use separate browser/private sessions for driver and admin. On the same computer use `http://localhost/workshop/driver.php` for GPS: plain HTTP `workshop.test` is not a secure browser context. Phones need HTTPS. GPS uploads and admin refreshes are limited to roughly five-second intervals. Driver GPS needs HTTPS (localhost is allowed on the same device); a phone visiting a plain HTTP LAN address cannot share location. Background/locked phone browsers may pause updates, which the map labels as stale. **Stop sharing** or completing the trip removes the cached location. Only the latest fix is cached for ten minutes, with no location history; page-close status reporting is best effort. Keep the default persistent file cache (or a shared persistent cache for multiple servers) rather than an array/null cache in production. This works without a Google API key using Leaflet/OpenStreetMap tiles; internet is required for those map assets. The passenger tracking page remains a separately labelled preview.
+
+## Verification
+
+```powershell
+php tests/astar_pathfinding.php
+php tests/live_tracking.php
+node tests/live_tracking_browser.cjs
+php tests/commute_features.php
+php tests/student_fares.php
+node tests/student_journey_browser.cjs
+php tests/read_only_http.php
+php artisan view:cache
+```
+
+The HTTP test uses existing active passenger, driver and administrator accounts and checks that record counts remain unchanged. No test accounts or records are created. The map/tracking simulation remains explicitly labelled as a preview; it is not actual GPS tracking or measured travel-time data.
+
+## Application structure
+
+- routes/web.php: authenticated routes, role restrictions and CSRF-protected actions.
+- app/Http/Controllers: page and action handling.
+- app/Services: journey validation, compatibility, precedence-aware route insertion and LSTM inference.
+- resources/views: Blade pages and shared navigation/location picker.
+- public/css and public/js: served browser assets.
+- database/migrations: schema-only journey/research extension.
+- ml: training and chronological baseline comparison on collected observations.
+- docs/RESEARCH.md: objective mapping, model training, evaluation and limitations.
 
 ## Collaborate with GitHub
 
@@ -59,16 +97,4 @@ To work with teammates:
 4. Have teammates clone the repository, create a branch per change, and open pull requests into `main`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow.
 
 This local folder does not currently have a GitHub remote. Keep credentials and local configuration out of the repository.
-
-## Proposal details reflected in the screens
-
-- Access is for UTeM students and staff using an official UTeM email address.
-- Students and UTeM staff can sign up as passengers or drivers. Active, admin-approved driver accounts can publish scheduled trips and update their status; passengers can request seats and share a pickup pin.
-- Driver vehicle details are stored separately and require administrator approval before they can be used for a new ride.
-- Same-gender selection is treated as a matching preference and is not presented as a safety guarantee.
-- The product is for scheduled rides to and from UTeM through agreed pickup points, not door-to-door ride-hailing. Seat requests are implemented; live GPS tracking remains a preview.
-
-
-
-
 

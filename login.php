@@ -1,3 +1,3 @@
-﻿<?php
-$page = 'login';
-require __DIR__ . '/app/controllers/auth-page.php';
+<?php
+
+require __DIR__ . '/public/index.php';
