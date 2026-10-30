@@ -300,12 +300,4 @@ textarea {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
-}
+/* Keep wind, car motion, and navbar underline animations active on all OS settings */

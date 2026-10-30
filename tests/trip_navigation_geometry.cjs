@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const ctx={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/js/trip-navigation-geometry.js'),'utf8'),ctx);const G=ctx.window.NavigationGeometry;
+const a={lat:2.31,lng:102.31},b={lat:2.311,lng:102.31},c={lat:2.311,lng:102.311},p=G.route([a,b,c]);
+assert.ok(G.distance(a,b)>110&&G.distance(a,b)<112);assert.ok(G.bearing(a,b)<1);
+const halfway=G.at(p,G.distance(a,b)/2);assert.ok(Math.abs(halfway.lat-2.3105)<1e-6&&halfway.lng===a.lng);
+const corner=G.at(p,G.distance(a,b)+G.distance(b,c)/2);assert.ok(corner.lat===b.lat&&corner.lng>b.lng&&corner.lng<c.lng);
+const projection=G.project(p,{lat:2.3105,lng:102.31001});assert.ok(projection.distance<2&&Math.abs(projection.along-55.6)<1);
+const loop=G.route([a,b,a]);const later=G.project(loop,a,G.distance(a,b));assert.ok(later.along>G.distance(a,b));
+assert.ok(G.at(p,-1).lat===a.lat&&G.at(p,p.total+100).lng===c.lng);
+console.log('7 live-navigation distance, road interpolation, heading and loop-ordering checks passed.');

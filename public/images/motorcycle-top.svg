@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 330" fill="none">
+  <!-- Top view: blue motorcycle, red flame tank, brown-haired rider and dark jacket. -->
+  <defs>
+    <linearGradient id="bikeBlue" x1="47" y1="0" x2="110" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#abc9e7"/><stop offset=".48" stop-color="#83acd5"/><stop offset="1" stop-color="#5f89b7"/></linearGradient>
+    <linearGradient id="bikeRed" x1="57" y1="112" x2="105" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#fa4c2a"/><stop offset="1" stop-color="#ce291f"/></linearGradient>
+    <linearGradient id="riderJacket" x1="39" y1="148" x2="114" y2="226" gradientUnits="userSpaceOnUse"><stop stop-color="#273946"/><stop offset="1" stop-color="#3e505b"/></linearGradient>
+  </defs>
+  <rect x="69" y="5" width="22" height="59" rx="10" fill="#293844"/>
+  <path d="M68 20h24v44H68z" fill="#354b5b"/>
+  <path d="M61 38q0-20 19-20t19 20v43H61z" fill="url(#bikeBlue)"/>
+  <path d="M68 22v47" stroke="#c4daf0" stroke-width="7" opacity=".6"/>
+  <path d="M40 47h80" stroke="#3e5261" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="40" cy="47" rx="4.5" ry="7" fill="#30404c"/><path d="M35.5 46a4.5 6 0 0 1 9 0" fill="#ffb924"/>
+  <ellipse cx="120" cy="47" rx="4.5" ry="7" fill="#30404c"/><path d="M115.5 46a4.5 6 0 0 1 9 0" fill="#ffb924"/>
+  <rect x="58" y="66" width="44" height="24" rx="9" fill="#41596a"/>
+  <rect x="61" y="70" width="38" height="15" rx="6" fill="#314552"/>
+  <ellipse cx="70" cy="78" rx="7" ry="5" fill="#21333e"/><ellipse cx="89" cy="78" rx="7" ry="5" fill="#21333e"/>
+  <path d="M76 88h8v29h-8z" fill="#2c414b"/>
+  <path d="M54 107q-9-23-18-23H25m81 23q9-23 18-23h11" stroke="#273744" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="19" cy="84" rx="11" ry="5" fill="#88a9cf"/><path d="M8 83q10-11 21-2" fill="#6986a9"/>
+  <ellipse cx="141" cy="84" rx="11" ry="5" fill="#88a9cf"/><path d="M131 81q11-9 21 2" fill="#6986a9"/>
+  <path d="M57 99q-7-3-12 9l7 21h14m37-30q7-3 12 9l-7 21H94" fill="#51475c"/>
+  <path d="M53 120q-6 32-3 72l7 53h46l7-53q3-40-3-72z" fill="#2d93c3"/>
+  <path d="M80 97c-27 0-31 31-28 64l8 43h40l8-43c3-33-1-64-28-64" fill="url(#bikeRed)"/>
+  <path d="M86 101c13 6 18 24 17 47l-5 46h7l5-42c1-29-7-48-24-51" fill="#bc271f"/>
+  <path d="m55 132 9-6 5 5-8 4-2 16 8-4-8 26-6-21zM105 132l-9-6-5 5 8 4 2 16-8-4 8 26 6-21z" fill="#ffce32"/>
+  <path d="m68 158 5-3-1 9 8-5 8 5-1-9 5 3-2 15H70z" fill="#ffb43a"/>
+  <circle cx="80" cy="133" r="9" fill="#394d58"/>
+  <path d="M64 236h32l8 68H56z" fill="url(#bikeBlue)"/>
+  <path d="M69 292q11-8 22 0v23H69z" fill="#8db5da"/>
+  <rect x="72" y="302" width="16" height="23" rx="7" fill="#2c3e48"/>
+  <path d="m51 222-9 12-4 70 11 10 11-69m49-23 9 12 4 70-11 10-11-69" fill="#8baed4"/>
+  <path d="m42 237-4 67 10-1 4-70m66 4 4 67-10-1-4-70" fill="#6e9bc9"/>
+  <path d="m43 303-3 25 11-4 1-24m65 3 3 25-11-4-1-24" fill="#85abd2"/>
+  <path d="M50 233c0-23 12-33 30-33s30 10 30 33c0 27-9 54-30 54s-30-27-30-54" fill="#344653"/>
+  <path d="M52 239c1 26 10 47 28 47s27-21 28-47" stroke="#253741" stroke-width="2"/>
+  <path d="M55 207q25-9 50 0v12q-25 11-50 0z" fill="#267abb"/>
+  <path d="M56 178q24-9 48 0l8 24q-3 13-32 14t-32-14z" fill="url(#riderJacket)"/>
+  <path d="M57 184C36 172 23 149 20 112" stroke="#1e2d39" stroke-width="12" stroke-linecap="round"/>
+  <path d="M103 184c21-12 34-35 37-72" stroke="#1e2d39" stroke-width="12" stroke-linecap="round"/>
+  <path d="M57 181C37 169 27 148 24 118m79 63c20-12 30-33 33-63" stroke="#3b4b58" stroke-width="7" stroke-linecap="round"/>
+  <path d="m18 112-2-12 8-10 9 2 4 10-7 11zM142 112l2-12-8-10-9 2-4 10 7 11z" fill="#f2ab84"/>
+  <path d="m14 98 7-11 10 1m115 10-7-11-10 1" stroke="#87abd1" stroke-width="2" stroke-linecap="round"/>
+  <path d="m30 101 33-20m67 20L97 81" stroke="#9cb8d1" stroke-width="6" stroke-linecap="round"/>
+  <path d="m28 99 3 6m101-6-3 6" stroke="#304653" stroke-width="7" stroke-linecap="round"/>
+  <path d="M58 174c-4-10-1-29 8-34q14-9 29 0c10 6 13 24 8 34l-9 16H66z" fill="#713a35"/>
+  <ellipse cx="80" cy="157" rx="19" ry="15" fill="#9e4e43"/>
+  <ellipse cx="78" cy="154" rx="13" ry="9" fill="#b25b4e"/>
+  <path d="m60 164 7 7 1 13 7-4 7 9 3-11 10 8 1-12 7-10-3 19-8 8-23-1-11-12z" fill="#653734"/>
+  <path d="M51 312h58" stroke="#455764" stroke-width="3"/>
+  <ellipse cx="50" cy="312" rx="4" ry="6" fill="#263b49"/><path d="M46 312h8v4h-8z" fill="#f3c440"/>
+  <ellipse cx="110" cy="312" rx="4" ry="6" fill="#263b49"/><path d="M106 312h8v4h-8z" fill="#f3c440"/>
+  <path d="M69 315h22" stroke="#f04931" stroke-width="3" stroke-linecap="round"/>
+</svg>

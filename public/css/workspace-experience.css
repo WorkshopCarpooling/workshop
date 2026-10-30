@@ -1,0 +1,87 @@
+/* Shared RideUTeM workspace: forest, cream, sage and warm orange. */
+body.app-page{background:var(--brand-cream);color:var(--brand-ink);color-scheme:light}
+.app-page .app-shell{min-height:100dvh}
+.app-page .sidebar{position:fixed;inset:0 auto 0 0;width:212px;height:100dvh;min-height:0;padding:29px 18px 20px;display:flex!important;flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:0;background:#F9FAF3;border:0;border-right:1px solid var(--brand-line);z-index:30}
+.app-page .sidebar .app-brand{flex:none;padding:0 8px;font-size:23px;gap:2px}
+.app-page .sidebar .app-brand .brand-mark{background:#E2EBD8;border-radius:10px;color:var(--brand-forest)}
+.app-page .sidebar .workspace-nav-label{font-size:8px;line-height:1.5;letter-spacing:1.7px;color:#7B8A71;font-weight:600;margin:38px 12px 15px}
+.app-page .sidebar .side-nav{display:flex;flex-direction:column;align-items:stretch;gap:6px;flex:none;flex-wrap:nowrap}
+.app-page .sidebar .side-link{font-size:12px;min-height:45px;padding:12px 13px;gap:12px;border-radius:10px;color:#687C62;justify-content:flex-start;transition:background .2s,color .2s,box-shadow .2s}
+.app-page .sidebar .side-link>span{display:grid;place-items:center;color:#7D926C;width:18px;height:18px;flex:none}
+.app-page .sidebar .side-link svg{width:18px;height:18px}
+.app-page .sidebar .side-link.active{background:var(--brand-forest);color:#F4F5EC;box-shadow:0 4px 12px #254B3912}
+.app-page .sidebar .side-link.active>span{color:#CBD8BD}
+.app-page .sidebar .side-link:hover{background:#E8EEDD;color:var(--brand-forest);transform:none}
+.app-page .sidebar .side-link.active:hover{background:#355F47;color:#F4F5EC}
+.workspace-sidebar-note{display:flex;gap:9px;align-items:flex-start;margin:auto 9px 20px;padding-top:26px;color:#6C7F61;font-size:9px;line-height:1.6}
+.workspace-sidebar-note small{display:block;color:#87967B;font-size:8px;margin-top:3px}
+.workspace-community-dot{width:5px;height:5px;border-radius:50%;background:#C98148;flex:none;margin-top:5px}
+.app-page .sidebar .account-nav{margin:0;padding:15px 0 0;border-top:1px solid var(--brand-line);width:100%;flex:none;gap:0}
+.app-page .sidebar .account-nav .profile-menu{width:100%;min-width:0;max-width:none}
+.app-page .sidebar .profile-trigger{background:transparent;border:0;padding:5px 1px;color:var(--brand-forest);border-radius:8px;min-height:46px;gap:9px}
+.app-page .sidebar .user-avatar{background:#DCE7D1;color:var(--brand-forest);width:31px;height:31px;flex:none}
+.app-page .sidebar .account-nav-name{max-width:130px;min-width:0}
+.app-page .sidebar .account-nav-name b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-page .sidebar .account-nav-name small{font-size:8px;color:#7C8E71}
+.app-page .sidebar .profile-menu-panel{top:auto;bottom:calc(100% + 12px);left:0;right:auto;min-width:174px;background:var(--brand-surface);border-color:var(--brand-line);box-shadow:0 10px 35px #254B3918}
+.app-page .main-area{margin-left:212px!important;min-height:100dvh}
+.app-page .topbar{min-height:63px;padding:18px 34px;border-bottom:1px solid #D9E0CE99;background:transparent}
+.app-page .breadcrumb{font-size:10px;color:#7C8B71}.app-page .breadcrumb span{color:#A1AF96;padding-inline:9px}
+.app-page .topbar:after{content:'UTeM COMMUNITY';margin-left:auto;font-size:7px;letter-spacing:1.7px;color:#859579}
+.app-page .page-content{max-width:1450px;padding:29px 34px 30px;margin-inline:auto}
+.app-page .welcome-row{margin-bottom:25px;gap:18px}.app-page .welcome-row h1{font-size:clamp(26px,2.6vw,34px);font-weight:600;letter-spacing:-1.1px;line-height:1.25}
+.app-page .subtitle{font-size:12px;line-height:1.8;color:var(--brand-muted);max-width:750px}
+.app-page :is(.content-card,.stat-card,.admin-stat,.workspace-tile,.find-search-card,.ride-result-card,.map-card,.trip-status-card,.privacy-card,.route-steps-card,.complaint-card,.members-card){border-radius:16px;border-color:var(--brand-line);box-shadow:0 4px 16px #254B3903}
+.app-page .content-card h2{font-size:17px;letter-spacing:-.4px;font-weight:600}.app-page .content-card p{line-height:1.8}
+.app-page :is(.solid-button,.outline-button,.find-submit,.search-button,.ride-action-button,.review-button,.approve-button,.overview-primary){border-radius:10px;transition:transform .2s,background .2s,box-shadow .2s}
+.app-page .workspace-tile{border-radius:15px;padding:22px;transition:transform .22s,border-color .22s,box-shadow .22s}
+.app-page :is(.workspace-stats article,.research-stats>div){border-radius:12px;background:#E9EEDD;border-color:var(--brand-line)}
+.app-page .dashboard-footer{border-color:var(--brand-line);color:#829576;font-size:9px;line-height:1.8}
+.app-page .schedule-robot-launcher{width:auto;min-height:36px;border-radius:20px}.app-page .schedule-robot-launcher-label{background:var(--brand-surface);color:var(--brand-forest);border-color:var(--brand-line);font-size:9px;padding:9px 13px;box-shadow:0 4px 16px #254B3912}.app-page .schedule-robot-launcher-label i{color:var(--brand-orange)}
+/* The overview uses the same layout and original palette as every workspace. */
+.overview-sidebar-note,.overview-nav-label{display:none}
+.overview-metric{border-radius:14px;min-height:122px;transition:border-color .22s,box-shadow .22s,transform .22s}
+.overview-metric:first-child{background:linear-gradient(115deg,#E7EEDC,#F6F8EE);border-color:#CCDABB}
+.overview-card{border-radius:16px}.overview-primary{color:#F4F5EC;background:#254B39;border-color:#254B39}.overview-intro h1{font-weight:600}.overview-eyebrow{display:flex;align-items:center;gap:7px}.overview-eyebrow>i{width:5px;height:5px;border-radius:50%;background:#C98148}
+.empty-route-art>svg>path:first-child{animation:workspace-route-flow 16s linear 2}
+/* One animation system replaces the previous whole-page slide. Nothing is hidden
+   unless JavaScript has actively started a finite reveal animation. */
+.motion-enter .app-page .page-content{animation:none}
+html .app-page .interface-reveal{animation:workspace-reveal .65s cubic-bezier(.2,.75,.25,1) var(--reveal-delay,0ms) backwards}
+.app-page .interface-reveal .journey-route-points>div:first-child:after{transform-origin:top;animation:workspace-route-grow .8s ease-out .2s backwards}
+.app-page .interface-reveal :is(.progress-track i,.stat-progress i){transform-origin:left;animation:workspace-progress .85s cubic-bezier(.2,.7,.25,1) .15s backwards}
+.app-page .profile-menu[open] .profile-menu-panel{animation:workspace-menu .18s ease-out backwards;transform-origin:bottom center}
+.app-page .side-link.active>span{animation:workspace-nav-in .5s ease-out backwards}
+.interface-ripple-host{position:relative;overflow:hidden;isolation:isolate}
+.interface-ripple{position:absolute;left:var(--ripple-x);top:var(--ripple-y);width:var(--ripple-size);height:var(--ripple-size);border-radius:50%;background:currentColor;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(0);animation:workspace-ripple .55s ease-out forwards}
+.app-page :is(input,select,textarea){transition:border-color .2s,box-shadow .2s,background-color .2s}.app-page :is(input,select,textarea):focus{box-shadow:0 0 0 3px #CBD8BD4D}
+.app-page :is(.overview-primary,.solid-button,.find-submit,.search-button)>svg{transition:transform .22s}
+/* Preserve the existing two-shot cinematic car sequence, adding only an arrival. */
+.landing-page .system-title{animation:workspace-title .9s cubic-bezier(.2,.75,.25,1) backwards}.landing-page .landing-button{animation:workspace-reveal .7s ease-out .22s backwards;overflow:hidden;isolation:isolate}
+.campus-auth-page .auth-card{animation:workspace-auth-in .75s cubic-bezier(.2,.75,.25,1) backwards}.campus-auth-page .auth-form>.field,.campus-auth-page .auth-form>.fields-grid,.campus-auth-page .submit-button{animation:workspace-reveal .65s ease-out .12s backwards}
+.campus-auth-page .auth-form>:nth-child(2){animation-delay:.18s}.campus-auth-page .auth-form>:nth-child(3){animation-delay:.23s}.campus-auth-page .auth-form>:nth-child(4){animation-delay:.28s}
+.motion-tab-hidden :is(.empty-route-art>svg>path,.welcome-display-image,.welcome-display-light,.campus-backdrop>img){animation-play-state:paused}
+@keyframes workspace-reveal{from{opacity:.2;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes workspace-title{from{opacity:0;transform:translateY(14px);letter-spacing:-2px}to{opacity:1;transform:translateY(0)}}
+@keyframes workspace-auth-in{from{opacity:.25;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes workspace-route-flow{to{stroke-dashoffset:-128}}
+@keyframes workspace-route-grow{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:1}}
+@keyframes workspace-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes workspace-menu{from{opacity:0;transform:translateY(5px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes workspace-nav-in{from{opacity:.3;transform:translateX(-4px)}to{opacity:1;transform:none}}
+@keyframes workspace-ripple{0%{opacity:.18;transform:translate(-50%,-50%) scale(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+@media(hover:hover){.app-page .workspace-tile:hover,.overview-metric:hover{transform:translateY(-3px);border-color:#B6C7A5;box-shadow:0 8px 22px #254B3909}.app-page :is(.solid-button,.outline-button,.find-submit,.search-button,.overview-primary):hover{transform:translateY(-2px);box-shadow:0 5px 13px #254B3915}.app-page .overview-primary:hover>svg{transform:translate(2px,-2px)}.app-page .overview-tools>a:hover .tool-icon{transform:rotate(-5deg)}.app-page .tool-icon{transition:transform .22s,background .22s}}
+.app-page :is(.solid-button,.outline-button,.find-submit,.search-button,.overview-primary):active{transform:translateY(0)}
+@media(min-width:761px) and (max-height:720px){.app-page .sidebar{padding-top:22px}.app-page .sidebar .workspace-nav-label{margin-top:27px}.app-page .sidebar .side-nav{gap:3px}.workspace-sidebar-note{padding-top:18px;margin-bottom:15px}}
+@media(min-width:761px) and (max-width:1100px){.app-page .sidebar{width:184px;padding-inline:13px}.app-page .main-area{margin-left:184px!important}.app-page .page-content{padding:26px 23px}.app-page .topbar{padding-inline:23px}.app-page .content-grid,.app-page .admin-grid,.overview-grid{grid-template-columns:minmax(0,1fr)}.app-page .sidebar .side-link{font-size:11px;gap:10px}.overview-side-column{grid-template-columns:1.3fr 1fr;align-items:start}}
+@media(max-width:760px){
+ .app-page .sidebar{position:relative;inset:auto;width:100%;height:auto;min-height:0;flex-direction:row;flex-wrap:wrap;padding:16px 18px;gap:12px;align-items:center}.app-page .sidebar .app-brand{font-size:22px;padding:0;flex:1}.app-page .sidebar .workspace-nav-label,.workspace-sidebar-note{display:none}
+ .app-page .mobile-nav-toggle{display:inline-flex;background:#E9EEDD;border-color:var(--brand-line);color:var(--brand-forest);font-size:11px;min-height:41px;padding:9px 12px;border-radius:10px}
+ .app-page .sidebar .account-nav{order:2;width:100%;padding-top:10px;margin:0;border-color:var(--brand-line)}.app-page .sidebar .profile-trigger{padding:0;min-height:38px}.app-page .sidebar .account-nav-name{max-width:none}.app-page .sidebar .profile-menu-panel{top:calc(100% + 8px);bottom:auto;right:0;left:auto;min-width:0;transform-origin:top center}
+ .app-page .sidebar .side-nav{order:3;width:100%;padding-top:12px;border-color:var(--brand-line);gap:6px}.app-page .sidebar .side-link{font-size:12px;padding:12px 14px}.app-page .main-area{margin-left:0!important}
+ .app-page .topbar{padding:12px 19px;min-height:43px}.app-page .topbar:after{font-size:6px;letter-spacing:1px}.app-page .page-content{padding:24px 18px 34px}.app-page .welcome-row h1{font-size:27px}.app-page .subtitle{font-size:12px}
+ .overview-side-column{grid-template-columns:1fr}.overview-metric{min-height:105px}.overview-intro h1{font-size:27px}.app-page .sidebar .profile-menu[open] .profile-menu-panel{animation-name:workspace-mobile-menu}.app-page .dashboard-footer{font-size:9px}
+}
+@keyframes workspace-mobile-menu{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body.app-page *,body.app-page *:before,body.app-page *:after,body.campus-auth-page *,body.landing-page *{animation:none!important;transition:none!important}.interface-ripple{display:none}}
+@media print{.app-page .sidebar,.app-page .topbar:after,.interface-ripple{display:none!important}.app-page .main-area{margin:0!important}.app-page *{animation:none!important;transition:none!important}}

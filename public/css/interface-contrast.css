@@ -1,0 +1,74 @@
+/* Workspace surfaces: a dark navigation rail, cool page canvas and white cards. */
+body.app-page{
+  --brand-forest:#205c3d;--brand-cream:#edf2f5;--brand-ink:#19352a;
+  --brand-muted:#52675d;--brand-surface:#fff;--brand-soft:#e9f1ec;
+  --brand-line:#c7d4cd;--brand-focus:#985706;
+  --nav-surface:#153c32;--nav-text:#e9f3ed;--nav-muted:#bed1c5;
+  background:#edf2f5;color:var(--brand-ink);
+}
+.app-page .app-shell,.app-page .main-area{background:#edf2f5}
+.app-page .topbar{background:#fff;border-bottom:1px solid #c7d4cd}
+.app-page .breadcrumb{color:#50675c;font-size:11px}
+.app-page .topbar:after{color:#52675d}
+.app-page .subtitle{color:#52675d;font-size:13px}
+
+/* Keep names, icons and account access legible in both sidebar sizes. */
+.app-page .sidebar{background:var(--nav-surface);border-right-color:#0f3027;border-bottom-color:#0f3027;box-shadow:4px 0 20px #153c3210}
+.app-page .sidebar :is(.app-brand,.campus-wordmark,.campus-wordmark>span){color:#f5faf6}
+.app-page .sidebar .app-brand .brand-mark{background:#deedce;color:#153c32}
+.app-page .sidebar .workspace-nav-label{color:#bed1c5}
+.app-page .sidebar .side-link{color:#e9f3ed}
+.app-page .sidebar .side-link>span{color:#c6dbce}
+.app-page .sidebar .side-link:hover{background:#2b5546;color:#fff}
+.app-page .sidebar .side-link.active{background:#dceec9;color:#16392a;box-shadow:0 3px 12px #0002;font-weight:700}
+.app-page .sidebar .side-link.active>span{color:#214b32}
+.app-page .sidebar .side-link.active:hover{background:#cce3b5;color:#16392a}
+.app-page .sidebar .workspace-sidebar-note,.app-page .sidebar .workspace-sidebar-note small{color:#bed1c5}
+.app-page .sidebar .workspace-community-dot{background:#efb877}
+.app-page .sidebar .account-nav{border-color:#537262}
+.app-page .sidebar .profile-trigger{color:#f5faf6}
+.app-page .sidebar .profile-trigger:hover{background:#244c3e}
+.app-page .sidebar .account-nav-name small{color:#bed1c5}
+.app-page .sidebar .user-avatar{background:#deedce;color:#173a2b}
+.app-page .sidebar .profile-menu-panel{background:#fff;border-color:#9eb5a8;box-shadow:0 12px 35px #0d241d33}
+.app-page .sidebar .profile-menu-panel :is(.profile-menu-link,.logout-button){color:#193b2b}
+.app-page .sidebar .profile-menu-panel :is(.profile-menu-link:hover,.logout-button:hover){background:#e7f1e9}
+.app-page .sidebar .sidebar-toggle,.app-page .sidebar .mobile-nav-toggle{background:#285342;border-color:#789c87;color:#fff}
+.app-page .sidebar .sidebar-toggle:hover,.app-page .sidebar .mobile-nav-toggle:hover{background:#376b52}
+
+/* Separate page sections and individual records without changing their flow. */
+.app-page :is(.content-card,.stat-card,.admin-stat,.workspace-tile,.find-search-card,.ride-result-card,.map-card,.trip-status-card,.privacy-card,.route-steps-card,.complaint-card,.members-card,.overview-card,.overview-metric){
+  background:#fff;border:1px solid #c7d4cd;box-shadow:0 5px 18px #173a2b0c;
+}
+.app-page :is(.driver-ride,.workspace-stats article,.vehicle-review-row,.journey-route-summary,.journey-current-location,.pool-setup,.pool-summary,.route-plan){background:#eaf1ed;border-color:#bdcec2}
+.app-page .overview-metric:first-child{background:#e5f1e9;border-color:#b8d0be}
+.app-page .workspace-tile:hover{background:#f4f9f5;border-color:#749a80;box-shadow:0 7px 20px #173a2b15}
+.app-page .now-driver-request{background:#fff;border-color:#afc3b5}
+.app-page .content-card.now-request-card.is-waiting{background:#fff;border-color:#b8cabd!important;box-shadow:0 5px 18px #173a2b0c}
+.app-page .now-request-card .ride-request-journey{background:#edf3ef;border-color:#b9cbc0}
+.app-page .now-request-card :is(.ride-animation-caption,.ride-waiting-hint,.ride-request-price>span,.now-kicker){color:#52675d}
+.app-page .now-request-card .ride-request-update>p{color:#4b6258}
+.app-page .now-request-card .ride-cancel-button{background:#fff;border-color:#6d8a78;color:#224e34}
+.app-page .now-request-card .ride-cancel-button:hover{background:#e8f2e9}
+.app-page .driver-home-requests{border-color:#8bad96;box-shadow:0 5px 20px #153c3210}
+.app-page :is(.content-grid,.admin-grid,.overview-grid,.workspace-tiles){gap:22px}
+.app-page :is(.section-kicker,.date-line,.journey-eyebrow){color:#526c5a}
+.app-page .dashboard-footer{color:#52675d;border-color:#bfcfc5}
+
+/* A clear action hierarchy: solid primary, outlined secondary and red removal. */
+.app-page :is(.solid-button,.find-submit,.search-button,.approve-button,.journey-cta,.join-button,.overview-primary,.schedule-robot-primary,.member-approve,.ride-action-button:not(.quiet-action)){
+  background:#205c3d;border-color:#205c3d;color:#fff;font-weight:700;box-shadow:0 3px 7px #17462d1a;
+}
+.app-page :is(.solid-button,.find-submit,.search-button,.approve-button,.journey-cta,.join-button,.overview-primary,.schedule-robot-primary,.member-approve,.ride-action-button:not(.quiet-action)):hover{background:#16452d;border-color:#16452d;color:#fff;box-shadow:0 4px 12px #17462d29}
+.app-page :is(.outline-button,.review-button,.member-restore){background:#fff;border:1px solid #6d8a78;color:#224e34;font-weight:650}
+.app-page :is(.outline-button,.review-button,.member-restore):hover{background:#e8f2e9;border-color:#406d4d;color:#193e29}
+.app-page .ride-action-button.quiet-action,.app-page .member-remove{background:#fff6f3;border-color:#c38673;color:#883f2d}
+.app-page .ride-action-button.quiet-action:hover,.app-page .member-remove:hover{background:#fce7df;border-color:#ad634d;color:#72321f}
+.app-page :is(.text-link,.empty-action,.calendar-link){color:#205c3d;text-decoration-color:#658d70;font-weight:650}
+.app-page :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea){background-color:#fff;border-color:#8fa99a;color:#19352a}
+.app-page :is(input,textarea)::placeholder{color:#63766c}
+.app-page :is(input,select,textarea):focus{border-color:#38744c;box-shadow:0 0 0 3px #2a7b451a}
+.app-page :is(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #985706;outline-offset:3px}
+.app-page .sidebar :is(a,button,summary):focus-visible{outline-color:#f0c46f}
+@media(max-width:760px){.app-page :is(.content-grid,.admin-grid,.overview-grid,.workspace-tiles){gap:16px}.app-page .sidebar{box-shadow:0 4px 12px #153c3215}.app-page .sidebar .side-nav{border-color:#537262}}
+@media print{body.app-page,.app-page .app-shell,.app-page .main-area{background:#fff}.app-page .content-card{box-shadow:none}}

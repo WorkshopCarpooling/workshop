@@ -1,0 +1,47 @@
+.live-tracking-card { margin: 24px 0; padding: 24px; overflow: hidden; }
+.tracking-intro, .tracking-note { color: #59685f; font-size: 13px; line-height: 1.65; }
+.tracking-intro { margin: 0 0 12px; }
+.tracking-note { margin: 14px 0 0; }
+.tracking-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.tracking-toolbar p { margin: 0; font-size: 13px; color: #3f584a; }
+.tracking-pill { background: #e6f1e9; color: #244b39; border-radius: 30px; padding: 7px 12px; font-size: 12px; white-space: nowrap; }
+.tracking-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; }
+#admin-driver-map { height: 440px; border-radius: 16px; border: 1px solid #d9e3d8; background: #edf1e7; z-index: 0; }
+.tracking-driver-list { max-height: 440px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.tracking-driver { padding: 16px; border: 1px solid #dce5dc; border-radius: 14px; background: #f8faf6; }
+.tracking-driver b, .tracking-driver small { display: block; }
+.tracking-driver b { font-size: 14px; margin: 8px 0; }
+.tracking-driver small { color: #5d6c61; line-height: 1.6; overflow-wrap: anywhere; }
+.tracking-driver button { cursor: pointer; margin-top: 12px; border: 0; background: #244b39; color: white; padding: 8px 12px; border-radius: 8px; font: inherit; font-size: 12px; }
+.tracking-driver button:disabled { opacity: .5; cursor: default; }
+.tracking-state { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #24603c; }
+.tracking-state.stale { color: #8f5d13; }
+.tracking-state.waiting { color: #65736b; }
+.tracking-empty { padding: 32px 20px; color: #59685f; font-size: 13px; line-height: 1.7; background: #f8faf6; border-radius: 14px; }
+.live-car-marker { background: transparent; border: 0; }
+.live-car { width: 42px; height: 48px; filter: drop-shadow(0 3px 4px #0008); transform-origin: center; }
+.live-car img { display:block;width:32px;height:48px;margin:0 auto;object-fit:contain;image-rendering:pixelated; }
+.live-car-marker.stale, .live-car-marker.planned { opacity: .72; }
+.car-state-label { display: block; position: absolute; top: 52px; left: 21px; transform: translateX(-50%); white-space: nowrap; padding: 4px 7px; color: #f2d685; background: #182021ee; border: 1px solid #756442; border-radius: 6px; font-size: 10px; }
+.car-state-label:empty { display: none; }
+.tracking-map-wrap { position: relative; min-width: 0; }
+#admin-driver-map { background: #121719; border-color: #293638; height: 480px; }
+#admin-driver-map .leaflet-tile-pane { filter: grayscale(1) invert(.93) brightness(.9) contrast(.85); }
+#admin-driver-map .leaflet-control-attribution { background: #142020dc; color: #c7d3d3; }
+#admin-driver-map .leaflet-control-attribution a { color: #e6eadb; }
+.tracking-map-legend { position: absolute; z-index: 400; top: 14px; right: 14px; display: flex; gap: 14px; border: 1px solid #435253; border-radius: 9px; background: #152021eb; color: #e9efeb; padding: 10px 12px; font-size: 11px; pointer-events: none; }
+.tracking-map-legend span { display: flex; align-items: center; gap: 6px; }
+.app-page .live-tracking-card .tracking-map-legend { background: #152b22f2; color: #f2f8f3; border-color: #789486; }
+.tracking-map-legend i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.gps-live-dot { background: #87d7a1; box-shadow: 0 0 7px #87d7a177; }
+.gps-wait-dot { background: #f0c85e; }
+.tracking-gps-issue { margin-top: 8px; color: #925c23 !important; }
+.driver-location-sharing { padding: 16px; border: 1px solid #c9decf; border-radius: 12px; background: #f3f8f1; flex-basis: 100%; max-width: 540px; }
+.driver-location-sharing p { font-size: 13px; line-height: 1.6; margin: 8px 0 12px; }
+.driver-location-sharing small { display: block; margin-top: 10px; line-height: 1.6; }
+.driver-location-sharing .ride-action-button { min-height: 44px; font-size: 13px; padding: 10px 14px; }
+.driver-location-sharing [hidden] { display: none; }
+.ride-actions:has(.driver-location-sharing) { flex-wrap: wrap; }
+.trip-gps-hint { display: block; max-width: 230px; margin-top: 8px; color: #59685f; font-size: 11px; line-height: 1.5; }
+@media (max-width: 900px) { .tracking-layout { grid-template-columns: 1fr; } .tracking-driver-list { max-height: 300px; } #admin-driver-map { height: 360px; } }
+@media (max-width: 480px) { .live-tracking-card { padding: 16px; } .tracking-toolbar { align-items: flex-start; flex-direction: column; } #admin-driver-map { height: 360px; } .tracking-map-legend { font-size: 10px; gap: 8px; padding: 8px; } }

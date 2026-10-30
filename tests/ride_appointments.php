@@ -1,0 +1,96 @@
+<?php
+// Reuse the isolated SQLite setup and check the unchanged immediate-ride lifecycle.
+require __DIR__.'/on_demand_rides.php';
+
+use App\Http\Controllers\RideAppointmentController;
+use App\Models\{RideRequest, RideBooking};
+use App\Services\{FareQuote, OnDemandRides, RideAppointments, PassengerReminders};
+use Carbon\Carbon;
+use Illuminate\Support\Facades\{Auth, Artisan};
+
+(require database_path('migrations/2026_10_29_010000_add_ride_appointments.php'))->up();
+(require database_path('migrations/2026_10_29_010000_add_ride_appointments.php'))->up();
+Carbon::setTestNow(Carbon::parse('2030-01-07 08:30:00','Asia/Kuala_Lumpur'));
+Auth::guard()->setUser($users[0]);
+$controller=new RideAppointmentController;
+$fields=$journey+['pickup_date'=>'2030-01-07','pickup_time'=>'09:00'];
+$review=fn($input)=>$controller->index(useNowRequest('passenger/schedule','GET',$input))->getData(true);
+$beforeRequests=RideRequest::count();
+$quote=$review($fields)['fare'];
+checkNow(RideAppointments::ready(),'appointment schema is ready and idempotent');
+checkNow(RideRequest::count()===$beforeRequests,'reviewing an appointment never books or searches for a driver');
+rejectedNow(fn()=>$review(array_replace($fields,['pickup_date'=>'2030-01-06'])),'past appointments cannot be booked');
+rejectedNow(fn()=>$review(array_replace($fields,['pickup_time'=>'invalid'])),'invalid pickup times are rejected');
+$canonical=$journey+['scheduled_for'=>'2030-01-07 09:00:00'];
+rejectedNow(fn()=>FareQuote::verifyNow($quote['token'],$users[0]->user_id,$canonical),'an appointment quote cannot be used for a ride-now request');
+rejectedNow(fn()=>FareQuote::verifyNow($quote['token'],$users[0]->user_id,array_replace($canonical,['scheduled_for'=>'2030-01-07 09:30:00']),'appointment'),'changing the appointment time invalidates its fare quote');
+rejectedNow(fn()=>FareQuote::verifyNow($quote['token'],$users[0]->user_id,array_replace($canonical,['seats_requested'=>3]),'appointment'),'changing appointment passenger count invalidates the quote');
+$book=function($input,$quote)use($controller){return $controller->store(useNowRequest('passenger/schedule','POST',$input+['fare_quote'=>$quote['token']]))->getData(true);};
+$saved=$book($fields,$quote)['appointment'];
+checkNow($saved['status']==='scheduled'&&$saved['timeLabel']==='9:00 AM','booking saves a 9 AM appointment in Malaysia time without claiming a car is confirmed');
+$record=RideRequest::findOrFail($saved['id']);
+checkNow($record->expires_at->format('H:i')==='09:10','the search window is anchored to the appointment time rather than the booking time');
+$repeat=$book($fields,$quote)['appointment'];
+checkNow($repeat['id']===$saved['id']&&RideRequest::count()===$beforeRequests+1,'double submission creates only one appointment');
+checkNow(OnDemandRides::feed($users[3]->user_id)->isEmpty(),'future appointments are not broadcast early');
+$reminders=PassengerReminders::upcoming($users[0]->user_id);
+checkNow(count($reminders)===1&&$reminders[0]['kind']==='appointment'&&$reminders[0]['status']==='scheduled','robot reminders include unassigned appointments before pickup time');
+checkNow($reminders[0]['startsAt']==='2030-01-07T09:00:00+08:00'&&$reminders[0]['passengers']===2,'robot receives the real appointment date/time and passenger count');
+checkNow(!in_array('appointment-'.$saved['id'],array_column(PassengerReminders::upcoming($users[1]->user_id),'id'),true),'appointment reminders are private to their passenger');
+$later=array_replace($fields,['pickup_time'=>'10:00']);$laterQuote=$review($later)['fare'];
+$laterId=$book($later,$laterQuote)['appointment']['id'];
+checkNow(RideRequest::where('passenger_id',$users[0]->user_id)->where('request_status','scheduled')->count()===2,'a passenger can save more than one future appointment');
+Auth::guard()->setUser($users[1]);
+try{$controller->cancel(useNowRequest('passenger/appointments/'.$laterId.'/cancel','POST'),$laterId);checkNow(false,'appointment cancellation ownership');}
+catch(Illuminate\Database\Eloquent\ModelNotFoundException $error){checkNow(true,'another passenger cannot cancel an appointment');}
+Auth::guard()->setUser($users[0]);
+$controller->cancel(useNowRequest('passenger/appointments/'.$laterId.'/cancel','POST'),$laterId);
+checkNow(RideRequest::find($laterId)->request_status==='cancelled','future appointment cancellation stops its automatic search');
+Carbon::setTestNow(Carbon::parse('2030-01-07 08:59:00','Asia/Kuala_Lumpur'));
+checkNow(RideAppointments::dispatchDue()===0,'scheduler waits until the selected appointment time');
+Carbon::setTestNow(Carbon::parse('2030-01-07 09:00:00','Asia/Kuala_Lumpur'));
+checkNow(RideAppointments::dispatchDue()===1&&$record->fresh()->request_status==='pending','at 9 AM the scheduler automatically releases the saved request');
+checkNow(RideAppointments::dispatchDue()===0,'repeated scheduler runs do not duplicate searches');
+checkNow(OnDemandRides::feed($users[3]->user_id)->pluck('request_id')->all()===[$saved['id']],'approved drivers see the due appointment with no passenger action');
+checkNow(PassengerReminders::upcoming($users[0]->user_id)[0]['status']==='pending','robot changes from countdown to driver-search status');
+$appointmentRide=OnDemandRides::accept($users[3]->user_id,$saved['id'],$vehicles[3]->vehicle_id);
+checkNow($appointmentRide->ride_mode==='appointment'&&$appointmentRide->departure_at->format('H:i')==='09:00','acceptance preserves the appointment time and uses the existing trip controls');
+checkNow(RideBooking::where('ride_id',$appointmentRide->ride_id)->value('fare_per_seat')===$quote['perSeat'],'driver acceptance preserves the reviewed appointment contribution');
+$events=PassengerReminders::upcoming($users[0]->user_id);
+checkNow(count($events)===1&&$events[0]['status']==='accepted'&&$events[0]['driver']===$users[3]->full_name,'robot announces the real accepting driver without duplicate ride reminders');
+$appointmentRide->update(['ride_status'=>'completed']);
+checkNow(PassengerReminders::upcoming($users[0]->user_id)===[],'completed appointments stop prompting the robot');
+Carbon::setTestNow(Carbon::parse('2030-01-07 09:30:00','Asia/Kuala_Lumpur'));
+$missed=$book($later,$review($later)['fare'])['appointment']['id'];
+Carbon::setTestNow(Carbon::parse('2030-01-07 10:11:00','Asia/Kuala_Lumpur'));
+checkNow(RideAppointments::dispatchDue()===0&&RideRequest::find($missed)->request_status==='expired','a server returning after the search window marks the appointment missed rather than offering a late pickup');
+$expiredEvent=PassengerReminders::upcoming($users[0]->user_id);
+checkNow(count($expiredEvent)===1&&$expiredEvent[0]['status']==='expired','robot reports that no driver was confirmed after the search window');
+checkNow(Artisan::call('rides:dispatch-appointments')===0,'the unattended dispatcher command runs successfully');
+$page=$controller->index(Illuminate\Http\Request::create('/passenger/schedule'))->getContent();
+checkNow(str_contains($page,'name="pickup_date"')&&str_contains($page,'name="pickup_time"')&&str_contains($page,'name="seats_requested"'),'Schedule is an appointment form with date, time and passenger count');
+checkNow(str_contains($page,'images/schedule-robot.png')&&str_contains($page,'data-schedule-robot'),'the visible robot and reminder component are restored on Schedule');
+if(in_array('--appointments-preview',$argv,true)) {
+    Illuminate\Support\Facades\URL::forceRootUrl('http://localhost/workshop');
+    Carbon::setTestNow(Carbon::parse('2030-01-08 08:40:00','Asia/Kuala_Lumpur'));
+    $previewFields=array_replace($fields,['pickup_date'=>'2030-01-08']);
+    $previewReview=$review($previewFields);
+    $previewAppointment=$book($previewFields,$previewReview['fare'])['appointment'];
+    app('session.store')->flashInput($previewFields);
+    $previewRequest=Illuminate\Http\Request::create('http://localhost/workshop/passenger/schedule');
+    $previewRequest->setLaravelSession(app('session.store'));app()->instance('request',$previewRequest);
+    $page=view('schedule',['appointments'=>[$previewAppointment],'appointmentReady'=>true])->render();
+    $directory=public_path('device-review/appointments');if(!is_dir($directory))mkdir($directory,0777,true);
+    $previewEvents=['serverTime'=>now()->toIso8601String(),'timezone'=>'Asia/Kuala_Lumpur','events'=>PassengerReminders::upcoming($users[0]->user_id)];
+    $html=preg_replace('~<form\b~','<form inert',$page);
+    $html=preg_replace('~<script\b[^>]*src="[^"]*ride-appointments\.js[^>]*>.*?</script>~s','',$html);
+    $html=str_replace(' data-auto-pickup','',$html);
+    $html=preg_replace('~(<p data-gps-status role="status">).*?</p>~s','$1Sample pickup selected for this preview. No device location is used.</p>',$html);
+    $previewTrip=json_encode($previewReview['journey'],JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
+    $mock='<script>window.fetch=async function(url){if(String(url).includes("api/routes/compute"))return {ok:true,json:async()=>('.$previewTrip.')};throw new Error("Inert preview; requests are disabled.");};</script>';
+    $html=str_replace('</head>',$mock.'<meta name="robots" content="noindex,nofollow"></head>',$html);
+    $html=str_replace('data-schedule-robot data-endpoint','data-schedule-robot data-preview-events="'.htmlspecialchars(json_encode($previewEvents),ENT_QUOTES,'UTF-8').'" data-endpoint',$html);
+    file_put_contents($directory.'/schedule.html',$html);
+}
+Carbon::setTestNow();
+echo "$checks total immediate-ride and appointment checks passed; SQLite memory only.\n";

@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f7f8f5">
-    <title><?= $isSignup ? 'Sign up' : 'Log in' ?> Â· RideUTeM</title>
+    <title><?= $isSignup ? 'Sign up' : 'Log in' ?> · RideUTeM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/interface-refresh.css">
 </head>
 <body class="auth-page <?= $isSignup ? 'signup-page' : 'login-page' ?>">
     <main class="auth-shell">
@@ -43,10 +44,10 @@
                     <path d="M128 190a39 39 0 1 0 78 0 39 39 0 0 0-78 0Zm278 0a39 39 0 1 0 78 0 39 39 0 0 0-78 0Z" fill="#1d302d"/><path d="M139 190a28 28 0 1 0 56 0 28 28 0 0 0-56 0Zm278 0a28 28 0 1 0 56 0 28 28 0 0 0-56 0Z" fill="#d4ded8"/><path d="M151 190a16 16 0 1 0 32 0 16 16 0 0 0-32 0Zm278 0a16 16 0 1 0 32 0 16 16 0 0 0-32 0Z" fill="#879c92"/>
                     <path d="M515 150c12 6 19 13 24 22h-26l-7-19 9-3ZM91 147c-11 7-18 15-23 26h23l9-20-9-6Z" fill="#f5b45f"/>
                 </svg>
-                <div class="route-chip"><span class="route-icon">â†—</span><span><b>UTeM Main Campus</b><small>Durian Tunggal Â· 18 min</small></span><span class="route-arrow">â†’</span></div>
+                <div class="route-chip"><span class="route-icon">↗</span><span><b>UTeM Main Campus</b><small>Durian Tunggal · 18 min</small></span><span class="route-arrow">→</span></div>
                 <div class="ride-note"><span class="avatar-stack"><i>F</i><i>A</i><i>+</i></span><span><b>Seats feel better together</b><small>Meet your campus community</small></span></div>
             </div>
-            <div class="panel-footer"><span>Designed for the UTeM community</span><span class="footer-spark">âœ³</span><span>Move together, thoughtfully.</span></div>
+            <div class="panel-footer"><span>Designed for the UTeM community</span><span class="footer-spark">✳</span><span>Move together, thoughtfully.</span></div>
         </section>
 
         <section class="form-panel">
@@ -54,7 +55,7 @@
 
             <div class="form-wrap <?= $isSignup ? 'form-wrap-wide' : '' ?>">
                 <div class="form-heading">
-                    <div class="welcome-tag"><span>âœ¦</span> YOUR CAMPUS, YOUR COMMUNITY</div>
+                    <div class="welcome-tag"><span>✦</span> YOUR CAMPUS, YOUR COMMUNITY</div>
                     <h2><?= $isSignup ? 'Find your way<br>to <em>better rides.</em>' : 'Welcome<br><em>back.</em>' ?></h2>
                     <p><?= $isSignup ? 'Create an account as a passenger or driver in the UTeM carpool community.' : 'Your next campus ride is just around the corner.' ?></p>
                 </div>
@@ -69,23 +70,23 @@
                     <label class="field-label" for="email">University email</label>
                     <?php endif; ?>
                     <div class="input-wrap"><span class="input-icon"><svg viewBox="0 0 20 20"><rect x="2.7" y="4" width="14.6" height="12" rx="2"/><path d="m3.5 5.2 6.5 5 6.5-5"/></svg></span><input id="email" name="email" type="email" placeholder="name@university.edu" autocomplete="email" required></div>
-                    <?php if ($isSignup): ?><p class="field-hint"><span class="verified-mark">âœ“</span> Use your official UTeM email so an administrator can review your account.</p>
-                    <label class="field-label" for="memberType">Iâ€™m joining as</label><div class="select-wrap"><span class="input-icon"><svg viewBox="0 0 20 20"><circle cx="7" cy="6" r="2.5"/><path d="M2.5 16c.2-2.8 1.8-4.4 4.5-4.4s4.3 1.6 4.5 4.4M13 5.5a2.4 2.4 0 0 1 0 4.6m1 2c2 .3 3.2 1.6 3.4 3.9"/></svg></span><select id="memberType" name="memberType" required><option value="" disabled selected>Select your community</option><option value="student">Student</option><option value="staff">UTeM staff</option></select><span class="select-chevron">âŒ„</span></div><label class="field-label" for="accountType">How will you use RideUTeM?</label><div class="select-wrap"><span class="input-icon">â†—</span><select id="accountType" name="accountType" required><option value="" disabled selected>Choose your account type</option><option value="passenger">Passenger â€” find rides</option><option value="driver">Driver â€” offer rides</option></select><span class="select-chevron">âŒ„</span></div><p class="field-hint">Students can choose passenger or driver and offer rides for part-time work. New accounts need admin approval.</p><?php endif; ?>
+                    <?php if ($isSignup): ?><p class="field-hint"><span class="verified-mark">✓</span> Use your official UTeM email so an administrator can review your account.</p>
+                    <label class="field-label" for="memberType">I’m joining as</label><div class="select-wrap"><span class="input-icon"><svg viewBox="0 0 20 20"><circle cx="7" cy="6" r="2.5"/><path d="M2.5 16c.2-2.8 1.8-4.4 4.5-4.4s4.3 1.6 4.5 4.4M13 5.5a2.4 2.4 0 0 1 0 4.6m1 2c2 .3 3.2 1.6 3.4 3.9"/></svg></span><select id="memberType" name="memberType" required><option value="" disabled selected>Select your community</option><option value="student">Student</option><option value="staff">UTeM staff</option></select><span class="select-chevron">⌄</span></div><label class="field-label" for="accountType">How will you use RideUTeM?</label><div class="select-wrap"><span class="input-icon">↗</span><select id="accountType" name="accountType" required><option value="" disabled selected>Choose your account type</option><option value="passenger">Passenger — find rides</option><option value="driver">Driver — offer rides</option></select><span class="select-chevron">⌄</span></div><p class="field-hint">Students can choose passenger or driver and offer rides for part-time work. New accounts need admin approval.</p><?php endif; ?>
                     <div class="password-label"><label class="field-label" for="password">Password</label><?php if (!$isSignup): ?><a href="#" class="quiet-link" id="forgotLink">Forgot password?</a><?php endif; ?></div>
                     <div class="input-wrap"><span class="input-icon"><svg viewBox="0 0 20 20"><rect x="3" y="8.5" width="14" height="9" rx="2"/><path d="M6 8.5V6a4 4 0 1 1 8 0v2.5"/></svg></span><input id="password" name="password" type="password" placeholder="<?= $isSignup ? 'At least 8 characters' : 'Enter your password' ?>" autocomplete="<?= $isSignup ? 'new-password' : 'current-password' ?>" minlength="8" required><button class="show-password" type="button" aria-label="Show password" data-password-toggle="password"><svg viewBox="0 0 20 20"><path d="M2 10s2.8-5 8-5 8 5 8 5-2.8 5-8 5-8-5-8-5Z"/><circle cx="10" cy="10" r="2.2"/></svg></button></div>
                     <?php if ($isSignup): ?><label class="field-label" for="confirmPassword">Confirm password</label><div class="input-wrap"><span class="input-icon"><svg viewBox="0 0 20 20"><rect x="3" y="8.5" width="14" height="9" rx="2"/><path d="M6 8.5V6a4 4 0 1 1 8 0v2.5"/></svg></span><input id="confirmPassword" name="confirmPassword" type="password" placeholder="Enter your password again" autocomplete="new-password" minlength="8" required><button class="show-password" type="button" aria-label="Show password" data-password-toggle="confirmPassword"><svg viewBox="0 0 20 20"><path d="M2 10s2.8-5 8-5 8 5 8 5-2.8 5-8 5-8-5-8-5Z"/><circle cx="10" cy="10" r="2.2"/></svg></button></div>
                     <label class="preference-row"><input type="checkbox" name="genderPreference"><span class="fake-check"></span><span>Show me rides with a same-gender preference <small>This is a matching preference, not a safety guarantee.</small></span></label><?php endif; ?>
                     <?php if (!$isSignup): ?><label class="remember-row"><input type="checkbox" name="remember"><span class="fake-check"></span><span>Remember me on this device</span></label><?php endif; ?>
                     <div class="form-message <?= $formError !== '' ? 'error' : ($formSuccess !== '' ? 'success' : '') ?>" id="formMessage" role="status" aria-live="polite"><?= htmlspecialchars($formError !== '' ? $formError : $formSuccess, ENT_QUOTES, 'UTF-8') ?></div>
-                    <button class="submit-button" type="submit"><?= $isSignup ? 'Create account' : 'Log in' ?><span>â†’</span></button>
+                    <button class="submit-button" type="submit"><?= $isSignup ? 'Create account' : 'Log in' ?><span>→</span></button>
                     <div class="form-divider"><span>or continue with</span></div>
                     <button class="google-button" type="button" id="googleButton"><span class="google-g">G</span> Continue with Google</button>
                 </form>
 
-                <p class="switch-prompt"><?= $isSignup ? 'Already have an account?' : 'New to the community?' ?> <a href="<?= $isSignup ? 'login.php' : 'signup.php' ?>"><?= $isSignup ? 'Log in' : 'Create an account' ?> <span>â†—</span></a></p>
+                <p class="switch-prompt"><?= $isSignup ? 'Already have an account?' : 'New to the community?' ?> <a href="<?= $isSignup ? 'login.php' : 'signup.php' ?>"><?= $isSignup ? 'Log in' : 'Create an account' ?> <span>↗</span></a></p>
                 <p class="privacy-note"><svg viewBox="0 0 20 20"><path d="M10 2 4 4.5v4.3c0 4 2.6 7.4 6 8.7 3.4-1.3 6-4.7 6-8.7V4.5L10 2Z"/></svg>Your details stay within the verified UTeM community.</p>
             </div>
-            <footer class="form-footer"><span>Â© 2026 RideUTeM</span><a href="#">Help centre</a><a href="#">Privacy</a><a href="dashboard.php">Dashboard preview</a></footer>
+            <footer class="form-footer"><span>© 2026 RideUTeM</span><a href="#">Help centre</a><a href="#">Privacy</a><a href="dashboard.php">Dashboard preview</a></footer>
         </section>
     </main>
     <script src="js/auth.js" defer></script>

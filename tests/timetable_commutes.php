@@ -1,0 +1,123 @@
+<?php
+// All sessions, weekly plans and appointments in this suite exist in SQLite memory.
+require __DIR__.'/ride_appointments.php';
+
+use App\Http\Controllers\TimetableController;
+use App\Models\{RideRequest, TimetableRidePlan};
+use App\Services\{OnDemandRides, RideAppointments, TimetableCommutes, TimetableRideQuote, PassengerReminders};
+use Carbon\{Carbon, CarbonImmutable};
+use Illuminate\Support\Facades\{Auth, DB, URL};
+
+(require database_path('migrations/2026_10_29_020000_add_timetable_commutes.php'))->up();
+(require database_path('migrations/2026_10_29_020000_add_timetable_commutes.php'))->up();
+RideRequest::query()->update(['request_status'=>'cancelled']);
+Carbon::setTestNow(Carbon::parse('2030-01-07 07:00:00','Asia/Kuala_Lumpur'));
+Auth::guard()->setUser($users[0]);
+$sessionId=DB::table('commute_timetable')->insertGetId(['user_id'=>$users[0]->user_id,'title'=>'Software engineering','weekday'=>1,'starts_at'=>'09:00:00','ends_at'=>'10:00:00','location'=>'FTMK Main Campus','created_at'=>now(),'updated_at'=>now()]);
+$session=DB::table('commute_timetable')->find($sessionId);
+$controller=new TimetableController;
+$inputs=$journey+['arrival_buffer_minutes'=>10,'booking_mode'=>'once'];
+$review=function($data,$id=null)use($controller,$sessionId){return $controller->ride(useNowRequest('timetable/'.($id??$sessionId).'/ride','GET',$data),$id??$sessionId)->getData(true);};
+$save=function($data,$token,$id=null)use($controller,$sessionId){return $controller->confirm(useNowRequest('timetable/'.($id??$sessionId).'/ride','POST',$data+['fare_quote'=>$token]),$id??$sessionId)->getData(true);};
+checkNow(TimetableCommutes::ready(),'weekly commute schema is ready and idempotent');
+$calculated=TimetableCommutes::nextSession($session,'2030-01-07','2030-01-28',20,10);
+checkNow($calculated['scheduledFor']==='2030-01-07 08:20:00'&&$calculated['arriveBy']==='2030-01-07 08:50:00','a 9 AM class allows 20 minutes travel, 10 minutes early arrival and 10 minutes to find a driver');
+$overnight=clone $session;$overnight->weekday=2;$overnight->starts_at='00:10:00';
+$night=TimetableCommutes::nextSession($overnight,'2030-01-08','2030-01-08',30,10,CarbonImmutable::parse('2030-01-07 22:00:00','Asia/Kuala_Lumpur'));
+checkNow($night['scheduledFor']==='2030-01-07 23:20:00','early-morning sessions correctly plan the journey on the preceding calendar day');
+$tooLate=TimetableCommutes::nextSession($session,'2030-01-07','2030-01-28',20,10,CarbonImmutable::parse('2030-01-07 08:30:00','Asia/Kuala_Lumpur'));
+checkNow($tooLate['classStartsAt']==='2030-01-14 09:00:00','an already-missed suggested departure moves to the next eligible session');
+checkNow(TimetableCommutes::nextSession($session,'2030-01-07','2030-01-07',20,10,CarbonImmutable::parse('2030-01-07 08:30:00','Asia/Kuala_Lumpur'))===null,'no ride is suggested outside the selected repeat dates');
+$before=RideRequest::count();$single=$review($inputs);
+checkNow(RideRequest::count()===$before&&TimetableRidePlan::count()===0,'calculating a session ride is read-only and does not enable recurring bookings');
+$singleRide=$save($inputs,$single['fare']['token'])['appointment'];
+checkNow($singleRide['timetableTitle']==='Software engineering'&&$singleRide['classStartsAt']==='2030-01-07T09:00:00+08:00','a one-time timetable ride appears in Schedule with its class and start time');
+checkNow(TimetableRidePlan::count()===0,'booking the next session only does not start a weekly plan');
+$singleRepeat=$save($inputs,$single['fare']['token'])['appointment'];
+checkNow($singleRepeat['id']===$singleRide['id'],'repeated one-time confirmation cannot duplicate the class ride');
+OnDemandRides::cancel($users[0]->user_id,$singleRide['id']);
+$weekly=array_replace($inputs,['booking_mode'=>'weekly','starts_on'=>'2030-01-07','ends_on'=>'2030-01-28']);
+$quote=$review($weekly);
+rejectedNow(fn()=>$save($weekly,$quote['fare']['token']),'weekly automation requires explicit consent at confirmation');
+rejectedNow(fn()=>$save(array_replace($weekly,['ends_on'=>'2030-02-04','weekly_consent'=>'1']),$quote['fare']['token']),'a reviewed repeat end date cannot be silently extended');
+rejectedNow(fn()=>$save(array_replace($weekly,['arrival_buffer_minutes'=>30,'weekly_consent'=>'1']),$quote['fare']['token']),'changing the early-arrival buffer requires another review');
+DB::table('commute_timetable')->where('id',$sessionId)->update(['starts_at'=>'09:15:00']);
+rejectedNow(fn()=>$save($weekly+['weekly_consent'=>'1'],$quote['fare']['token']),'changing the class time invalidates an old ride review');
+DB::table('commute_timetable')->where('id',$sessionId)->update(['starts_at'=>'09:00:00']);
+$weekly['weekly_consent']='1';$weeklyRide=$save($weekly,$quote['fare']['token'])['appointment'];
+$plan=TimetableRidePlan::where('timetable_id',$sessionId)->firstOrFail();
+checkNow($plan->is_enabled&&$plan->ends_on->format('Y-m-d')==='2030-01-28','confirmed weekly settings save an explicit end date');
+checkNow(RideRequest::find($weeklyRide['id'])->timetable_plan_id===$plan->id,'the next appointment is linked to the enabled weekly plan');
+$repeatWeekly=$save($weekly,$quote['fare']['token'])['appointment'];
+checkNow($repeatWeekly['id']===$weeklyRide['id']&&TimetableRidePlan::whereNotNull('timetable_id')->count()===1,'double clicking weekly confirmation does not replace the plan or duplicate its appointment');
+checkNow(TimetableCommutes::maintain()===0,'background maintenance keeps only one future appointment per weekly plan');
+TimetableCommutes::toggle($users[0]->user_id,$sessionId,false);
+checkNow(RideRequest::find($weeklyRide['id'])->request_status==='paused','pausing a weekly plan pauses its future unconfirmed appointment');
+checkNow(TimetableCommutes::maintain()===0,'paused plans never generate appointments');
+TimetableCommutes::toggle($users[0]->user_id,$sessionId,true);
+checkNow(RideRequest::find($weeklyRide['id'])->request_status==='scheduled','resuming a valid plan restores its future appointment');
+OnDemandRides::cancel($users[0]->user_id,$weeklyRide['id']);
+checkNow(TimetableCommutes::maintain()===1,'after cancelling one occurrence the plan prepares the following week');
+$next=RideRequest::where('timetable_plan_id',$plan->id)->where('request_status','scheduled')->firstOrFail();
+checkNow($next->timetable_session_at->format('Y-m-d')==='2030-01-14'&&RideRequest::find($weeklyRide['id'])->request_status==='cancelled','a skipped occurrence stays cancelled rather than being booked again');
+checkNow(TimetableCommutes::maintain()===0,'repeated maintenance cannot create duplicate weekly occurrences');
+Carbon::setTestNow($next->scheduled_for->copy());
+checkNow(RideAppointments::dispatchDue()===1&&$next->fresh()->request_status==='pending','the existing background dispatcher starts the class ride search at its calculated time');
+checkNow(RideRequest::where('timetable_plan_id',$plan->id)->where('request_status','scheduled')->count()===1,'the next week is prepared after the current ride starts searching');
+$events=PassengerReminders::upcoming($users[0]->user_id);
+checkNow(count(array_filter($events,fn($event)=>$event['kind']==='appointment'&&$event['title']==='Ride for Software engineering'))===1,'the reminder robot identifies the ride by its timetable session');
+checkNow(!array_key_exists('timetableTitle',OnDemandRides::payload($next->fresh())),'driver request feeds do not expose the passenger’s class name');
+$ride=OnDemandRides::accept($users[3]->user_id,$next->request_id,$vehicles[3]->vehicle_id);
+TimetableCommutes::toggle($users[0]->user_id,$sessionId,false);
+checkNow($next->fresh()->request_status==='accepted','pausing future weekly rides preserves an already accepted car');
+$ride->update(['ride_status'=>'completed']);TimetableCommutes::toggle($users[0]->user_id,$sessionId,true);
+Carbon::setTestNow(Carbon::parse('2030-01-28 07:00:00','Asia/Kuala_Lumpur'));
+RideAppointments::dispatchDue();
+checkNow(RideRequest::where('timetable_plan_id',$plan->id)->whereDate('timetable_session_at','2030-01-28')->exists(),'a session on the chosen final date is included');
+Carbon::setTestNow(Carbon::parse('2030-01-29 12:00:00','Asia/Kuala_Lumpur'));TimetableCommutes::maintain();
+checkNow(!$plan->fresh()->is_enabled&&!RideRequest::where('timetable_plan_id',$plan->id)->where('timetable_session_at','>','2030-01-28 23:59:59')->exists(),'recurring rides stop automatically when the selected term ends');
+rejectedNow(fn()=>TimetableCommutes::toggle($users[0]->user_id,$sessionId,true),'an ended plan needs new reviewed dates before it can resume');
+$otherId=DB::table('commute_timetable')->insertGetId(['user_id'=>$users[1]->user_id,'title'=>'Private seminar','weekday'=>2,'starts_at'=>'11:00:00','ends_at'=>'12:00:00','location'=>'Private building','created_at'=>now(),'updated_at'=>now()]);
+try{$controller->ride(useNowRequest('timetable/'.$otherId.'/ride'),$otherId);checkNow(false,'timetable ownership');}catch(Symfony\Component\HttpKernel\Exception\HttpException $error){checkNow($error->getStatusCode()===404,'another passenger cannot read or plan a private timetable session');}
+TimetableCommutes::removeSession($users[1]->user_id,$sessionId);
+checkNow(DB::table('commute_timetable')->where('id',$sessionId)->exists(),'another passenger cannot remove the session or its plan');
+Carbon::setTestNow(Carbon::parse('2030-01-07 07:00:00','Asia/Kuala_Lumpur'));
+$replacement=$save($weekly,$review($weekly)['fare']['token'])['appointment'];
+TimetableCommutes::removeSession($users[0]->user_id,$sessionId);
+checkNow(!DB::table('commute_timetable')->where('id',$sessionId)->exists()&&RideRequest::find($replacement['id'])->request_status==='cancelled','removing a session cancels its future unconfirmed timetable ride');
+checkNow(TimetableRidePlan::whereNotNull('timetable_id')->count()===0,'removed sessions cannot generate further automatic rides');
+$page=$controller->index()->getContent();
+checkNow(str_contains($page,'Plan my ride')||str_contains($page,'Your week starts here.'),'the new Timetable page offers a direct path to ride planning');
+checkNow(str_contains($page,'30 and 10 minutes before'),'Timetable explains the connected robot reminders');
+$previewId=DB::table('commute_timetable')->insertGetId(['user_id'=>$users[0]->user_id,'title'=>'Software engineering','weekday'=>1,'starts_at'=>'09:00:00','ends_at'=>'10:00:00','location'=>'FTMK Main Campus','created_at'=>now(),'updated_at'=>now()]);
+$htmlRequest=Illuminate\Http\Request::create('http://localhost/workshop/timetable/'.$previewId.'/ride');$htmlRequest->setLaravelSession(app('session.store'));app()->instance('request',$htmlRequest);
+$rideForm=$controller->ride($htmlRequest,$previewId)->getContent();
+checkNow(str_contains($rideForm,'timetableRideForm')&&str_contains($rideForm,'FTMK Main Campus'),'ride setup carries the session destination into an editable location picker');
+checkNow(str_contains($rideForm,'Next session only')&&str_contains($rideForm,'Repeat every week')&&str_contains($rideForm,'weeklyRideConsent'),'the ride form offers a one-time ride and explicit weekly opt-in');
+$previewReview=$review($weekly,$previewId);$previewSaved=$save($weekly,$previewReview['fare']['token'],$previewId)['appointment'];
+checkNow(str_contains($controller->index()->getContent(),'Weekly rides enabled'),'a saved weekly plan and next ride appear on Timetable');
+if(in_array('--timetable-preview',$argv,true)) {
+    URL::forceRootUrl('http://localhost/workshop');
+    $previewSession=DB::table('commute_timetable')->find($previewId);
+    $extraId=DB::table('commute_timetable')->insertGetId(['user_id'=>$users[0]->user_id,'title'=>'Database systems','weekday'=>3,'starts_at'=>'14:00:00','ends_at'=>'16:00:00','location'=>'FTMK Lab 3','created_at'=>now(),'updated_at'=>now()]);
+    $htmlRequest->setLaravelSession(app('session.store'));app()->instance('request',$htmlRequest);
+    $directory=public_path('device-review/timetable');if(!is_dir($directory))mkdir($directory,0777,true);
+    $trip=(new App\Http\Controllers\RoutesController)->computeRoute(useNowRequest('api/routes/compute','POST',[
+        'origin_lat'=>$journey['pickup_latitude'],'origin_lng'=>$journey['pickup_longitude'],
+        'dest_lat'=>$journey['dropoff_latitude'],'dest_lng'=>$journey['dropoff_longitude'],
+    ]))->getData(true);
+    $write=function($name,$html)use($directory,$trip) {
+        $html=preg_replace('~<form\b~','<form inert',$html);
+        $html=preg_replace('~<script\b[^>]*src="[^"]*timetable-rides\.js[^>]*>.*?</script>~s','',$html);
+        $html=str_replace('id="commuteRepeatDates" hidden','id="commuteRepeatDates"',$html);
+        $events=['serverTime'=>now()->toIso8601String(),'timezone'=>'Asia/Kuala_Lumpur','events'=>[]];
+        $html=str_replace('data-schedule-robot data-endpoint','data-schedule-robot data-preview-events="'.htmlspecialchars(json_encode($events),ENT_QUOTES,'UTF-8').'" data-endpoint',$html);
+        $json=json_encode($trip,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
+        $html=str_replace('</head>','<meta name="robots" content="noindex,nofollow"><script>window.fetch=async function(url){if(String(url).includes("api/routes/compute"))return {ok:true,json:async()=>('.$json.')};throw new Error("Inert preview; no requests are submitted.");};</script></head>',$html);
+        file_put_contents($directory.'/'.$name.'.html',$html);
+    };
+    $write('overview',$controller->index()->getContent());
+    $write('ride',$controller->ride($htmlRequest,$previewId)->getContent());
+}
+Carbon::setTestNow();
+echo "$checks total ride, appointment and timetable-commute checks passed; SQLite memory only.\n";

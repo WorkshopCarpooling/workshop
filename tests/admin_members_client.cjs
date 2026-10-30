@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const make=action=>({dataset:{memberAction:action,memberName:'Demo member'},button:{disabled:false,textContent:''},addEventListener(_name,callback){this.submit=callback},querySelector(){return this.button}});
+const remove=make('remove'),restore=make('restore');let answer=false,calls=0,checks=0;
+vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/js/admin-members.js'),'utf8'),{document:{querySelectorAll:()=>[remove,restore]},window:{confirm:text=>{assert.ok(text.includes('Demo member')&&text.includes('Past trips'));calls++;return answer}}});
+const submit=form=>{let blocked=false;form.submit({preventDefault(){blocked=true}});return blocked};
+assert.ok(submit(remove)&&!remove.button.disabled);checks++;
+answer=true;assert.ok(!submit(remove)&&remove.button.disabled&&remove.button.textContent==='Removing…');checks++;
+assert.ok(submit(remove)&&calls===2);checks++;
+assert.ok(!submit(restore)&&restore.button.disabled&&restore.button.textContent==='Restoring…'&&calls===2);checks++;
+console.log(`${checks} member action confirmation, cancellation and duplicate-submit checks passed; no real accounts used.`);

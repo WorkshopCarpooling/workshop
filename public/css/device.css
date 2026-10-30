@@ -1,0 +1,84 @@
+/* Shared device behavior. Loaded after the page-specific styles. */
+:root{--app-green:#244b39;--safe-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:24px;-webkit-text-size-adjust:100%}
+body{min-width:0;margin:0}
+*,*:before,*:after{box-sizing:border-box}
+img,video,canvas{max-width:100%}
+button,input,select,textarea{font-family:inherit}
+a,button,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,a,input,select,textarea{touch-action:manipulation}
+button{cursor:pointer}
+button:disabled{cursor:default}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid #72965d;outline-offset:4px}
+.app-page .sidebar,.app-page .main-area,.app-page .page-content,.app-page .content-card,.app-page .driver-ride-main,.app-page .research-grid>*{min-width:0}
+.app-page .sidebar{padding-top:max(14px,env(safe-area-inset-top));padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}
+.app-page .sidebar .side-link{min-height:44px}
+.app-page .account-nav{flex-wrap:wrap;gap:10px}
+.app-page .account-nav-name{min-width:0;flex:1;max-width:200px}
+.app-page .account-nav .logout-button{min-height:44px;padding:10px 13px;border-radius:12px}
+.mobile-nav-toggle{display:none}
+.app-page .page-content{padding-bottom:calc(32px + var(--safe-bottom))}
+.app-page .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.app-page .table-scroll table{min-width:580px}
+.research-page table{min-width:420px}
+.app-page .driver-ride-route,.app-page .driver-ride-meta{overflow-wrap:anywhere}
+.app-page .driver-ride .route-plan{grid-column:2/-1;min-width:0;overflow-wrap:anywhere}
+.app-page .route-plan a{display:inline-flex;align-items:center;min-height:44px;line-height:1.6}
+.journey-extra-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.journey-picker .journey-input-row button,.journey-extra-tools button{min-height:44px}
+.journey-map{height:clamp(280px,44svh,470px)}
+.journey-suggestions button{min-height:48px;line-height:1.6}
+.journey-search-options>label{min-width:0}
+.journey-search-options input,.journey-search-options select{width:100%;min-width:0}
+.app-page [aria-busy=true] button[type=submit],.auth-page [aria-busy=true] button[type=submit]{opacity:.65;pointer-events:none}
+.connection-status{position:fixed;inset:auto 16px calc(16px + var(--safe-bottom));z-index:1200;max-width:700px;margin:auto;padding:14px 18px;border-radius:14px;box-shadow:0 8px 32px #172d2a22;font:500 14px/1.6 system-ui,sans-serif;background:#fff3df;color:#684514;border:1px solid #e5ce9f}
+@media(hover:hover){.app-page .solid-button:hover,.journey-picker button:hover{filter:brightness(.95)}.app-page .ride-result-card{transition:box-shadow .18s ease}.app-page .ride-result-card:hover{box-shadow:0 8px 28px #244b3910}}
+@media(min-width:1600px){.app-page .page-content{max-width:1500px}.app-page .sidebar{padding-inline:max(32px,calc((100vw - 1430px)/2))}}
+@media(max-width:1100px){.app-page .sidebar{gap:12px 18px;flex-wrap:wrap}.app-page .account-nav{margin-left:auto}.app-page .side-nav{gap:3px}.app-page .side-link{padding-inline:11px}.app-page .driver-ride .route-plan{grid-column:1/-1}}
+@media(max-width:820px){
+  .app-page input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.app-page select,.app-page textarea,.auth-page input:not([type=checkbox]):not([type=radio]),.auth-page select{font-size:16px!important;min-height:48px}
+  .app-page button:not(.gm-ui-hover-effect):not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out),.auth-page button{min-height:44px}
+  .app-page .driver-form-grid,.app-page .journey-fields,.app-page .research-grid{grid-template-columns:minmax(0,1fr)}
+  .app-page .driver-form-bottom{align-items:stretch;flex-direction:column}.app-page .driver-form-bottom .solid-button{width:100%;justify-content:center}
+  .app-page .journey-search-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app-page .find-submit{width:100%;justify-content:center;min-height:48px}
+  .app-page .driver-ride-route b{font-size:14px}.app-page .driver-ride-meta,.app-page .driver-intro,.app-page .driver-request{font-size:12px;line-height:1.7}
+  .app-page .section-kicker{font-size:10px}.app-page .driver-field>span{font-size:12px}
+  .research-page table{min-width:420px}.app-page .journey-status{font-size:12px}
+  .auth-page .auth-shell{min-height:100svh;height:auto}.auth-page .form-panel{min-width:0}.auth-page .auth-card{max-width:100%;width:100%}
+}
+@media(max-width:760px){
+  .app-page .sidebar{gap:12px;padding:14px 16px;align-items:center}
+  .app-page .sidebar .app-brand{order:0;flex:1}
+  .mobile-nav-toggle{order:1;display:inline-flex;align-items:center;gap:10px;justify-content:center;min-height:44px;padding:9px 14px;border:1px solid #cbd8c8;border-radius:12px;background:#edf3e9;color:#244b39;font:inherit;font-size:13px;font-weight:700}
+  .app-page .sidebar .account-nav{order:2;width:100%;margin:0;padding-top:12px;border-top:1px solid #dbe5d7}
+  .app-page .account-nav-name{max-width:none}.app-page .account-nav-name b{font-size:13px}.app-page .account-nav-name small{font-size:11px}
+  .app-page .sidebar .side-nav{order:3;display:flex;width:100%;padding:8px 0 0;overflow:visible;flex-direction:column;align-items:stretch;gap:6px;border-top:1px solid #dbe5d7}
+  .app-page .sidebar .side-link{width:100%;min-width:0;border-radius:10px;justify-content:flex-start;padding:12px 14px;font-size:14px;white-space:normal}
+  .app-page.nav-ready .sidebar[data-mobile-nav-open=false]>.side-nav{display:none!important}
+  .app-page .sidebar-label{display:none!important}
+  .app-page .sidebar .account-nav .logout-form{margin-left:0}
+  .app-page .topbar{min-height:44px;padding:10px 16px}.app-page .page-content{padding-inline:16px}
+  .app-page .welcome-row h1{font-size:27px;line-height:1.2}.app-page .subtitle{font-size:13px;line-height:1.7}
+  .app-page .content-card{padding:18px;border-radius:18px}.app-page .welcome-row{align-items:flex-start}
+  .research-page .form-pair{grid-template-columns:1fr}
+  .app-page .tracking-side{grid-template-columns:1fr}.app-page .dashboard-footer{flex-wrap:wrap;font-size:11px;line-height:1.7}
+  .journey-copy h2{font-size:34px!important}.journey-copy{padding:26px}.journey-scene{min-height:230px}.journey-hero{min-height:0}
+  .connection-status{left:10px;right:10px;font-size:13px}
+}
+@media(max-width:480px){
+  .app-page .journey-search-options,.research-page .form-pair{grid-template-columns:minmax(0,1fr)}
+  .app-page .account-nav{gap:8px}.app-page .account-nav>.user-avatar{display:none}.app-page .account-nav .logout-button{padding:9px 11px;font-size:12px}
+  .app-page .account-nav-name{max-width:calc(100% - 80px)}
+  .app-page .driver-ride{grid-template-columns:36px minmax(0,1fr);gap:10px;padding:14px}
+  .app-page .driver-ride>.ride-status{grid-column:2;justify-self:start}.app-page .driver-ride>.ride-actions,.app-page .driver-ride>.route-plan{grid-column:1/-1}
+  .app-page .ride-actions{flex-wrap:wrap}.app-page .ride-action-button{font-size:12px;padding:10px 15px}
+  .app-page .driver-ride-date{width:34px}.app-page .vehicle-review-row{flex-wrap:wrap;gap:12px}
+  .app-page .journey-input-row button{flex:1}.journey-map{height:300px}
+  .auth-page .visual-panel{min-height:210px}.auth-page .panel-copy h1{font-size:32px}.auth-page .panel-copy p{font-size:12px}.auth-page .form-panel{padding:26px 20px 80px}.auth-page .auth-footer{flex-wrap:wrap;gap:10px}
+  .auth-page .visual-panel{min-height:0;padding:22px 20px;border-radius:0 0 24px 24px}.auth-page .panel-copy{position:relative;margin:20px 0 0}.auth-page .panel-copy p{margin-bottom:0}.auth-page .journey-art{display:none}
+}
+@media(max-height:500px) and (orientation:landscape){.journey-map{height:250px}.auth-page .visual-panel{display:none}.auth-page .auth-shell{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media print{.mobile-nav-toggle,.connection-status{display:none!important}}

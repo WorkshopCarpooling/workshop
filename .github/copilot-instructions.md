@@ -1,29 +1,11 @@
 # RideUTeM project instructions
 
-## Project structure
+This is a Laravel 9 campus carpooling application. Read README and CONTRIBUTING for setup and collaboration.
 
-RideUTeM is a small PHP/MySQL campus carpool application organized with a lightweight MVC structure:
+Use `app/Http/Controllers`, middleware, `app/Models`, `app/Services`, Blade templates and `public` assets for new work. Older MVC folders and root PHP entry points remain for compatibility. Models use the `App\Models` namespace; preserve directory case for Linux.
 
-- `app/controllers/` handles requests, validation, access checks, and page data.
-- `app/models/` contains database access.
-- `app/views/` renders HTML templates.
-- `app/core/` contains shared session and authorization helpers.
-- Root-level PHP files are compatibility entry points. Static assets stay in `css/` and `js/`.
+Keep server-side authentication, account/vehicle approval, role and ownership checks, Laravel CSRF protection and escaped output. Preserve transactions and locking in shared-car acceptance. Passenger GPS responses must not expose another passenger's identity or pickup. Tracking is live only for active trips; do not invent driver coordinates or reopen finished trips.
 
-Keep the existing MVC boundaries when adding features. Use `databaseConnection(): PDO` and parameterized PDO queries. Do not put request or database logic in views.
+Passenger Find Ride is immediate. Date/time belongs to appointments and recurring timetable plans. Keep the floating reminder robot; research is not a passenger feature. Instant car capacity is server-managed and closes at full capacity or trip start. Carbon savings require explicit alternative-travel assumptions and must remain labelled as estimates.
 
-## Product and security rules
-
-The `users` table separates community role (`student`, `staff`, or `admin`) from account type (`passenger` or `driver`). Student and staff accounts need admin approval. Keep server-side role checks consistent across registration, routing, and authorization.
-
-Ride publishing, seat requests and decisions, passenger pickup pins, member approval, and account authentication use MySQL. Preserve transaction and locking behavior in the booking flow. Admin ride, complaint, and report areas remain interface previews. `tracking.php` and `js/tracking.js` simulate movement in the browser only; they do not use GPS or send location data.
-
-Use PDO prepared statements for request values, validate on the server, and follow the existing session CSRF-token pattern for state-changing forms. Escape dynamic HTML with `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')`. Never add admin registration to public sign-up or commit credentials, personal data, `.env`, or `config/database.local.php`.
-
-The pickup map uses Leaflet and OpenStreetMap. Keep attribution visible and follow the tile and Nominatim policies linked in `README.md`.
-
-## Checks
-
-There is no configured build system, automated test runner, or JavaScript linter. Check PHP syntax with `php -l path/to/file.php`. For end-to-end checks, follow the XAMPP and MySQL setup in `README.md`.
-
-Before team changes, follow `CONTRIBUTING.md`: create a short-lived branch, push it, and open a pull request for review into `main`.
+Never commit credentials, `.env`, database dumps with real records, installed dependencies, runtime caches or generated previews. Feature checks use SQLite memory and synthetic fixtures; read standalone utilities before running scripts that may touch a local database.

@@ -1,0 +1,1310 @@
+/* ==========================================================================
+   RideUTeM Post-Login Synchronized Green & White Studio Theme
+   - Reference-inspired Top Navbar with Animated Underline Effect
+   - Moving Studio Car Stage + Constant-Speed Infinite Wind Animation
+   - Synchronized with Login/Signup Green (#315b4c / #3f765f / #198d58) & White
+   ========================================================================== */
+
+:root {
+  --ink: #1d302b;
+  --muted: #6c7c73;
+  --green: #3f765f;
+  --green-dark: #285540;
+  --green-panel: #315b4c;
+  --green-vivid: #188c56;
+  --mint: #d9e6d9;
+  --studio-bg: #e3ece7;
+  --studio-bg-deep: #d6e3dc;
+  --paper: #f3f7f4;
+  --card-glass: rgba(255, 255, 255, 0.86);
+  --card-solid: #ffffff;
+  --refresh-border: #dce6df;
+  --refresh-shadow: 0 18px 42px rgba(25, 52, 41, 0.08);
+  --refresh-shadow-soft: 0 10px 26px rgba(25, 52, 41, 0.055);
+}
+
+body.app-page {
+  background: linear-gradient(180deg, #e5eee9 0%, #eef4f0 48%, #f5f8f6 100%);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: transparent;
+  position: relative;
+}
+
+/* Replace old left sidebar and old topbar with the new Reference Navbar */
+.app-page .sidebar,
+.app-page .topbar {
+  display: none !important;
+}
+
+.app-page .main-area {
+  margin-left: 0 !important;
+  min-height: calc(100vh - 84px);
+  position: relative;
+  z-index: 2;
+}
+
+.app-page .page-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 18px 32px 42px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   1. TOP NAVIGATION BAR WITH ANIMATED UNDERLINE EFFECT
+   ========================================================================== */
+
+.ref-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 14px 32px 10px;
+  background: rgba(227, 236, 231, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(63, 118, 95, 0.12);
+}
+
+.ref-navbar-inner {
+  max-width: 1376px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+/* Brand Logo (Synchronized with Login/Signup) */
+.ref-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: var(--ink);
+  font: 800 20px/1 "Manrope", sans-serif;
+  letter-spacing: -0.7px;
+  flex-shrink: 0;
+}
+
+.ref-brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #3f765f 0%, #285540 100%);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 18px rgba(40, 85, 64, 0.22);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.ref-brand:hover .ref-brand-mark {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(40, 85, 64, 0.3);
+}
+
+.ref-brand-mark svg {
+  width: 23px;
+  height: 23px;
+  fill: currentColor;
+}
+
+.ref-brand-text > span {
+  font-weight: 500;
+  color: var(--green);
+}
+
+/* Center Pill Navigation with Animated Underline Effect */
+.ref-nav-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 24px rgba(29, 48, 43, 0.06);
+}
+
+.ref-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 22px;
+  border-radius: 13px;
+  text-decoration: none;
+  color: #465a50;
+  font: 600 13px/1 "DM Sans", sans-serif;
+  letter-spacing: -0.1px;
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.ref-nav-link:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.ref-nav-link.active {
+  color: #ffffff;
+  background: linear-gradient(145deg, #3a6c56 0%, #285540 100%);
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(40, 85, 64, 0.22);
+}
+
+/* Underline Effect Animation */
+.ref-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 6px;
+  height: 2.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #188c56 0%, #3f765f 50%, #74c69d 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+  opacity: 0;
+}
+
+.ref-nav-link:hover::after,
+.ref-nav-link:focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.ref-nav-link.active::after {
+  background: linear-gradient(90deg, #a8ebc6 0%, #ffffff 50%, #a8ebc6 100%);
+  background-size: 200% 100%;
+  transform: scaleX(1);
+  opacity: 0.95;
+  animation: navUnderlineShimmer 2.6s linear infinite;
+}
+
+@keyframes navUnderlineShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Right Navbar Actions (Location Pill, User Chip & Logout Button) */
+.ref-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ref-location-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: #495e53;
+  font-size: 12px;
+  box-shadow: 0 6px 18px rgba(29, 48, 43, 0.05);
+}
+
+.ref-location-pill svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--green-vivid);
+  flex-shrink: 0;
+}
+
+.ref-location-pill b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.ref-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 4px 13px 4px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(29, 48, 43, 0.05);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.ref-user-chip:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.ref-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #d7e8dc 0%, #bed8c6 100%);
+  color: var(--green-dark);
+  font: 800 12px/1 "Manrope", sans-serif;
+  display: grid;
+  place-items: center;
+}
+
+.ref-user-meta b {
+  display: block;
+  font-size: 12px;
+  line-height: 1.15;
+}
+
+.ref-user-meta small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.ref-logout-form {
+  margin: 0;
+}
+
+.ref-logout-btn {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(63, 118, 95, 0.18);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--green-dark);
+  font: 700 12px/1 "DM Sans", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(29, 48, 43, 0.05);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.18s ease;
+}
+
+.ref-logout-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ref-logout-btn:hover {
+  background: var(--green-panel);
+  border-color: var(--green-panel);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   2. AMBIENT CONSTANT-SPEED WIND BACKGROUND (FULL VIEWPORT)
+   ========================================================================== */
+
+.ambient-wind-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-wind-line {
+  position: absolute;
+  left: -35%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(63, 118, 95, 0.22) 45%,
+    rgba(255, 255, 255, 0.65) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: ambientWindConstant 3.2s linear infinite;
+}
+
+.ambient-wind-line.aw-1 { top: 16%; width: 320px; animation-duration: 2.8s; animation-delay: -0.4s; }
+.ambient-wind-line.aw-2 { top: 32%; width: 440px; animation-duration: 3.4s; animation-delay: -1.7s; }
+.ambient-wind-line.aw-3 { top: 51%; width: 380px; animation-duration: 2.5s; animation-delay: -0.9s; }
+.ambient-wind-line.aw-4 { top: 68%; width: 490px; animation-duration: 3.1s; animation-delay: -2.2s; }
+.ambient-wind-line.aw-5 { top: 82%; width: 350px; animation-duration: 2.7s; animation-delay: -1.3s; }
+.ambient-wind-line.aw-6 { top: 92%; width: 420px; animation-duration: 3.6s; animation-delay: -2.8s; }
+
+@keyframes ambientWindConstant {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(145vw, 0, 0);
+  }
+}
+
+/* ==========================================================================
+   3. STUDIO CAR STAGE + CONSTANT-SPEED INFINITE WIND + CAR MOTION
+   ========================================================================== */
+
+.ref-car-stage {
+  position: relative;
+  min-height: 490px;
+  border-radius: 30px;
+  background: #e3ece7;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 50px rgba(29, 48, 43, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  padding: 32px 36px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+/* Wind Tunnel Layer Inside Car Stage (Constant Speed Infinite Left -> Right) */
+.wind-tunnel-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.wind-streak {
+  position: absolute;
+  left: -30%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.92) 38%,
+    rgba(63, 118, 95, 0.48) 78%,
+    rgba(63, 118, 95, 0) 100%
+  );
+  will-change: transform;
+  animation: stageWindConstant 1.35s linear infinite;
+}
+
+.wind-streak.ws-1  { top: 14%; width: 260px; animation-duration: 1.25s; animation-delay: -0.15s; }
+.wind-streak.ws-2  { top: 22%; width: 340px; animation-duration: 1.45s; animation-delay: -0.75s; height: 2.5px; }
+.wind-streak.ws-3  { top: 31%; width: 290px; animation-duration: 1.15s; animation-delay: -0.45s; }
+.wind-streak.ws-4  { top: 41%; width: 380px; animation-duration: 1.35s; animation-delay: -0.95s; height: 3.5px; }
+.wind-streak.ws-5  { top: 49%; width: 310px; animation-duration: 1.08s; animation-delay: -0.30s; }
+.wind-streak.ws-6  { top: 58%; width: 420px; animation-duration: 1.28s; animation-delay: -0.62s; height: 3px; }
+.wind-streak.ws-7  { top: 67%; width: 280px; animation-duration: 1.12s; animation-delay: -0.88s; }
+.wind-streak.ws-8  { top: 75%; width: 360px; animation-duration: 1.02s; animation-delay: -0.22s; height: 3.5px; }
+.wind-streak.ws-9  { top: 83%; width: 450px; animation-duration: 0.92s; animation-delay: -0.54s; }
+.wind-streak.ws-10 { top: 89%; width: 320px; animation-duration: 0.85s; animation-delay: -0.40s; }
+
+@keyframes stageWindConstant {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(1650px, 0, 0);
+  }
+}
+
+/* High-Speed Passing Road Track Underneath Tires (Constant Speed Infinite) */
+.road-speed-track {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: 44px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(49, 91, 76, 0.26) 0 58px,
+    rgba(255, 255, 255, 0.75) 58px 116px,
+    transparent 116px 180px
+  );
+  opacity: 0.78;
+  animation: roadTrackConstant 0.42s linear infinite;
+}
+
+@keyframes roadTrackConstant {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(180px, 0, 0);
+  }
+}
+
+/* Top-Left Stage Title & Mode Pills (Matching "Volvo EX30" & "L R F B" in Reference) */
+.ref-stage-header {
+  position: absolute;
+  top: 32px;
+  left: 34px;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 440px;
+}
+
+.ref-back-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(29, 48, 43, 0.06);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.ref-back-btn:hover {
+  background: #ffffff;
+  transform: translateX(-2px);
+}
+
+.ref-back-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ref-stage-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--green-dark);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.ref-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-vivid);
+  box-shadow: 0 0 0 4px rgba(24, 140, 86, 0.18);
+}
+
+.ref-stage-title {
+  margin: 0;
+  font: 700 clamp(32px, 3.4vw, 48px)/1.05 "Manrope", sans-serif;
+  letter-spacing: -1.8px;
+  color: var(--ink);
+}
+
+.ref-stage-subtitle {
+  margin: 7px 0 18px;
+  font-size: 13.5px;
+  color: #5d7066;
+  font-weight: 500;
+}
+
+.ref-drive-modes {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 6px 16px rgba(29, 48, 43, 0.05);
+}
+
+.drive-pill {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: 700 11px/1 "Manrope", sans-serif;
+  color: #495e53;
+}
+
+.drive-pill.active {
+  background: var(--green-vivid);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(24, 140, 86, 0.35);
+}
+
+/* Left & Right Floating Control Squircles */
+.ref-side-controls {
+  position: absolute;
+  top: 54%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ref-side-left {
+  left: 34px;
+}
+
+.ref-side-right {
+  right: 34px;
+}
+
+.ref-squircle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: #364c41;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(29, 48, 43, 0.06);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.ref-squircle-btn:hover,
+.ref-squircle-btn.active {
+  background: var(--green-panel);
+  border-color: var(--green-panel);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.ref-squircle-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Center Studio Car Showcase with Moving Car Effects */
+.ref-car-showcase {
+  position: relative;
+  width: min(74%, 890px);
+  margin: 28px auto 0 7%;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+.car-ground-shadow-pulse {
+  position: absolute;
+  left: 9%;
+  right: 8%;
+  bottom: 7%;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(22, 45, 36, 0.34) 0%, rgba(22, 45, 36, 0) 72%);
+  filter: blur(6px);
+  animation: carShadowDynamic 0.52s ease-in-out infinite alternate;
+}
+
+/* Moving Car Suspension Bounce, Road Vibration & Forward Cruise Effect */
+.car-motion-rig {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1376 / 768;
+  transform-origin: 50% 68%;
+  will-change: transform;
+  animation: carCruiseMotion 0.52s ease-in-out infinite alternate;
+}
+
+.car-studio-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.car-motion-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Spinning Wheels (Counter-Clockwise because Car Faces Left) */
+.car-wheel-ccw {
+  transform-origin: 0 0;
+  animation: wheelSpinLeftConstant 0.34s linear infinite;
+}
+
+@keyframes wheelSpinLeftConstant {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Car Body Dynamic Cruising Bounce & Pitch */
+@keyframes carCruiseMotion {
+  0% {
+    transform: translate3d(-2px, 0px, 0) rotate(-0.26deg);
+  }
+  50% {
+    transform: translate3d(1px, -3.5px, 0) rotate(0.14deg);
+  }
+  100% {
+    transform: translate3d(-1px, 1.8px, 0) rotate(0.28deg);
+  }
+}
+
+@keyframes carShadowDynamic {
+  0% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scaleX(0.96) scaleY(0.88);
+    opacity: 0.62;
+  }
+}
+
+/* Constant-Speed Infinite Aerodynamic Wind Ribbons Over the Car Contour */
+.aero-wind-path {
+  stroke-dasharray: 210 310;
+  animation: aeroWindRibbonConstant 0.95s linear infinite;
+}
+
+.aero-wind-path.awp-2 {
+  stroke-dasharray: 170 280;
+  animation-duration: 0.82s;
+  animation-delay: -0.3s;
+}
+
+.aero-wind-path.awp-3 {
+  stroke-dasharray: 240 320;
+  animation-duration: 0.74s;
+  animation-delay: -0.55s;
+}
+
+.aero-wind-path.awp-4 {
+  stroke-dasharray: 190 300;
+  animation-duration: 1.05s;
+  animation-delay: -0.2s;
+}
+
+.aero-wind-path.awp-5 {
+  stroke-dasharray: 150 230;
+  animation-duration: 0.62s;
+  animation-delay: -0.4s;
+}
+
+@keyframes aeroWindRibbonConstant {
+  0% {
+    stroke-dashoffset: 520;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Rear Slipstream Puffs Trailing Right */
+.slip-puff {
+  animation: slipPuffStream 0.78s linear infinite;
+}
+
+.slip-puff.sp-2 {
+  animation-delay: -0.26s;
+}
+
+.slip-puff.sp-3 {
+  animation-delay: -0.52s;
+}
+
+@keyframes slipPuffStream {
+  0% {
+    transform: translate3d(-10px, 2px, 0) scale(0.6);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(48px, -8px, 0) scale(1.45);
+    opacity: 0;
+  }
+}
+
+.car-headlight-cone {
+  animation: headlightPulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes headlightPulse {
+  0% {
+    opacity: 0.68;
+  }
+  100% {
+    opacity: 0.98;
+  }
+}
+
+/* ==========================================================================
+   4. RIGHT FLOATING GLASS CARD (MATCHING REFERENCE "AI ASSISTANT" PANEL)
+   ========================================================================== */
+
+.ref-assistant-card {
+  position: absolute;
+  right: 96px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 348px;
+  z-index: 6;
+  border-radius: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 48px rgba(24, 48, 38, 0.12);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.ref-assistant-card.is-compact .ref-assistant-grid {
+  display: none;
+}
+
+.ref-assistant-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ref-assistant-top b {
+  display: block;
+  font: 700 15px/1.2 "Manrope", sans-serif;
+  color: var(--ink);
+}
+
+.ref-assistant-top small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.ref-card-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  border: 1px solid rgba(63, 118, 95, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.ref-card-close:hover {
+  background: #ffffff;
+}
+
+.ref-assistant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ref-assistant-tile {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 12px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ref-assistant-tile:hover,
+.ref-assistant-tile.active {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(29, 48, 43, 0.07);
+}
+
+.tile-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.ref-assistant-tile.active .tile-icon {
+  background: var(--green-dark);
+}
+
+.ref-assistant-tile b {
+  display: block;
+  font: 700 12.5px/1.2 "Manrope", sans-serif;
+}
+
+.ref-assistant-tile small {
+  display: block;
+  margin-top: 3px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.ref-assistant-prompt {
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+}
+
+.ref-prompt-input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 600 12.5px/1.3 "DM Sans", sans-serif;
+  margin-bottom: 11px;
+  padding: 2px 4px;
+}
+
+.ref-prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ref-mini-tool {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(63, 118, 95, 0.12);
+  color: var(--green-dark);
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.ref-mini-tool:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.ref-send-btn {
+  margin-left: auto;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1d945c 0%, #147748 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font: 700 12.5px/1 "DM Sans", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 18px rgba(20, 119, 72, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ref-send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(20, 119, 72, 0.36);
+}
+
+.ref-send-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==========================================================================
+   5. BOTTOM 3-COLUMN BENTO CARDS (MY LOCATION, MY DATES, RIDE PASS)
+   ========================================================================== */
+
+.ref-bento-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.ref-bento-card {
+  background: var(--card-glass);
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 24px;
+  padding: 20px 22px;
+  box-shadow: var(--refresh-shadow-soft);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 182px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ref-bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--refresh-shadow);
+}
+
+.ref-bento-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ref-bento-head b {
+  display: block;
+  font: 700 15px/1.2 "Manrope", sans-serif;
+  color: var(--ink);
+}
+
+.ref-bento-head small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.ref-expand-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: #f2f7f4;
+  border: 1px solid #e1ebe4;
+  color: var(--green-dark);
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.ref-expand-btn:hover {
+  background: var(--green-panel);
+  color: #ffffff;
+}
+
+/* Mini Schematic Map in Card 1 */
+.ref-mini-map {
+  position: relative;
+  height: 92px;
+  border-radius: 16px;
+  background: #dde7e1;
+  overflow: hidden;
+  border: 1px solid #d2dfd7;
+}
+
+.map-road-h {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 48%;
+  height: 14px;
+  background: #ffffff;
+  transform: rotate(-8deg);
+}
+
+.map-road-v {
+  position: absolute;
+  top: -15%;
+  bottom: -15%;
+  left: 44%;
+  width: 14px;
+  background: #ffffff;
+  transform: rotate(14deg);
+}
+
+.map-road-d {
+  position: absolute;
+  left: 15%;
+  right: -10%;
+  bottom: 12%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  transform: rotate(22deg);
+}
+
+.ref-map-pin {
+  position: absolute;
+  left: 46%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--green-vivid);
+  box-shadow: 0 6px 16px rgba(24, 140, 86, 0.42);
+  display: grid;
+  place-items: center;
+}
+
+.ref-map-pin i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* Split Date & Time Display in Card 2 */
+.ref-dates-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.ref-date-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #f2f7f4;
+  border: 1px solid #e3ece6;
+  text-align: center;
+}
+
+.date-arrow {
+  color: var(--green-vivid);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ref-date-box b,
+.ref-time-box b {
+  display: block;
+  font: 700 28px/1 "Manrope", sans-serif;
+  letter-spacing: -1px;
+  color: var(--ink);
+}
+
+.ref-date-box small,
+.ref-time-box small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ref-time-box {
+  text-align: center;
+  padding: 12px 10px;
+}
+
+/* Pass / Payment Summary Row in Card 3 */
+.ref-pass-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f2f7f4;
+  border: 1px solid #e3ece6;
+}
+
+.ref-pass-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(29, 48, 43, 0.06);
+}
+
+.ref-pass-info b {
+  display: block;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.ref-pass-info small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ref-radio-green {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--green-vivid);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ref-radio-green::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--green-vivid);
+}
+
+/* ==========================================================================
+   6. SYNCHRONIZED GREEN & WHITE CONTENT CARDS BELOW STAGE
+   ========================================================================== */
+
+.content-card,
+.stat-card,
+.admin-stat,
+.map-card,
+.trip-status-card,
+.privacy-card,
+.route-steps-card,
+.members-card,
+.admin-table-card,
+.find-search-card {
+  background: var(--card-glass);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 22px;
+  box-shadow: var(--refresh-shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+.solid-button,
+.find-submit,
+.approve-button {
+  background: linear-gradient(145deg, #3f765f 0%, #285540 100%);
+  color: #ffffff;
+  border-radius: 11px;
+  box-shadow: 0 8px 18px rgba(40, 85, 64, 0.18);
+}
+
+.solid-button:hover,
+.find-submit:hover,
+.approve-button:hover {
+  background: linear-gradient(145deg, #315b4c 0%, #1e4231 100%);
+  transform: translateY(-1px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1180px) {
+  .ref-car-showcase {
+    width: 68%;
+    margin-left: 4%;
+  }
+
+  .ref-assistant-card {
+    right: 24px;
+    width: 315px;
+  }
+
+  .ref-side-right {
+    display: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .ref-navbar {
+    padding: 12px 18px;
+  }
+
+  .ref-navbar-inner {
+    flex-wrap: wrap;
+  }
+
+  .ref-nav-pills {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .ref-location-pill {
+    display: none;
+  }
+
+  .ref-car-stage {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 20px;
+    min-height: 0;
+    gap: 18px;
+  }
+
+  .ref-stage-header {
+    position: relative;
+    top: auto;
+    left: auto;
+    max-width: none;
+  }
+
+  .ref-side-controls {
+    display: none;
+  }
+
+  .ref-car-showcase {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .ref-assistant-card {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+  }
+
+  .ref-bento-row {
+    grid-template-columns: 1fr;
+  }
+
+  .app-page .page-content {
+    padding: 16px 16px 36px;
+  }
+}

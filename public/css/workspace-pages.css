@@ -1,0 +1,28 @@
+.app-page .sidebar { gap: 12px; }
+.app-page .side-nav { flex-wrap: wrap; gap: 3px; }
+.app-page .side-link { padding-inline: 11px; white-space: nowrap; }
+.workspace-tiles { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 18px; margin: 24px 0; }
+.workspace-tile { display: block; color: #244b39; background: #fffef9; border: 1px solid #dbe5d8; border-radius: 18px; padding: 22px; text-decoration: none; }
+.workspace-tile b { display: block; font-size: 18px; margin-bottom: 8px; }
+.workspace-tile small { color: #627568; font-size: 13px; line-height: 1.7; }
+.workspace-stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(170px,1fr)); gap: 14px; margin: 20px 0; }
+.workspace-stats article { background: #f1f6ec; border-radius: 14px; padding: 20px; }
+.workspace-stats strong { display: block; font-size: 26px; color: #244b39; margin: 8px 0; }
+.workspace-stats small { color: #667a6b; font-size: 12px; line-height: 1.6; }
+.carbon-page .content-card, .carbon-report { padding: 24px; margin-bottom: 22px; }
+.carbon-form-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.carbon-page form, .vehicle-fuel-form { display: grid; gap: 14px; margin: 16px 0; }
+.carbon-page label, .vehicle-fuel-form label, .carbon-baseline-fields label { display: grid; gap: 7px; font-size: 13px; font-weight: 600; }
+.carbon-page input, .carbon-page select, .vehicle-fuel-form input, .vehicle-fuel-form select, .carbon-baseline-fields input, .carbon-baseline-fields select { width: 100%; min-width: 0; padding: 12px; border: 1px solid #cdd9ce; border-radius: 8px; background: white; font: inherit; }
+.carbon-baseline-fields { display: grid; gap: 12px; padding: 16px; margin-bottom: 14px; border: 1px solid #d9e4d6; border-radius: 12px; background: #f6faf2; }
+.carbon-baseline-fields small, .carbon-page small { font-size: 12px; line-height: 1.7; color: #657968; }
+.carbon-result { padding: 16px; border-radius: 12px; background: #edf4e6; font-size: 14px; line-height: 1.8; }
+.carbon-result.negative { background: #fff1df; color: #89562f; }
+.carbon-pending { padding: 14px; background: #faf4e7; color: #7b633c; border-radius: 10px; line-height: 1.7; }
+.global-driver-gps { margin: 16px 24px 24px; padding: 16px; border: 1px solid #c8dcc9; border-radius: 14px; background: #f5f9f1; }
+.global-driver-gps summary { cursor: pointer; color: #244b39; font-weight: 700; }
+.global-driver-gps .driver-location-sharing { margin-top: 12px; max-width: none; }
+.vehicle-fuel-form { flex-basis: 100%; padding: 14px; border: 1px solid #d6e1d2; border-radius: 10px; }
+.vehicle-review-row { flex-wrap: wrap; }
+.carbon-page details summary { cursor: pointer; padding: 12px 0; font-weight: 700; }
+@media(max-width:760px) { .carbon-form-grid { grid-template-columns: 1fr; } .carbon-page .content-card { padding: 18px; } .global-driver-gps { margin-inline: 16px; } }

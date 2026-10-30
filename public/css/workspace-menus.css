@@ -1,0 +1,36 @@
+/* Profile disclosures and a compact vehicle application picker. */
+.app-page .account-nav .profile-menu{position:relative;min-width:200px;max-width:320px}
+.app-page .profile-trigger{display:flex;align-items:center;gap:10px;min-height:48px;padding:7px 12px;border:1px solid #dce5d7;border-radius:14px;cursor:pointer;list-style:none;background:#fff;color:#244b39}
+.profile-trigger::-webkit-details-marker{display:none}
+.app-page .profile-trigger .account-nav-name{max-width:200px;flex:1;min-width:0}
+.app-page .profile-trigger .account-nav-name b{font-size:12px;line-height:1.4}
+.profile-chevron{margin-left:auto;flex-shrink:0;font-size:20px;line-height:1;transition:transform .15s}
+.profile-menu[open] .profile-chevron{transform:rotate(180deg)}
+.profile-menu-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:100;min-width:220px;width:100%;max-width:calc(100vw - 32px);padding:9px;background:#fff;border:1px solid #d9e3d3;border-radius:14px;box-shadow:0 12px 36px #20392f24}
+.app-page .profile-menu-label{margin:6px 10px 8px;font-size:10px;font-weight:700;line-height:1.5;letter-spacing:1.2px;color:#80907d}
+.app-page .profile-menu-link,.app-page .profile-menu-panel .logout-button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:11px 12px;border:0;border-radius:9px;background:transparent;color:#244b39;text-decoration:none;text-align:left;font:600 13px 'DM Sans',sans-serif}
+.profile-menu-link span,.profile-menu-panel .logout-button span{font-size:18px;line-height:1}
+.app-page .profile-menu-link:hover,.app-page .profile-menu-link.active,.app-page .profile-menu-panel .logout-button:hover{background:#edf3e9}
+.app-page .profile-menu-panel .logout-form{display:block;width:100%;margin:5px 0 0;padding-top:5px;border-top:1px solid #edf1e9}
+.vehicle-picker{margin:22px 0}
+.vehicle-picker>label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}
+.vehicle-picker>select{display:block;width:100%;min-height:50px;padding:12px 36px 12px 14px;border:1px solid #bdcdb7;border-radius:12px;background:#fff;color:#244b39;font:600 14px 'DM Sans',sans-serif}
+.vehicle-picker-help,.vehicle-status-help{font-size:12px;color:#667c69;line-height:1.7;margin:10px 0}
+.vehicle-status-help{flex-basis:100%;margin:0}
+.vehicle-picker .vehicle-review-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:18px;gap:14px;background:#f8faf5;border:1px solid #e2e9dc;border-radius:12px}
+.vehicle-picker .vehicle-review-row>div{display:grid;gap:5px;flex:1;min-width:0}
+.vehicle-picker .vehicle-review-row b{font-size:14px}
+.vehicle-picker .vehicle-review-row small{font-size:12px;line-height:1.6}
+.vehicle-fuel-details{flex-basis:100%;width:100%;border-top:1px solid #e0e7dc;padding-top:6px}
+.vehicle-fuel-details>summary,.vehicle-application>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:48px;cursor:pointer;list-style:none;color:#244b39;font-size:13px;font-weight:700;line-height:1.6}
+.vehicle-fuel-details>summary::-webkit-details-marker,.vehicle-application>summary::-webkit-details-marker{display:none}
+.vehicle-fuel-details>summary>span,.vehicle-application>summary>span{font-size:20px;flex-shrink:0}
+.vehicle-fuel-details[open]>summary>span{transform:rotate(180deg)}
+.vehicle-picker .vehicle-fuel-form{display:grid;gap:14px;margin:10px 0 0;padding:16px;background:#fff;border:1px solid #d9e3d3;border-radius:12px}
+.vehicle-fuel-form .carbon-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.vehicle-fuel-form label{display:grid;gap:8px;font-size:12px;font-weight:600}
+.vehicle-fuel-form input,.vehicle-fuel-form select{width:100%;min-width:0;padding:12px;border:1px solid #cdd9ce;border-radius:8px;background:#fff;font:inherit}
+.vehicle-fuel-form .ride-action-button{justify-self:start}
+.vehicle-application{margin-top:22px;border:1px solid #d6e1d0;border-radius:14px;padding:8px 18px;background:#fff}
+.vehicle-application .vehicle-submit-form{margin-top:8px}
+@media(max-width:760px){.app-page .account-nav .profile-menu{width:100%;max-width:none;min-width:0}.app-page .profile-menu-panel{width:100%;min-width:0}.app-page .profile-trigger .account-nav-name{max-width:none}.vehicle-fuel-form .carbon-form-grid{grid-template-columns:1fr}.vehicle-picker .vehicle-review-row{align-items:stretch}.vehicle-picker .vehicle-review-row>.ride-status{align-self:flex-start}.vehicle-application{padding-inline:14px}}

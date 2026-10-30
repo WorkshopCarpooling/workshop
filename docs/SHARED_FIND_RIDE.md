@@ -1,0 +1,17 @@
+# Shared cars in Find Ride
+
+The driver presses Accept directly. The first instant acceptance creates one shared car with the server-managed `carpool.instant_passenger_capacity` (currently 3 passengers, excluding the driver). There is no passenger-count selector or capacity field in the accept form. Submitted capacity overrides are ignored. The default starting point is UTeM Main Campus; changing the location remains optional. Capacity and start are saved for this trip and cannot be changed by later accept submissions. Existing trips retain their saved capacity.
+
+The starting pin defaults to the application's UTeM Main Campus coordinate. `carpool.driver_area` defines a 5 km service radius around it. New driver starts outside that radius are rejected on both client and server. Out-of-area device GPS retains the previously selected campus pin; actual in-trip GPS tracking still reports the device position. This circle is an approximate service area, not an official campus boundary. Existing accepted trips are not moved.
+
+The driver home page places instant passenger requests before the large illustration and displays up to three pending scheduled seat requests with accept/decline actions. Sidebar minimisation applies to admin, driver and passenger pages, persists locally, and preserves accessible names and the existing mobile navigation.
+
+Additional pending instant requests join that same ride only when their pinned drop-off is within 50 metres of its common destination and their whole party fits the remaining seats. Location labels alone never match destinations. Appointments stay separate. The existing quoted contribution for each request is preserved; adding another passenger does not reprice earlier bookings.
+
+Acceptances lock the driver, request, trip and vehicle inside a database transaction. All accepted seats count, including multiple seats requested by one passenger. Repeating an accepted request does not consume more seats. Full cars stop receiving requests. Drivers can leave early using **Start pickups**; starting also closes matching. Old instant rides with no pool capacity retain their original private behaviour.
+
+The route begins at the saved driver starting pin and chooses the nearest remaining pickup at each leg, using straight-line pin distances and booking ID to break ties. It ends at the common drop-off after all pickups. This is a nearest-neighbour suggestion, not a claim of the shortest road route or live traffic optimisation. Road directions preserve this stop order. New acceptances can change positions before pickup starts; no requests join after starting. The driver can update the starting pin before accepting the first request.
+
+Passengers see only their own pickup position, total booked seats and remaining seats. Other passengers' identities and pickup locations are not included in their status response. Driver route pages remain restricted to the owning driver. Existing timetable, appointments, reminders, cancellation animation and carbon records remain in place; carbon route estimates now include the driver starting point and all pooled pickup stops.
+
+Install only `2026_10_30_000000_add_find_ride_pooling.php`. It adds nullable fields and does not convert or reassign existing rides or requests. Test with `php tests/shared_find_ride.php`; every fixture uses SQLite memory. `--pool-preview` writes clearly marked synthetic previews without modifying real accounts or journeys.

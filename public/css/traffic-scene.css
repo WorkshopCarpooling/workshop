@@ -1,0 +1,50 @@
+/* The road moves continuously; the vehicles alternate without restarting the road. */
+.traffic-scene{--road-step:56px;--road-period:.75s;--traffic-cycle:12s;position:relative;min-width:0;min-height:390px;overflow:hidden;isolation:isolate;background:linear-gradient(110deg,#eef2e8,#dfe9d8)}
+.traffic-road{position:absolute;top:-30%;bottom:-30%;width:31%;border-inline:6px solid #f8fbf3;background:#cfd8ce;transform:rotate(12deg);box-shadow:8px 0 22px #314b3014;z-index:1}
+.traffic-road-car{left:10%}
+.traffic-road-motorcycle{left:61%;background:#c6d1c7}
+.traffic-road-stripes{position:absolute;inset:0 auto 0 50%;width:3px;transform:translateX(-50%);background:repeating-linear-gradient(to bottom,#fbfcf5 0 27px,transparent 27px var(--road-step));animation:traffic-road-flow var(--road-period) linear infinite}
+
+.traffic-road:before{content:"";position:absolute;inset:0 8px;border-inline:1px solid #f7faf14d}
+.traffic-vehicle{position:absolute;top:35%;left:42%;width:80px;margin-left:-40px;z-index:3;pointer-events:none;animation:traffic-car-turn var(--traffic-cycle) linear infinite;will-change:opacity,transform}
+.traffic-motorcycle{left:58%;top:33%;width:66px;margin-left:-33px;opacity:0;animation-name:traffic-motorcycle-turn}
+.traffic-body{position:relative;filter:drop-shadow(7px 11px 5px #263d3542);animation:traffic-car-vibration .28s linear infinite;will-change:transform}
+.traffic-body svg,.traffic-body img{position:relative;display:block;width:100%;height:auto;z-index:2}
+.traffic-motorcycle-body{animation:traffic-motorcycle-vibration .19s linear infinite;transform-origin:50% 58%}
+.traffic-headlight{position:absolute;top:-40px;left:31%;width:38%;height:65px;background:linear-gradient(to top,#fff5c45e,transparent);border-radius:50% 50% 15% 15%;filter:blur(5px);z-index:0}
+.traffic-motorcycle .traffic-headlight{top:-30px;left:37%;width:26%;height:45px;background:linear-gradient(to top,#fff5ba80,transparent)}
+.traffic-slipstream{position:absolute;top:79%;left:10%;height:90px;width:2px;border-radius:50%;background:linear-gradient(#ffffffbd,transparent);transform-origin:top;animation:traffic-slipstream-flow .8s linear infinite;z-index:1}
+.traffic-slipstream-right{left:auto;right:10%;animation-delay:-.4s}
+.traffic-motorcycle .traffic-slipstream{top:67%;left:5%;height:105px;animation-duration:.65s}
+.traffic-motorcycle .traffic-slipstream-right{left:auto;right:5%;animation-delay:-.325s}
+.traffic-exhaust{position:absolute;left:68%;top:90%;z-index:0}
+.traffic-exhaust i{position:absolute;width:7px;height:7px;border-radius:50%;background:#f2f7edb3;animation:traffic-exhaust-flow 1.05s linear infinite}
+.traffic-exhaust i:nth-child(2){animation-delay:-.35s}.traffic-exhaust i:nth-child(3){animation-delay:-.7s}
+.traffic-road-wind{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.traffic-road-wind i{position:absolute;top:-90px;left:9%;width:2px;height:65px;background:linear-gradient(transparent,#ffffff9e,transparent);border-radius:50%;animation:traffic-wind-flow 1.4s linear infinite}
+.traffic-road-wind i:nth-child(2){left:90%;height:45px;animation-delay:-.47s}.traffic-road-wind i:nth-child(3){left:59%;height:80px;animation-delay:-.94s}
+.traffic-road-motorcycle .traffic-road-wind i{animation-delay:-.22s}.traffic-road-motorcycle .traffic-road-wind i:nth-child(2){animation-delay:-.69s}.traffic-road-motorcycle .traffic-road-wind i:nth-child(3){animation-delay:-1.16s}
+.traffic-tree{position:absolute;z-index:0;display:block;width:105px;height:105px;border-radius:46% 54% 49% 51%;background:radial-gradient(circle at 35% 28%,#e4ecd9,#b6c9a7 67%,#9fb894);box-shadow:8px 14px 20px #36572b12}
+.traffic-tree-one{left:-48px;bottom:10px;width:140px;height:140px}.traffic-tree-two{left:42%;top:35px;width:62px;height:62px}.traffic-tree-three{right:-50px;top:5%;width:140px;height:140px}
+.traffic-journey-note{position:absolute;bottom:22px;left:20px;right:20px;z-index:4;display:flex;align-items:center;gap:12px;padding:15px 18px;border:1px solid #ffffffc9;border-radius:16px;background:#ffffffed;box-shadow:0 12px 30px #314b3012;backdrop-filter:blur(8px);color:#244b39}
+.traffic-journey-note b{display:block;font:800 16px Manrope,sans-serif;letter-spacing:-.4px}.traffic-journey-note small{display:block;font:11px/1.7 'DM Sans',sans-serif;color:#6b7e63;margin-top:3px}.traffic-journey-note small span{padding-inline:5px;color:#94a487}
+.traffic-note-icon{display:grid;place-items:center;flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#e8f0e0;color:#5c8050;font-size:23px}.traffic-note-spark{margin-left:auto;color:#9aaf7f;font-size:22px}
+@keyframes traffic-road-flow{from{background-position:0 0}to{background-position:0 var(--road-step)}}
+@keyframes traffic-car-turn{0%,43%{opacity:1;transform:translateY(0)}49%,94%{opacity:0;transform:translateY(-26px)}95%{opacity:0;transform:translateY(26px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes traffic-motorcycle-turn{0%,44%{opacity:0;transform:translateY(26px)}50%,93%{opacity:1;transform:translateY(0)}99%,100%{opacity:0;transform:translateY(-26px)}}
+@keyframes traffic-car-vibration{0%,100%{transform:translate(0,0)}25%{transform:translate(.3px,-.6px)}50%{transform:translate(0,-.2px)}75%{transform:translate(-.3px,-.6px)}}
+@keyframes traffic-motorcycle-vibration{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(.35px,-.8px) rotate(.3deg)}50%{transform:translate(0,-.25px) rotate(0)}75%{transform:translate(-.35px,-.8px) rotate(-.3deg)}}
+@keyframes traffic-slipstream-flow{0%{transform:scaleY(.45);opacity:.15}50%{opacity:.6}100%{transform:scaleY(1.1);opacity:0}}
+@keyframes traffic-wind-flow{from{top:-90px}to{top:100%}}
+@keyframes traffic-exhaust-flow{0%{transform:translate(0,0) scale(.4);opacity:.35}100%{transform:translate(3px,45px) scale(2.1);opacity:0}}
+.auth-page .auth-traffic-art{position:relative;display:block;flex:1;min-height:280px;margin:20px 0 0;width:100%;height:auto;right:auto;bottom:auto;opacity:1}
+.auth-page .auth-traffic-art .traffic-scene{min-height:280px;height:100%;border-radius:22px;background:linear-gradient(110deg,#b8cbb8,#9db99e)}
+.auth-page .auth-traffic-art .traffic-vehicle{top:33%;width:70px;margin-left:-35px}
+.auth-page .auth-traffic-art .traffic-motorcycle{width:58px;margin-left:-29px}
+@media(min-width:1500px){.journey-hero>.traffic-scene{min-height:440px}}
+@media(max-width:1000px){.traffic-road{width:34%}.traffic-road-car{left:5%}.traffic-road-motorcycle{left:60%}.traffic-vehicle{width:72px;margin-left:-36px}.traffic-motorcycle{width:60px;margin-left:-30px}.traffic-journey-note{left:14px;right:14px;padding:13px}}
+@media(max-width:820px){.auth-page .visual-panel{height:auto;max-height:none}.auth-page .auth-traffic-art{min-height:190px;margin-top:18px;flex:none}.auth-page .auth-traffic-art .traffic-scene{height:190px;min-height:190px}.auth-page .auth-traffic-art .traffic-vehicle{top:34%;width:54px;margin-left:-27px}.auth-page .auth-traffic-art .traffic-motorcycle{width:44px;margin-left:-22px}}
+@media(max-width:700px){.journey-hero>.traffic-scene{min-height:320px}.traffic-vehicle{top:33%}.traffic-journey-note{bottom:16px}.traffic-journey-note b{font-size:15px}.traffic-journey-note small{font-size:10px}}
+@media(max-width:480px){.auth-page .auth-traffic-art{display:block;min-height:165px}.auth-page .auth-traffic-art .traffic-scene{min-height:165px;height:165px}.auth-page .auth-traffic-art .traffic-vehicle{top:33%;width:48px;margin-left:-24px}.auth-page .auth-traffic-art .traffic-motorcycle{width:40px;margin-left:-20px}.traffic-note-icon{width:28px;height:28px}.traffic-journey-note{gap:9px}.traffic-note-spark{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.traffic-scene *,.traffic-scene *:before,.traffic-scene *:after{animation:none!important;will-change:auto!important}.traffic-vehicle{opacity:1!important;transform:none!important}.traffic-road-wind,.traffic-slipstream,.traffic-exhaust{display:none!important}}
+@media print{.traffic-scene{display:none}}
