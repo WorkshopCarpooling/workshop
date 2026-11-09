@@ -3,6 +3,13 @@
 
 define('LARAVEL_START', microtime(true));
 
+// A windowless worker has no terminal to measure. Prevent Symfony/Termwind
+// from spawning visible stty and mode CON command windows to detect its size.
+if (PHP_OS_FAMILY === 'Windows' && strtolower(basename(PHP_BINARY)) === 'php-win.exe') {
+    putenv('COLUMNS=120');
+    putenv('LINES=40');
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
