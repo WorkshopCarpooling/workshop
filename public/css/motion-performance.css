@@ -1,0 +1,42 @@
+/* Keep the page slide as the only entrance; cards and heroes appear together. */
+html .app-page .journey-hero,
+html .app-page .content-card,
+html .app-page .journey-floating { animation: none; }
+
+/* Move narrow road markings with transforms instead of repainting their background. */
+html .traffic-scene .traffic-road-stripes { top: calc(-1 * var(--road-step)); }
+@keyframes traffic-road-flow {
+  from { transform: translateY(0); }
+  to { transform: translateY(var(--road-step)); }
+}
+html .traffic-scene .traffic-body { animation: none; filter: none; }
+html .traffic-scene .traffic-headlight,
+html .traffic-scene .traffic-road-wind,
+html .traffic-scene .traffic-slipstream,
+html .traffic-scene .traffic-exhaust { display: none; }
+html .traffic-scene .traffic-road-wind i,
+html .traffic-scene .traffic-exhaust i,
+html .traffic-scene .traffic-slipstream { animation: none; }
+html .traffic-scene .traffic-journey-note { backdrop-filter: none; background: #fffffff5; }
+html .traffic-scene *, html .auth-vintage-art * { will-change: auto; }
+
+/* Keep the vintage car and turning wheels; stop the large SVG scenery layers. */
+html .auth-page .auth-vintage-art .vintage-landscape,
+html .auth-page .auth-vintage-art .vintage-road-texture,
+html .auth-page .auth-vintage-art .vintage-car,
+html .auth-page .auth-vintage-art .vintage-shadow,
+html .auth-page .auth-vintage-art .vintage-speed,
+html .auth-page .auth-vintage-art .vintage-dust circle { animation: none; }
+html .auth-page .auth-vintage-art .vintage-speed,
+html .auth-page .auth-vintage-art .vintage-dust { display: none; }
+html .auth-page .auth-vintage-art svg [filter] { filter: none; }
+
+/* Event-driven visibility classes affect illustration containers only, never live maps. */
+.motion-decor-paused *, .motion-decor-paused *::before, .motion-decor-paused *::after,
+.motion-tab-hidden .traffic-scene *, .motion-tab-hidden .traffic-scene *::before, .motion-tab-hidden .traffic-scene *::after,
+.motion-tab-hidden .auth-vintage-art *, .motion-tab-hidden .auth-vintage-art *::before, .motion-tab-hidden .auth-vintage-art *::after {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html .traffic-scene *, html .auth-vintage-art * { animation: none !important; }
+}

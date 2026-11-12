@@ -1,0 +1,40 @@
+.schedule-robot{position:fixed;right:24px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:1050;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:calc(100vw - 32px);pointer-events:none;font-family:'DM Sans',sans-serif;color:#20392f}
+.schedule-robot>*{pointer-events:auto}
+.app-page .schedule-robot .schedule-robot-launcher{width:122px;min-height:132px;border-radius:24px}
+.app-page .schedule-robot .schedule-robot-launcher,.app-page .schedule-robot .schedule-robot-launcher:is(:hover,:focus,:active){background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none}
+.app-page .schedule-robot .schedule-robot-launcher::before,.app-page .schedule-robot .schedule-robot-launcher::after{content:none!important}
+.app-page .schedule-robot .schedule-robot-launcher-label{background:transparent!important;border:0!important;box-shadow:none!important;padding:2px 0;margin-top:2px;color:#42613c}
+.app-page .schedule-robot .schedule-robot-launcher img{display:block;width:104px;height:104px}
+.app-page .schedule-robot .schedule-robot-halo{display:block}
+.schedule-robot [hidden]{display:none!important}
+.schedule-robot-card{position:relative;width:318px;max-width:100%;max-height:70dvh;overflow:auto;padding:19px;border:1px solid #dbe7d7;border-radius:22px 22px 6px 22px;background:#fffffc;box-shadow:0 16px 55px #1e3a2b28;text-align:left}
+.schedule-robot-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-6px -7px 10px 0}
+.schedule-robot-card-head>span{display:flex;align-items:center;gap:7px;color:#71866b;font-size:9px;font-weight:700;letter-spacing:1.1px}
+.schedule-robot-card-head i{width:6px;height:6px;border-radius:50%;background:#729a5c;box-shadow:0 0 0 4px #eaf2e3;flex-shrink:0}
+.app-page .schedule-robot-card-head button{display:grid;place-items:center;flex-shrink:0;width:38px;min-height:38px;border:0;border-radius:50%;background:#f1f5ec;color:#62765d;font-size:24px;padding:0;cursor:pointer}
+.schedule-robot-kicker{margin:0 0 8px!important;font-size:9px!important;letter-spacing:1.4px;font-weight:700;color:#829272}
+.app-page .schedule-robot-card h2{margin:0 0 10px;font:800 20px/1.35 Manrope,sans-serif;letter-spacing:-.6px;overflow-wrap:anywhere;color:#244b39}
+.schedule-robot-countdown{font-size:14px!important;font-weight:600;line-height:1.6!important;color:#45673d;margin:0 0 12px!important}
+.schedule-robot-location{font-size:12px!important;line-height:1.6!important;margin:0 0 5px!important;color:#6b7c65;overflow-wrap:anywhere}
+.schedule-robot-time{font-size:11px!important;line-height:1.6!important;margin:0 0 16px!important;color:#84917b}
+.schedule-robot-primary{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:11px 15px;background:#244b39;border-radius:12px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;gap:16px}
+.schedule-robot-primary:hover{background:#345d43}
+.schedule-robot-primary>span{font-size:18px}
+.schedule-robot-controls{display:flex;gap:9px;margin-top:10px}
+.app-page .schedule-robot-controls button,.app-page .schedule-robot-next{flex:1;min-height:40px;padding:9px 10px;border:1px solid #dce5d4;border-radius:10px;background:#f8faf4;color:#537049;font:600 11px 'DM Sans',sans-serif;cursor:pointer}
+.app-page .schedule-robot-next{display:block;width:100%;margin-top:9px;border:0;background:transparent;text-align:right}
+.schedule-robot-footnote{margin:13px 0 0!important;color:#8c9685;font-size:10px!important;line-height:1.6!important}
+.app-page .schedule-robot-launcher{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:132px;min-height:136px;padding:0;border:0;border-radius:26px;background:transparent;color:#244b39;cursor:pointer;font:600 10px 'DM Sans',sans-serif;isolation:isolate}
+.schedule-robot-launcher img{display:block;width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 5px 5px #244b391a);animation:schedule-robot-float 4s ease-in-out infinite}
+.schedule-robot-halo{position:absolute;bottom:20px;left:26px;right:26px;height:13px;background:#587e4e25;border-radius:50%;filter:blur(4px);z-index:-1}
+.schedule-robot-launcher-label{display:flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid #d8e3d0;border-radius:20px;background:#fffffc;box-shadow:0 3px 10px #25432912;white-space:nowrap}
+.schedule-robot-launcher-label i{font-size:12px;font-style:normal;color:#8eab67}
+.schedule-robot-badge{position:absolute;right:8px;top:4px;display:grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border:2px solid #fff;border-radius:50%;background:#e6a06f;color:#493220;font:800 10px Manrope,sans-serif}
+.schedule-robot[data-urgency=soon] .schedule-robot-launcher img{animation:schedule-robot-float 2s ease-in-out infinite}
+.app-page .schedule-robot button:focus-visible,.schedule-robot a:focus-visible{outline:3px solid #8da972;outline-offset:4px}
+body:has(.connection-status:not([hidden])) .schedule-robot{bottom:105px}
+@keyframes schedule-robot-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+@media(max-width:600px){.schedule-robot{right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));gap:6px}.schedule-robot-card{width:min(310px,calc(100vw - 28px));padding:17px}.app-page .schedule-robot-launcher{width:112px;min-height:119px}.schedule-robot-launcher img{width:96px;height:96px}.schedule-robot-launcher-label{font-size:9px;padding:6px 10px}.app-page .schedule-robot-controls button{min-height:44px}.schedule-robot-card-head>span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.schedule-robot-launcher img{animation:none!important}}
+@media print{.schedule-robot{display:none!important}}
+@media(max-width:600px){.app-page .schedule-robot .schedule-robot-launcher{width:106px;min-height:114px}.app-page .schedule-robot .schedule-robot-launcher img{width:88px;height:88px}}
