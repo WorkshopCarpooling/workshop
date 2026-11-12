@@ -1,0 +1,113 @@
+/* Pomelo-inspired passenger workspace. CSS-only motion; no additional runtime. */
+body.app-page.passenger-overview{
+  --brand-forest:#BCE3CD;--brand-cream:#10131E;--brand-orange:#DDA8BD;
+  --brand-sage:#293D3C;--brand-deep:#10131E;--brand-ink:#EFF0F6;
+  --brand-muted:#A1A8BB;--brand-surface:#191D2C;--brand-soft:#242B3B;
+  --brand-line:#FFFFFF13;--brand-focus:#BCE3CD;
+  background:#10131E;color:var(--brand-ink);color-scheme:dark;
+  background-image:radial-gradient(ellipse at 78% 0,#6542661B,transparent 52%);
+  font-size:13px;
+}
+.passenger-overview ::selection{background:#BCE3CD;color:#10131E}
+.passenger-overview .app-shell{min-height:100dvh}
+.app-page.passenger-overview .sidebar{
+  position:fixed;inset:0 auto 0 0;width:212px;height:100dvh;min-height:0;
+  padding:30px 18px 20px;display:flex!important;flex-direction:column;align-items:stretch;
+  flex-wrap:nowrap;gap:0;background:#141824;border:0;border-right:1px solid var(--brand-line);z-index:30;
+}
+.app-page.passenger-overview .app-brand{flex:none;padding:0 8px 0;font-size:23px;gap:2px}
+.app-page.passenger-overview .campus-wordmark{color:#F1F2F7}
+.app-page.passenger-overview .app-brand .campus-wordmark>span{color:#BBC3D5}
+.app-page.passenger-overview .app-brand .brand-mark{background:#BCE3CD;color:#182C29;border-radius:10px}
+.overview-nav-label{font-size:8px;letter-spacing:1.8px;color:#858CA2;font-weight:600;margin:42px 12px 15px}
+.app-page.passenger-overview .side-nav{display:flex;flex-direction:column;align-items:stretch;gap:7px;flex:none;flex-wrap:nowrap}
+.app-page.passenger-overview .side-link{font-size:12px;min-height:45px;padding:12px 13px;gap:12px;border-radius:10px;color:#A1A8BB;justify-content:flex-start;transition:background .2s,color .2s}
+.app-page.passenger-overview .side-link>span{display:grid;place-items:center;color:#7D879F;width:18px;height:18px;flex:none}
+.app-page.passenger-overview .side-link svg{width:18px;height:18px}
+.app-page.passenger-overview .side-link.active{background:#BCE3CD12;color:#C8E9D8;box-shadow:inset 2px 0 #BCE3CD}
+.app-page.passenger-overview .side-link.active>span{color:#BCE3CD}
+.app-page.passenger-overview .side-link:hover{background:#FFFFFF08;color:#EDF0F7;transform:none}
+.overview-sidebar-note{display:flex;gap:9px;align-items:flex-start;margin:auto 9px 22px;padding-top:30px;color:#B1B8C9;font-size:9px;line-height:1.6}
+.overview-sidebar-note small{display:block;color:#7D879F;font-size:8px;margin-top:3px}
+.overview-community-dot{width:5px;height:5px;border-radius:50%;background:#BCE3CD;flex:none;margin-top:5px}
+.app-page.passenger-overview .account-nav{margin:0;padding:16px 0 0;border-top:1px solid var(--brand-line);width:100%;flex:none}
+.app-page.passenger-overview .profile-menu{width:100%}
+.app-page.passenger-overview .profile-trigger{background:transparent;border:0;padding:5px 2px;color:#E4E7EF;border-radius:8px;min-height:46px;gap:9px}
+.app-page.passenger-overview .user-avatar{background:#3F354A;color:#E6C8D7;width:31px;height:31px;flex:none}
+.app-page.passenger-overview .account-nav-name{max-width:130px;min-width:0}
+.app-page.passenger-overview .account-nav-name b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-page.passenger-overview .account-nav-name small{font-size:8px;color:#8993A9}
+.app-page.passenger-overview .profile-menu-panel{top:auto;bottom:calc(100% + 12px);left:0;right:auto;min-width:174px;background:#202537;border-color:#FFFFFF1C;box-shadow:0 10px 35px #0005}
+.app-page.passenger-overview .profile-menu-label{color:#919BB1}
+.app-page.passenger-overview :is(.profile-menu-link,.logout-button){color:#D8DFED;background:transparent}
+.app-page.passenger-overview :is(.profile-menu-link:hover,.profile-menu-panel .logout-button:hover){background:#FFFFFF09;color:#BCE3CD}
+.app-page.passenger-overview .profile-menu-panel .logout-form{border-color:#FFFFFF13}
+.app-page.passenger-overview .main-area{margin-left:212px!important;min-height:100dvh}
+.app-page.passenger-overview .topbar{min-height:65px;padding:20px 34px;border-bottom:1px solid var(--brand-line)}
+.app-page.passenger-overview .breadcrumb{font-size:10px;color:#9CA5B9}
+.app-page.passenger-overview .breadcrumb span{color:#566078;padding-inline:9px}
+.passenger-overview .topbar:after{content:'UTeM COMMUNITY';margin-left:auto;font-size:7px;letter-spacing:1.8px;color:#939DB3}
+.app-page.passenger-overview .page-content{max-width:1430px;padding:32px 34px 24px}
+.overview-intro{margin-bottom:27px;gap:18px}
+.overview-eyebrow{font-size:7px;letter-spacing:1.6px;color:#939DB3;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.overview-eyebrow>i{width:5px;height:5px;border-radius:50%;background:#BCE3CD}
+.overview-intro h1{font-size:clamp(24px,2.6vw,34px);font-weight:600;letter-spacing:-1.2px;margin-bottom:9px}
+.overview-intro h1>span{color:#BCE3CD}
+.overview-subtitle{color:#929CB2;font-size:11px}
+.overview-intro-actions{gap:19px}
+.overview-date{font-size:10px;color:#929CB2}.overview-date svg{stroke:#929CB2;width:15px}
+.overview-primary{background:#BCE3CD;color:#182921;border-color:#BCE3CD;border-radius:9px;font-size:10px;min-height:42px;gap:19px;box-shadow:0 4px 20px #BCE3CD09;transition:background .2s,transform .2s,box-shadow .2s}
+.overview-primary:hover{background:#D1EFDF;color:#182921;box-shadow:0 5px 22px #BCE3CD17;transform:translateY(-2px)}
+.overview-primary:active{transform:translateY(0)}
+.overview-metrics{gap:15px;margin-bottom:20px}
+.overview-metric{min-height:128px;padding:21px;gap:14px;position:relative;overflow:hidden;border-radius:13px;background:#191D2C;transition:border-color .25s,transform .25s}
+.overview-metric:first-child{background:linear-gradient(115deg,#343046,#242337);border-color:#D7B9D32B}
+.overview-metric:first-child:after{content:'';position:absolute;right:-25px;bottom:-55px;width:160px;height:160px;border:1px solid #C8B3D219;border-radius:50%;box-shadow:0 0 0 22px #C8B3D207,0 0 0 44px #C8B3D204;pointer-events:none}
+.metric-icon{width:32px;height:32px;border-radius:9px;background:#D8B8DE13;color:#D6C1E5}.metric-icon svg{width:17px;height:17px}
+.metric-confirmed{background:#BCE3CD10;color:#BCE3CD}.metric-pending{background:#DDA8BD10;color:#DDA8BD}
+.metric-label{font-size:10px;color:#BEC3D3;margin-bottom:8px}.overview-metric strong{font-size:30px;font-weight:500;color:#F0F1F8;letter-spacing:-1px}.overview-metric small{font-size:8px;color:#8E98B0;margin-top:8px}
+.overview-grid{grid-template-columns:minmax(0,1.65fr) minmax(245px,1fr);gap:20px}.overview-main-column,.overview-side-column{gap:20px}
+.overview-card{background:#191D2C;border-color:#FFFFFF12;border-radius:14px;box-shadow:0 5px 22px #00000009;transition:border-color .25s,transform .25s}
+.overview-card-head{padding:21px 22px 17px}.overview-section-label{font-size:7px;letter-spacing:1.5px;color:#8993AA;margin-bottom:7px}
+.overview-card h2{font-size:16px;font-weight:500;letter-spacing:-.4px;color:#E8EBF4}.overview-text-link{color:#9AA5BD;font-size:9px;min-height:30px}.overview-text-link:hover{color:#BCE3CD}
+.next-journey-empty{padding:8px 20px 28px}.next-journey-empty h3{font-weight:500;color:#DDE3EF;font-size:17px}.next-journey-empty>p{font-size:10px;color:#919BB1;line-height:1.9}.overview-empty-link{color:#BCE3CD;font-size:10px;min-height:36px;gap:15px}
+.empty-route-art{width:218px;height:62px;margin-bottom:18px}
+.empty-route-start{background:radial-gradient(circle,#BCE3CD 0 3px,#BCE3CD0C 4px 100%);border-color:#BCE3CD25}
+.empty-route-end{background:#BCE3CD0D;border-color:#BCE3CD29;color:#BCE3CD;transform:rotate(6deg)}
+.empty-route-art>svg{stroke:#8FA9A5}.empty-route-art>svg circle{fill:#191D2C}.empty-route-art>svg>path:first-child{animation:overview-route 18s linear 2}
+.journey-departure{border-color:#FFFFFF16}.journey-departure>span,.journey-departure>p{color:#97A3B9}.journey-departure>strong{color:#D7EDE2;font-weight:500}
+.journey-route-points small{color:#8D99B1}.journey-route-points b{color:#E0E6F1;font-weight:500}.journey-route-points i{background:#191D2C;border-color:#BCE3CD}.journey-route-points>div:first-child:after{border-color:#485C61}
+.journey-booking-detail{border-color:#FFFFFF10}.booking-driver>i{background:#344644;color:#CEE7DD}.booking-driver small,.booking-fare small{color:#8E9BB1}.booking-driver b{color:#D9E0ED;font-weight:500}.booking-fare{color:#CBE6D9;font-weight:500}
+.journey-confirmation{background:#BCE3CD07;border-color:#BCE3CD12;color:#A8C2B9}.journey-confirmation a{color:#BCE3CD}.journey-confirmation.is-pending{background:#E1BB8B08;border-color:#E1BB8B18;color:#D2B797}
+.overview-booking-list{padding-inline:22px}.overview-booking-row{border-color:#FFFFFF0C;padding-block:18px;gap:12px}.recent-route-icon{background:#BCE3CD08;color:#91B6A8}.recent-route-copy>b{color:#DBE2F0;font-weight:500;font-size:10px}.recent-route-copy>span{color:#8C97AE;font-size:8px}.recent-route-copy i{color:#64738E}
+.overview-status{background:#BCE3CD0B;color:#A8C4B7;font-size:7px;border:1px solid #BCE3CD11}.overview-status.status-accepted{background:#BCE3CD0E;color:#BCE3CD}.overview-status.status-pending{background:#D8BB930E;color:#E0C6A7}.overview-status:is(.status-declined,.status-cancelled){background:#DDA8BD0B;color:#DDA8BD}
+.recent-empty{color:#8496AD}.recent-empty b{color:#BBC7DA}.recent-empty p{color:#8B98B0}
+.campus-card-image{height:125px}.campus-card-image img{filter:saturate(.65) brightness(.78);transition:transform .8s}.campus-card-image:after{background:linear-gradient(0deg,#191D2C99,transparent 85%)}.campus-card-image>span{color:#E2E7F1;font-size:6px;letter-spacing:1.7px}
+.planning-card-body{padding:20px 21px 9px}.planning-card-body h2{font-size:15px}.planning-card-body>p{font-size:9px;color:#8E9BB1;line-height:1.8}
+.overview-tools>a{border-color:#FFFFFF0D;padding-block:14px;transition:color .2s}.tool-icon{background:#FFFFFF03;border-color:#FFFFFF0E;color:#A7C3B9;border-radius:8px}.overview-tools b{color:#CBD4E5;font-size:10px;font-weight:500}.overview-tools small{color:#8995AD;font-size:8px}.overview-tools>a>svg{color:#6F7E99}.overview-tools>a:hover b{color:#BCE3CD}.overview-tools>a:hover .tool-icon{background:#BCE3CD0D}
+.booking-guide{background:linear-gradient(120deg,#262438,#202332);border-color:#C6AECD18;padding:20px;border-radius:13px}.guide-icon{color:#C9B4D2}.booking-guide h3{color:#D9C7E2;font-size:11px;font-weight:500}.booking-guide p{color:#9D9BB2;font-size:9px}.booking-guide a{color:#C5DCCD;font-size:9px}
+.passenger-overview .dashboard-footer{border-color:#FFFFFF0D;color:#73809A;font-size:8px;padding-top:19px;margin-top:25px}
+.app-page.passenger-overview .schedule-robot-launcher{width:auto;min-height:36px;border-radius:20px}.passenger-overview .schedule-robot-launcher img,.passenger-overview .schedule-robot-halo{display:none}.passenger-overview .schedule-robot-launcher-label{background:#252E40;color:#B9C8DA;border-color:#FFFFFF1A;font-size:9px;padding:9px 13px;box-shadow:0 4px 16px #0003}.passenger-overview .schedule-robot-launcher-label i{color:#BCE3CD}
+.app-page.passenger-overview .schedule-robot-card{background:#202537;border-color:#FFFFFF20;color:#DAE2EF}.passenger-overview .schedule-robot-primary{background:#BCE3CD;color:#182921}.passenger-overview .schedule-robot-card h2{color:#E3E8F2}
+/* A short, staggered arrival. Animating only opacity/transform avoids layout work. */
+.overview-intro,.overview-metric,.overview-main-column>.overview-card,.overview-side-column>*{animation:overview-arrive .65s cubic-bezier(.2,.7,.25,1) backwards}
+.overview-metric:nth-child(1){animation-delay:60ms}.overview-metric:nth-child(2){animation-delay:120ms}.overview-metric:nth-child(3){animation-delay:180ms}.overview-main-column>.overview-card{animation-delay:210ms}.overview-main-column>.overview-card:nth-child(2){animation-delay:270ms}.overview-side-column>*{animation-delay:300ms}
+@keyframes overview-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes overview-route{to{stroke-dashoffset:-144}}
+@media(hover:hover){.overview-metric:hover{transform:translateY(-2px);border-color:#FFFFFF28}.overview-card:hover{border-color:#FFFFFF22}.planning-card:hover .campus-card-image img{transform:scale(1.025)}}
+@media(min-width:761px) and (max-height:720px){.app-page.passenger-overview .sidebar{padding-top:23px}.overview-nav-label{margin-top:28px}.app-page.passenger-overview .side-nav{gap:4px}.overview-sidebar-note{padding-top:20px;margin-bottom:16px}}
+@media(min-width:761px) and (max-width:1100px){.app-page.passenger-overview .sidebar{width:182px;padding-inline:13px}.app-page.passenger-overview .main-area{margin-left:182px!important}.app-page.passenger-overview .page-content{padding:27px 23px}.app-page.passenger-overview .topbar{padding-inline:23px}.overview-grid{grid-template-columns:minmax(0,1fr)}.overview-side-column{grid-template-columns:1.3fr 1fr;align-items:start}.overview-intro-actions .overview-date{display:none}.overview-metric{padding:18px 15px;gap:10px}.metric-icon{width:27px;height:27px}.overview-metric small{font-size:7px}}
+@media(max-width:760px){
+  .app-page.passenger-overview .sidebar{position:relative;inset:auto;width:100%;height:auto;min-height:0;flex-direction:row;flex-wrap:wrap;padding:16px 18px;gap:12px;align-items:center}
+  .app-page.passenger-overview .app-brand{font-size:22px;padding:0;flex:1}.overview-nav-label,.overview-sidebar-note{display:none}
+  .app-page.passenger-overview .mobile-nav-toggle{display:inline-flex;background:#222A3B;border-color:#FFFFFF18;color:#D6E4DF;font-size:11px;min-height:39px;padding:8px 12px;border-radius:9px}
+  .app-page.passenger-overview .sidebar .account-nav{order:2;width:100%;padding-top:10px;margin:0;border-color:#FFFFFF0D}
+  .app-page.passenger-overview .profile-trigger{padding:0;min-height:38px}.app-page.passenger-overview .account-nav-name{max-width:none}.app-page.passenger-overview .profile-menu-panel{top:calc(100% + 8px);bottom:auto;right:0;left:auto;min-width:210px}
+  .app-page.passenger-overview .sidebar .side-nav{order:3;width:100%;padding-top:12px;border-color:#FFFFFF0D;gap:6px}.app-page.passenger-overview .side-link{font-size:12px;padding:12px 14px}
+  .app-page.passenger-overview .main-area{margin-left:0!important}.app-page.passenger-overview .topbar{padding:12px 19px;min-height:43px}.passenger-overview .topbar:after{font-size:6px;letter-spacing:1px}
+  .app-page.passenger-overview .page-content{padding:25px 18px}.overview-intro{gap:19px;margin-bottom:21px}.overview-intro h1{font-size:28px;line-height:1.3}.overview-subtitle{font-size:11px}.overview-intro-actions{gap:15px}.overview-date{font-size:9px}.overview-primary{min-height:41px}
+  .overview-metrics{gap:8px;margin-bottom:17px}.overview-metric{padding:16px 11px;min-height:105px;border-radius:11px}.metric-label{font-size:8px;min-height:26px;line-height:1.6;margin-bottom:8px}.overview-metric strong{font-size:27px}.overview-metric:first-child:after{width:100px;height:100px;right:-50px}
+  .overview-grid{grid-template-columns:minmax(0,1fr);gap:17px}.overview-main-column,.overview-side-column{gap:17px}.overview-card{border-radius:13px}.overview-card-head{padding:20px 19px 16px}.overview-card h2{font-size:15px}.overview-text-link{font-size:8px}.overview-section-label{font-size:6px}.next-journey-empty{padding:9px 18px 24px}.next-journey-empty h3{font-size:16px}.next-journey-empty>p{font-size:10px}.empty-route-art{margin-bottom:13px}
+  .overview-booking-list{padding-inline:19px}.overview-booking-row{padding-block:17px}.recent-route-copy>b{font-size:10px}.recent-route-copy>span{font-size:8px}.overview-status{font-size:7px}.planning-card-body{padding:20px 20px 10px}.overview-tools b{font-size:11px}.overview-tools small{font-size:9px}.booking-guide p{font-size:10px}.booking-guide h3{font-size:12px}.passenger-overview .dashboard-footer{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.passenger-overview *, .passenger-overview *:before,.passenger-overview *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

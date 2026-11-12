@@ -41,13 +41,15 @@ Install the nullable fuel/baseline fields and empty report table with `php artis
 
 With Laragon, use the project at `C:\laragon\www\workshop`, start Apache and MySQL from Laragon, then open [RideUTeM](http://localhost/workshop/login.php). Laragon's local `.env` uses `DB_PORT=3306`, `DB_DATABASE=workshop`, and the persistent file cache/session drivers. Existing URLs such as dashboard.php, findride.php, driver.php and admin.php are preserved. The separate `C:\xampp\htdocs\workshop` checkout is not served by Laragon; changes must reach the Laragon project before they appear in the browser.
 
-For a fresh database, import database/schema.sql, then run:
+For a fresh clone on Windows, put the `workshop` folder under Laragon `www` or XAMPP `htdocs`. Start Apache and MySQL, create an empty database named `workshop`, then run these commands from the project directory with PHP and Composer available:
 
 ```powershell
-php artisan commute:install-schema
+Copy-Item .env.example .env
+composer install
+php artisan key:generate
 ```
 
-The installer adds nullable journey fields and empty research tables. It does not insert accounts, sample routes, bookings or research observations, and preserves existing records. Fresh schema SQL also contains no sample INSERT statements. Legacy survey data remains separate from the new commute_requirement_surveys table.
+Set `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` in your local `.env` to match MySQL, then run `php artisan migrate` and open [RideUTeM](http://localhost/workshop/login.php). Migrations include the driver profile photo field. A fresh database starts without accounts, routes, bookings or research records. Keep `.env` local and commit only `.env.example`.
 
 For an existing installation that already has journey fields, add only the four nullable booking fare columns with `php artisan commute:install-fares`. Existing bookings keep their original advertised contribution; new requests save their quoted distance and price. Requests remain unavailable until these columns exist.
 

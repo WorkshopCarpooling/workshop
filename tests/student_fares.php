@@ -1,0 +1,125 @@
+<?php
+
+// All users, rides and bookings in this test exist only in SQLite memory.
+require __DIR__.'/../vendor/autoload.php';
+$app = require __DIR__.'/../bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+use App\Http\Controllers\FindRideController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\RoutesController;
+use App\Models\User;
+use App\Models\Ride;
+use App\Models\RideBooking;
+use App\Services\StudentFare;
+use App\Services\FareQuote;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
+
+config(['database.default'=>'sqlite','database.connections.sqlite.database'=>':memory:','cache.default'=>'array','services.google_maps.api_key'=>'','session.driver'=>'array']);
+DB::purge('sqlite');
+$app->instance('encrypter',new Illuminate\Encryption\Encrypter(str_repeat('T',32),'AES-256-CBC'));
+Illuminate\Support\Facades\Crypt::clearResolvedInstance('encrypter');
+Carbon::setTestNow(Carbon::parse('2030-01-07 07:00:00','Asia/Kuala_Lumpur'));
+foreach (['2026_10_21_000000_create_workshop_schema_baseline.php','2026_10_22_000000_add_journey_and_research_features.php','2026_10_23_000000_add_booking_fare_quotes.php','2026_10_27_000000_add_carbon_estimates.php'] as $file) (require database_path('migrations/'.$file))->up();
+(require database_path('migrations/2026_10_23_000000_add_booking_fare_quotes.php'))->up();
+$checks=0;
+function verify($condition,$label) { global $checks; if(!$condition){fwrite(STDERR,"FAIL: $label\n");exit(1);}echo 'PASS: '.$label.PHP_EOL;$checks++; }
+function invalidQuote(callable $fn,$label) {try{$fn();verify(false,$label);}catch(ValidationException $error){verify(true,$label);}}
+verify(StudentFare::storageReady(),'fare migration is idempotent and ready');
+verify(StudentFare::quote(.1)['perSeat']==='2.00','short trips have an RM2 minimum');
+verify(StudentFare::quote(5)['perSeat']==='2.50','5 km costs RM2.50 per seat');
+verify(StudentFare::quote(10)['perSeat']==='4.00','10 km costs RM4 per seat');
+verify(StudentFare::quote(100)['perSeat']==='12.00','long trips respect RM12 cap');
+verify(StudentFare::quote(10,2.35)['perSeat']==='2.35','driver ceiling takes precedence over student fare');
+verify(StudentFare::quote(10,0)['perSeat']==='0.00','free published rides remain free');
+verify(StudentFare::quote(10,null,3)['total']==='12.00','multi-seat total uses requested seats');
+verify(StudentFare::quote(4.2)['perSeat']==='2.30','fare rounds to the nearest 10 sen');
+$users=[];
+foreach (['Passenger','Other passenger','Nearby driver','Farther driver','Suspended driver'] as $i=>$name) $users[]=User::create(['full_name'=>$name,'email'=>'synthetic'.$i.'@example.invalid','password_hash'=>'not-a-real-login','role'=>'student','account_type'=>$i<2?'passenger':'driver','account_status'=>$i===4?'suspended':'active']);
+$makeRide=function($driver,$lat,$lng,$seats=3) {return Ride::create(['driver_id'=>$driver->user_id,'pickup_point'=>'Synthetic start','destination'=>'UTeM Main Campus','pickup_latitude'=>$lat,'pickup_longitude'=>$lng,'dropoff_latitude'=>2.3139,'dropoff_longitude'=>102.3183,'departure_at'=>'2030-01-07 08:00:00','available_seats'=>$seats,'contribution_per_seat'=>8,'vehicle_description'=>'Test vehicle','vehicle_type'=>'Synthetic car','ride_status'=>'scheduled']);};
+$far=$makeRide($users[3],2.2214,102.2504);
+$near=$makeRide($users[2],2.2680,102.2830);
+$suspended=$makeRide($users[4],2.2707,102.2856);
+$full=$makeRide($users[2],2.2707,102.2856,0);
+Auth::guard()->setUser($users[0]);
+$app['session']->start();
+view()->share('errors',new Illuminate\Support\ViewErrorBag);
+$journey=['pickup_label'=>'My current location','pickup_latitude'=>2.2707,'pickup_longitude'=>102.2856,'dropoff_label'=>'UTeM Main Campus','dropoff_latitude'=>2.3139,'dropoff_longitude'=>102.3183,'seats_requested'=>2,'departure_at'=>'2030-01-07 07:45:00','arrive_by'=>'2030-01-07 09:00:00'];
+$search=function(array $fields) { $r=Request::create('/findride.php','GET',$fields,[],[],['HTTP_ACCEPT'=>'application/json']);app()->instance('request',$r);return (new FindRideController)->index($r)->getData(true); };
+$response=$search($journey);
+verify(array_column($response['rides'],'id')===[$near->ride_id,$far->ride_id],'compatible rides sort nearest planned start first, not creation order');
+verify(count($response['rides'])===2,'full rides and suspended drivers are excluded');
+verify($response['rides'][0]['driverDistanceKm'] < $response['rides'][1]['driverDistanceKm'],'driver distance is calculated from the detected pickup');
+verify($response['journey']['source']==='corridor_estimate','no-key routing is explicitly an approximate estimate');
+verify($response['rides'][0]['fare']['distanceSource']==='corridor_estimate','fare identifies estimated distance source');
+verify($response['rides'][0]['fare']['total']===number_format((float)$response['rides'][0]['fare']['perSeat']*2,2,'.',''),'search quote includes per-seat and passenger total');
+$quote=$response['rides'][0]['fare'];
+$stored=FareQuote::verify($quote['token'],(int)$users[0]->user_id,$near,$journey);
+verify($stored['fare_per_seat']===$quote['perSeat'],'issued quote verifies without client-provided price fields');
+invalidQuote(fn()=>FareQuote::verify($quote['token'].'x',(int)$users[0]->user_id,$near,$journey),'tampered quote is rejected');
+invalidQuote(fn()=>FareQuote::verify($quote['token'],(int)$users[1]->user_id,$near,$journey),'another passenger cannot reuse a quote');
+invalidQuote(fn()=>FareQuote::verify($quote['token'],(int)$users[0]->user_id,$far,$journey),'quote cannot be transferred to another driver');
+invalidQuote(fn()=>FareQuote::verify($quote['token'],(int)$users[0]->user_id,$near,array_replace($journey,['seats_requested'=>3])),'changing the passenger count invalidates the price');
+invalidQuote(fn()=>FareQuote::verify($quote['token'],(int)$users[0]->user_id,$near,array_replace($journey,['dropoff_latitude'=>2.30])),'moving a pin requires a new quote');
+Carbon::setTestNow(now()->addMinutes(11));
+invalidQuote(fn()=>FareQuote::verify($quote['token'],(int)$users[0]->user_id,$near,$journey),'expired fare quotes are rejected');
+Carbon::setTestNow(Carbon::parse('2030-01-07 07:00:00','Asia/Kuala_Lumpur'));
+$post=Request::create('/findride.php','POST',$journey+['ride_id'=>$near->ride_id,'fare_quote'=>$quote['token'],'fare_per_seat'=>'0.01']);
+app()->instance('request',$post);
+(new FindRideController)->requestSeat($post);
+$booking=RideBooking::first();
+verify($booking && $booking->fare_per_seat===$quote['perSeat'],'booking saves server-verified price and ignores a forged client amount');
+verify(abs($booking->journey_distance_km-$quote['distanceKm'])<.001 && $booking->distance_source==='corridor_estimate','booking saves distance and estimate source');
+(new FindRideController)->requestSeat($post);
+verify(RideBooking::count()===1,'repeated submission does not duplicate a pending request');
+Auth::guard()->setUser($users[2]);
+$accept=Request::create('/driver.php','POST',['action'=>'accept_booking','booking_id'=>$booking->booking_id]);app()->instance('request',$accept);
+(new DriverController)->handleAction($accept);
+verify($booking->fresh()->booking_status==='accepted' && $near->fresh()->available_seats===1,'driver acceptance still validates route and decrements only confirmed seats');
+verify($booking->fresh()->fare_per_seat===$quote['perSeat'],'driver confirmation preserves the passenger quote');
+
+// Fake the official Google endpoint: no user coordinates or network requests leave this test.
+Http::fake(['*'=>Http::response(['routes'=>[['distanceMeters'=>10000,'duration'=>'900s','polyline'=>['encodedPolyline'=>'_p~iF~ps|U_ulLnnqC_mqNvxq`@']]]],200)]);
+config(['services.google_maps.api_key'=>'synthetic-test-key']);Cache::flush();
+$routeFields=['origin_lat'=>2.2707,'origin_lng'=>102.2856,'dest_lat'=>2.3139,'dest_lng'=>102.3183];
+$route=(new RoutesController)->computeRoute(Request::create('/api/routes/compute','POST',$routeFields))->getData(true);
+verify($route['source']==='google_routes_api' && $route['fare']['perSeat']==='4.00' && count($route['path'])===3,'road distance generates fare and a decoded road path');
+(new RoutesController)->computeRoute(Request::create('/api/routes/compute','POST',$routeFields));
+verify(count(Http::recorded())===1,'duplicate road previews use the short-lived route cache');
+Http::swap(new Illuminate\Http\Client\Factory);
+Http::fake(['*'=>Http::response(['error'=>'synthetic outage'],503)]);Cache::flush();
+$route=(new RoutesController)->computeRoute(Request::create('/api/routes/compute','POST',$routeFields))->getData(true);
+verify($route['source']==='google_routes_fallback' && count($route['path'])===2,'routing outage falls back to a labelled estimate, not a fabricated road route');
+Auth::guard()->setUser($users[0]);
+config(['services.google_maps.api_key'=>'']);
+$r=Request::create('http://localhost/workshop/findride.php');app()->instance('request',$r);
+$html=(new FindRideController)->index($r)->getContent();
+verify(str_contains($html,'data-auto-pickup') && str_contains($html,'data-pickup-manual hidden'),'passenger screen starts with automatic pickup and optional manual override');
+$driverHtml=view('driver',['section'=>'requests','pageTitle'=>'Seat requests','activeRides'=>collect(),'currentUser'=>$users[2],'campusRoutes'=>collect(),'routeStopsByRoute'=>[],'rides'=>collect([$near->fresh()]),'rideStopsByRide'=>[$near->ride_id=>[]],'vehicles'=>collect(),'approvedVehicles'=>collect(),'bookingRequests'=>collect([$booking->fresh()->load('ride','passenger')]),'pendingRequestCount'=>0,'notice'=>'','noticeType'=>'','routePlans'=>collect()])->render();
+verify(str_contains($driverHtml,'Student contribution:'),'driver sees the same quoted contribution before and after acceptance');
+if(in_array('--render',$argv,true)) {
+    Illuminate\Support\Facades\URL::forceRootUrl('http://localhost/workshop');
+    $r->setLaravelSession(app('session.store'));
+    app()->instance('request',$r);
+    foreach($response['rides'] as &$row) $row['fare']['expiresAt']=date(DATE_ATOM,time()+600);
+    unset($row);
+    $app['session']->flashInput($journey);
+    $preview=view('findride',['currentUser'=>$users[0],'availableRides'=>$response['rides'],'bookingReady'=>true,'timetable'=>collect(),'bookingNotice'=>'Demo preview · synthetic pickup and driver data. No real GPS or database records are used.'])->render();
+    $snapshot=json_encode($response,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
+    $script='<script>const demoSnapshot='.$snapshot.';window.fetch=async function(url){const u=String(url);if(u.includes("api/routes/compute"))return {ok:true,json:async()=>demoSnapshot.journey};if(u.includes("findride.php"))return {ok:true,json:async()=>demoSnapshot};if(u.includes("api/locations/search"))return {ok:true,json:async()=>({results:[{label:"UTeM Main Campus",lat:2.3139,lng:102.3183}]})};throw new Error("Unavailable in demo preview");};document.addEventListener("submit",function(e){if(e.target.id!=="journeySearchForm"){e.preventDefault();document.getElementById("searchStatus").textContent="Demo only. No booking was submitted.";}},true);</script>';
+    $preview=str_replace('</head>',$script.'</head>',$preview);
+    $directory=public_path('device-review');
+    if(!is_dir($directory))mkdir($directory,0777,true);
+    file_put_contents($directory.'/student-journey.html',$preview);
+    $wrapper=file_get_contents($directory.'/width-390.html');
+    file_put_contents($directory.'/student-journey-390.html',str_replace('src="findride.html"','src="student-journey.html"',$wrapper));
+    echo "Synthetic student journey preview rendered.\n";
+}
+echo "$checks student fare, matching, routing and booking checks passed; SQLite memory only.\n";
+Carbon::setTestNow();

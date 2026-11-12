@@ -4,11 +4,14 @@
 !.env.example
 /config/maps.local.php
 /config/database.local.php
+/config/navigation.local.php
+/database/workshop_backup_before_migration.sql
 
 # Local runtime files
 *.log
 vendor/
 node_modules/
+/public/device-review/
 
 # Editor and operating-system files
 .vscode/
