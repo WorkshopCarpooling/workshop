@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\{Ride,User};
 use Illuminate\Support\Facades\{DB,Schema,Crypt};
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 final class CarbonRewards
@@ -45,16 +46,27 @@ final class CarbonRewards
         },3);
         self::finalize($id);
     }
-    public static function compare(Ride $ride,?float $sharedKg): array {
+    public static function missingConfirmations(array $participants, Collection $declarations): int {
+        $missing = 0;
+        foreach ($participants as $id => $seats) {
+            $declaration = $declarations->get($id);
+            if (!$declaration || $declaration->cars > $seats) {
+                $missing++;
+            }
+        }
+        return $missing;
+    }
+    public static function compare(Ride $ride,?float $sharedKg,?Collection $declarations=null): array {
         $missing=['status'=>'unavailable','level'=>'unknown','remaining_percent'=>null,'baseline_kg'=>null,'shared_kg'=>$sharedKg,'saved_kg'=>null,
             'reason'=>'Driver and accepted passengers must confirm their alternative travel in Carbon Rewards.'];
         if(!self::ready()||$sharedKg===null||!is_finite($sharedKg)||$sharedKg<0)return $missing;
-        $people=self::participants($ride);$declarations=DB::table('carbon_reward_declarations')->where('ride_id',$ride->ride_id)->get()->keyBy('user_id');
+        $people=self::participants($ride);
+        $declarations??=DB::table('carbon_reward_declarations')->where('ride_id',$ride->ride_id)->get()->keyBy('user_id');
         if(count($people)<2)return array_replace($missing,['reason'=>'A shared ride needs at least one accepted passenger.']);
+        if(self::missingConfirmations($people,$declarations)>0)return $missing;
         $baseline=0;
         foreach($people as $id=>$seats){
-            $d=$declarations->get($id);if(!$d||$d->cars>$seats)return $missing;
-            $baseline+=(float)$d->baseline_kg;
+            $baseline+=(float)$declarations->get($id)->baseline_kg;
         }
         if($baseline<=0)return array_replace($missing,['reason'=>'No separate-car emissions were declared. A saving percentage cannot be calculated.']);
         $percent=$sharedKg/$baseline*100;

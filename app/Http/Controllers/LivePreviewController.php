@@ -37,6 +37,17 @@ class LivePreviewController extends Controller {
                 'simulation'=>$current['simulation'],'route'=>$road,
                 'carbon'=>array_intersect_key($current['carbon'],array_flip(['level','participant_g_per_km']))]];
         }
+        $payload['fleet'] = collect($feed['rides'])
+            ->filter(fn (array $item) => $item['location'] && $item['state'] !== 'waiting')
+            ->map(fn (array $item) => [
+                'id' => $item['id'],
+                'location' => $item['location'],
+                'simulation' => $item['simulation'],
+                'path' => $item['simulationRoute']['path'] ?? [],
+                'serverNow' => $item['serverNow'],
+                'carbonLevel' => $item['carbon']['level'] ?? 'unknown',
+            ])->values();
+
         return response()->json($payload)->header('Cache-Control','no-store, private');
     }
 }

@@ -37,7 +37,7 @@
     </header>
     <div class="page-content">
       @if(($rideRequest['status'] ?? '') === 'pending')
-        <div class="driver-notice" role="status"><b>Finding a driver for your ride now.</b> {{ $rideRequest['pickup'] }} → {{ $rideRequest['dropoff'] }}. <a href="{{ url('findride.php') }}">View or cancel request →</a></div>
+        <div class="driver-notice" role="status"><b>Finding a driver for your ride now.</b> {{ $rideRequest['pickup'] }} → {{ $rideRequest['dropoff'] }}. <a href="{{ url('findride.php') }}">View or cancel request</a></div>
       @endif
       @if($section === 'overview')
         @include('partials.passenger-overview')
@@ -53,7 +53,7 @@
         <section class="content-card rides-card" id="upcoming">
           <div class="section-head">
             <div><span class="section-kicker">BOOKING STATUS</span><h2>{{ $pageTitle }}</h2></div>
-            <a class="text-link" href="{{ url('findride.php') }}">Browse available rides <span>→</span></a>
+            <a class="text-link" href="{{ url('findride.php') }}">Browse available rides</a>
           </div>
           @if ($myBookings->isNotEmpty())
             <div class="driver-ride-list">
@@ -74,7 +74,8 @@
                     </div>
                   </div>
                   <span class="ride-status {{ $booking->displayStatus() }}">{{ ucfirst($booking->displayStatus()) }}</span>
-                  @if($booking->booking_status==='accepted'&&$booking->ride->ride_status==='in_progress')<a class="text-link" href="{{ url('trips/'.$booking->ride_id.'/map') }}">View live journey map →</a>@endif
+                  @if($booking->booking_status==='accepted'&&$booking->ride->ride_status==='in_progress')<a class="text-link" href="{{ url('trips/'.$booking->ride_id.'/map') }}">View live journey map</a>@endif
+                  @if($booking->booking_status==='accepted'&&$booking->ride->ride_status==='completed')<a class="text-link" href="{{ route('carbon.rewards') }}#rewardTrips">Check trip points</a>@endif
                 </article>
               @endforeach
             </div>
@@ -83,7 +84,7 @@
               <span class="empty-illustration">⌖</span>
               <b>No bookings yet</b>
               <p>When you request a seat, your request status will appear here.</p>
-              <a class="empty-action" href="{{ url('findride.php') }}">Find a ride now <span>→</span></a>
+              <a class="empty-action" href="{{ url('findride.php') }}">Find a ride now</a>
             </div>
           @endif
         </section>

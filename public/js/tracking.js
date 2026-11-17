@@ -35,7 +35,7 @@
       state.innerHTML = '<i></i> ARRIVED · PREVIEW';
       title.textContent = 'Destination reached';
       copy.textContent = 'The simulated route has ended. No device location was used or shared.';
-      startButton.textContent = 'Restart movement preview →';
+      startButton.textContent = 'Restart movement preview';
       startButton.disabled = false;
       endButton.disabled = true;
       return;
@@ -47,7 +47,7 @@
     if (running) {
       running = false;
       cancelAnimationFrame(frame);
-      startButton.innerHTML = 'Resume movement preview <span>→</span>';
+      startButton.textContent = 'Resume movement preview';
       title.textContent = 'Preview paused';
       copy.textContent = 'The simulated marker is paused. Resume to continue the route preview.';
       return;
@@ -74,7 +74,7 @@
     title.textContent = 'Preview ended';
     copy.textContent = 'A real trip would stop sharing the driver’s location at this point.';
     eta.textContent = '—';
-    startButton.innerHTML = 'Start movement preview <span>→</span>';
+    startButton.textContent = 'Start movement preview';
     endButton.disabled = true;
   });
 })();

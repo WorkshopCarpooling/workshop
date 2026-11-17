@@ -41,7 +41,7 @@
             </div>
             <div class="driver-form-bottom">
               <span><b>Safety reminder</b> Review each passenger’s locations and arrival deadline before accepting.</span>
-              <button class="solid-button" type="submit" @disabled($approvedVehicles->isEmpty()) @if($approvedVehicles->isEmpty()) aria-describedby="vehicle-approval-notice" @endif>Publish ride <span>→</span></button>
+              <button class="solid-button" type="submit" @disabled($approvedVehicles->isEmpty()) @if($approvedVehicles->isEmpty()) aria-describedby="vehicle-approval-notice" @endif>Publish ride</button>
             </div>
           </form>
       </section>

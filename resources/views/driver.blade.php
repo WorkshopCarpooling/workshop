@@ -47,7 +47,7 @@
       @if ($pendingRequestCount > 0 && $section === 'overview')
         <a class="driver-pending-banner" href="{{ url('driver/requests') }}">
           <b>{{ $pendingRequestCount }} passenger request{{ $pendingRequestCount === 1 ? '' : 's' }} waiting</b>
-          <span>Review and respond to your seat requests →</span>
+          <span>Review and respond to your seat requests</span>
         </a>
       @endif
 

@@ -14,7 +14,7 @@ final class TripTest {
     private static function authorize(Ride $ride,User $driver,bool $finishing=false): void {
         abort_unless(self::enabled(),404);
         abort_unless($driver->isActive()&&$driver->isDriver()&&(int)$ride->driver_id===(int)$driver->user_id,403);
-        abort_unless(in_array($ride->ride_status,$finishing?['in_progress','completed']:['scheduled','in_progress'],true),409,'Choose a scheduled or active trip for this test.');
+        abort_unless(in_array($ride->ride_status,$finishing?['in_progress','completed']:['scheduled','in_progress'],true),409,'Choose a scheduled or active trip.');
     }
     private static function key(Ride $ride): string {return 'trip-test:v1:'.$ride->driver_id.':'.$ride->ride_id;}
     private static function save(Ride $ride,array $test): void {Cache::put(self::key($ride),$test,now()->addHours(4));}
@@ -49,7 +49,7 @@ final class TripTest {
         self::authorize($ride,$driver);
         return Cache::lock(self::key($ride).':lock',15)->block(5,function()use($ride,$driver,$key,$runId){
             $test=Cache::get(self::key($ride));
-            abort_unless($test&&!$test['ended']&&hash_equals($test['runId'],$runId),409,'This test session ended. Reopen the trip map.');
+            abort_unless($test&&!$test['ended']&&hash_equals($test['runId'],$runId),409,'This trip session ended. Reopen the trip map.');
             foreach($test['stops'] as $stop)if($stop['key']===$key&&$stop['done'])return self::payload($ride,$test);
             $snapshot=self::payload($ride,$test);$next=$snapshot['navigation']['next'];
             if(!$next||$next['key']!==$key||!$snapshot['navigation']['simulation']['arrived'])
@@ -66,7 +66,7 @@ final class TripTest {
         Cache::lock(self::key($ride).':lock',15)->block(5,function()use($ride,$driver,$runId){
             $test=Cache::get(self::key($ride));abort_unless($test&&hash_equals($test['runId'],$runId),409);
             if($test['ended']&&$ride->ride_status==='completed')return;
-            if(isset($test['stops'][$test['index']]))throw ValidationException::withMessages(['stop'=>'Confirm the final drop-off before finishing this test.']);
+            if(isset($test['stops'][$test['index']]))throw ValidationException::withMessages(['stop'=>'Confirm the final drop-off before completing the trip.']);
             abort_unless(RideLifecycle::transition($driver,(int)$ride->ride_id,'completed'),409,'The trip status changed. Refresh your rides.');
             $test['ended']=true;self::save($ride,$test);
         });

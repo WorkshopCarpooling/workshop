@@ -14,18 +14,20 @@ class CarbonRewardsController extends Controller
         $user=$this->user();$ready=CarbonRewards::ready();$wallet=CarbonRewards::wallet((int)$user->user_id);
         $leaders=$ready?CarbonRewards::leaderboard():collect();$myRank=$leaders->search(fn($row)=>(int)$row->user_id===(int)$user->user_id);$myRank=$myRank===false?null:$myRank+1;
         $catalog=$ready?DB::table('carbon_reward_catalog as r')->select('r.*')->selectSub(function($q){$q->from('carbon_reward_vouchers as v')->selectRaw('COUNT(*)')->whereColumn('v.reward_id','r.id')->whereNull('v.claimed_at')->where('v.expires_at','>',now());},'stock')->when(!$user->isAdmin(),fn($q)=>$q->where('r.active',true))->orderBy('r.points_cost')->orderBy('r.id')->get():collect();
-        $trips=collect();$declarations=collect();$settled=collect();$reports=collect();$ledger=collect();$receipts=collect();$allReceipts=collect();
+        $trips=collect();$declarations=collect();$settled=collect();$reports=collect();$tripCredits=collect();$ledger=collect();$receipts=collect();$allReceipts=collect();
         if($ready&&!$user->isAdmin()){
             $trips=Ride::whereIn('ride_status',['scheduled','in_progress','completed'])->where(fn($q)=>$q->where('driver_id',$user->user_id)->orWhereHas('bookings',fn($b)=>$b->where('passenger_id',$user->user_id)->where('booking_status','accepted')))
                 ->whereHas('bookings',fn($b)=>$b->where('booking_status','accepted'))->with(['bookings','vehicle'])->orderByDesc('ride_id')->limit(30)->get();
-            $declarations=DB::table('carbon_reward_declarations')->where('user_id',$user->user_id)->whereIn('ride_id',$trips->pluck('ride_id'))->get()->keyBy('ride_id');
-            $settled=DB::table('carbon_reward_trips')->whereIn('ride_id',$trips->pluck('ride_id'))->get()->keyBy('ride_id');
-            $reports=CarbonEstimate::ready()?DB::table('ride_carbon_reports')->whereIn('ride_id',$trips->pluck('ride_id'))->get()->keyBy('ride_id'):collect();
+            $rideIds=$trips->pluck('ride_id');
+            $declarations=DB::table('carbon_reward_declarations')->whereIn('ride_id',$rideIds)->get()->groupBy('ride_id');
+            $settled=DB::table('carbon_reward_trips')->whereIn('ride_id',$rideIds)->get()->keyBy('ride_id');
+            $reports=CarbonEstimate::ready()?DB::table('ride_carbon_reports')->whereIn('ride_id',$rideIds)->get()->keyBy('ride_id'):collect();
+            $tripCredits=DB::table('carbon_reward_ledger')->where('user_id',$user->user_id)->where('kind','earn')->whereIn('ride_id',$rideIds)->pluck('points','ride_id');
             $ledger=DB::table('carbon_reward_ledger')->where('user_id',$user->user_id)->orderByDesc('id')->limit(30)->get();
             $receipts=DB::table('carbon_reward_redemptions')->where('user_id',$user->user_id)->orderByDesc('id')->limit(30)->get();
         }
         if($ready&&$user->isAdmin())$allReceipts=DB::table('carbon_reward_redemptions')->orderByDesc('id')->limit(30)->get();
-        return response()->view('carbon-rewards',compact('user','ready','wallet','leaders','myRank','catalog','trips','declarations','settled','reports','ledger','receipts','allReceipts'))->header('Cache-Control','no-store, private');
+        return response()->view('carbon-rewards',compact('user','ready','wallet','leaders','myRank','catalog','trips','declarations','settled','reports','tripCredits','ledger','receipts','allReceipts'))->header('Cache-Control','no-store, private');
     }
     public function declare(Request $request,int $ride) {
         CarbonRewards::declare($this->user(),$ride,$request->all());

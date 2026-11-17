@@ -10,7 +10,7 @@
           <button class="ride-action-button" type="button" data-share-start hidden>Retry GPS</button>
           <button class="ride-action-button quiet-action" type="button" data-share-stop hidden>Stop sharing</button>
           <small data-share-status role="status">Starting GPS automatically…</small>
-          <a href="http://localhost/workshop/trips/{{ $gpsRide->ride_id }}/map" data-gps-localhost hidden>Open this trip on localhost for GPS →</a>
+          <a href="http://localhost/workshop/trips/{{ $gpsRide->ride_id }}/map" data-gps-localhost hidden>Open this trip on localhost for GPS</a>
         </div>
       @endforeach
     @if($inlineGps ?? false)</div>@else</details>@endif

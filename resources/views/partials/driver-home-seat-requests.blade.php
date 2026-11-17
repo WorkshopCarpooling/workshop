@@ -1,7 +1,7 @@
 @php($homeRequests=$bookingRequests->where('booking_status','pending')->filter(fn($booking)=>$booking->ride->ride_status==='scheduled')->take(3))
 @if($homeRequests->isNotEmpty())
 <section class="content-card driver-home-requests" id="driver-home-seat-requests" aria-labelledby="homeSeatRequestsTitle">
-  <div class="section-head"><div><span class="section-kicker">NEEDS YOUR RESPONSE</span><h2 id="homeSeatRequestsTitle">Requests for your scheduled rides</h2></div><a class="text-link" href="{{ url('driver/requests') }}">View all {{ $pendingRequestCount }} →</a></div>
+  <div class="section-head"><div><span class="section-kicker">NEEDS YOUR RESPONSE</span><h2 id="homeSeatRequestsTitle">Requests for your scheduled rides</h2></div><a class="text-link" href="{{ url('driver/requests') }}">View all {{ $pendingRequestCount }}</a></div>
   <div class="now-driver-list">
   @foreach($homeRequests as $booking)
     <article class="now-driver-request"><h3>{{ $booking->passenger?->full_name ?? 'Passenger' }} · {{ $booking->seats_requested }} {{ $booking->seats_requested===1?'seat':'seats' }}</h3>

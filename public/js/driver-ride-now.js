@@ -55,7 +55,7 @@
       const label=node('label','Your vehicle'),select=node('select');select.name='vehicle_id';select.required=true;
       for(const vehicle of config.vehicles){if((pool&&Number(vehicle.id)!==pool.vehicleId)||(!pool&&waiting?.online&&Number(vehicle.id)!==waiting.vehicleId))continue;const option=node('option',vehicle.label);option.value=vehicle.id;select.append(option);}
       if(!pool&&!waiting?.online&&selections.has(String(request.id)))select.value=selections.get(String(request.id));label.append(select);form.append(label);
-      const accept=node('button',pool?'Add to shared car →':'Accept ride →','solid-button');accept.type='submit';form.append(accept);
+      const accept=node('button',pool?'Add to shared car':'Accept ride','solid-button');accept.type='submit';form.append(accept);
       form.addEventListener('submit',event=>{
         if(form.dataset.submitting){event.preventDefault();return;}
         if(!pool&&!request.scheduledFor){

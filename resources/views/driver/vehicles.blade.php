@@ -66,7 +66,7 @@
           </div>
           <div class="driver-form-bottom">
             <span><b>Admin review</b> Your vehicle is not available for ride publishing until approved.</span>
-            <button class="solid-button" type="submit">Submit vehicle <span>→</span></button>
+            <button class="solid-button" type="submit">Submit vehicle</button>
           </div>
         </form>
         </details>

@@ -2,11 +2,12 @@
 @push('styles')<link rel="stylesheet" href="{{ asset('css/carbon-rewards.css') }}?v={{ filemtime(public_path('css/carbon-rewards.css')) }}">@endpush
 @section('content')
 <div class="carbon-rewards-page">
-<nav class="rewards-tabs" aria-label="Carbon Rewards sections"><a href="#rewardsWallet">Overview</a><a href="#allTimeLeaderboard">All-time leaderboard</a><a href="#rewardCatalog">Rewards</a>@if(!$user->isAdmin())<a href="#rewardTrips">Your trips</a>@endif<a href="{{ url('carbon') }}">Carbon reports →</a></nav>
+<nav class="rewards-tabs" aria-label="Carbon Rewards sections"><a href="#rewardsWallet">Overview</a><a href="#allTimeLeaderboard">All-time leaderboard</a><a href="#rewardCatalog">Rewards</a>@if(!$user->isAdmin())<a href="#rewardTrips">Your trips</a>@endif<a href="{{ url('carbon') }}">Carbon reports</a></nav>
 @if(!$ready)<section class="content-card"><h2>Carbon Rewards is being set up</h2><p>Points and rewards become available after the rewards schema is installed.</p></section>
 @else
 <section class="rewards-hero content-card" id="rewardsWallet"><div><span class="section-kicker">A SMALLER FOOTPRINT. A SHARED REWARD.</span><h2>{{ $user->isAdmin()?'Grow a greener campus.':'Make sharing count.' }}</h2><p>Passenger points come from their allocated share of positive estimated carpool savings, after a completed trip and confirmed travel alternatives.</p><p class="rewards-small">{{ config('carbon_rewards.points_per_kg',100) }} points per kg CO₂e · rounded down per trip · estimated savings, not a carbon credit.</p></div>
-@if(!$user->isAdmin())<div class="rewards-wallet"><div><small>AVAILABLE POINTS</small><strong>{{ number_format($wallet['balance']) }}</strong></div><div><small>LIFETIME EARNED</small><b>{{ number_format($wallet['earned']) }}</b></div><div><small>YOUR ALLOCATED SAVINGS</small><b>{{ number_format($wallet['saved_kg'],3) }} kg CO₂e</b></div><div><small>ALL-TIME RANK</small><b>{{ $myRank?'#'.$myRank:'Not ranked yet' }}</b></div></div>@endif
+@if($user->isPassenger())<div class="rewards-wallet"><div><small>AVAILABLE POINTS</small><strong>{{ number_format($wallet['balance']) }}</strong></div><div><small>LIFETIME EARNED</small><b>{{ number_format($wallet['earned']) }}</b></div><div><small>YOUR ALLOCATED SAVINGS</small><b>{{ number_format($wallet['saved_kg'],3) }} kg CO₂e</b></div><div><small>ALL-TIME RANK</small><b>{{ $myRank?'#'.$myRank:'Not ranked yet' }}</b></div></div>
+@elseif($user->isDriver() && !$user->isAdmin())<p>Only passengers earn points. <a class="text-link" href="#rewardTrips">Confirm how you would have travelled</a> so your passengers can earn theirs.</p>@endif
 </section>
 <div class="rewards-columns">
 <section class="content-card" id="allTimeLeaderboard"><div class="rewards-heading"><div><span class="section-kicker">EVERY SHARED JOURNEY COUNTS</span><h2>All-time leaderboard</h2></div><span class="rewards-badge">All time</span></div><p class="rewards-small">Ranked by lifetime points earned. Redeeming a reward keeps your ranking.</p>
@@ -19,7 +20,7 @@
 <section class="content-card" id="rewardCatalog"><div class="rewards-heading"><div><span class="section-kicker">TURN POINTS INTO SOMETHING GOOD</span><h2>{{ $user->isAdmin()?'Reward catalogue & voucher stock':'Rewards to claim' }}</h2></div></div>
 @if($catalog->isEmpty())<div class="rewards-empty"><b>No rewards available yet.</b><p>{{ $user->isAdmin()?'Create a reward below and add genuine voucher codes from your programme or sponsor.':'Rewards appear when the administrator adds genuine vouchers and activates them. You can continue earning points.' }}</p></div>@else
 <div class="reward-catalog-grid">@foreach($catalog as $reward)<article class="reward-product"><span class="section-kicker">{{ $reward->provider }}</span><h3>{{ $reward->title }}</h3>@if($reward->discount_rm!==null)<div class="reward-discount">RM{{ number_format($reward->discount_rm,2) }} <small>off</small></div>@endif<strong>{{ number_format($reward->points_cost) }} <small>points to claim</small></strong><p>{{ $reward->terms }}</p><p class="rewards-small">{{ $reward->stock }} voucher(s) available @if($user->isAdmin()) · {{ $reward->active?'Active':'Inactive' }}@endif</p>
-@if($user->isPassenger())<form method="post" action="{{ url('carbon/rewards/'.$reward->id.'/redeem') }}">@csrf<input type="hidden" name="request_key" value="{{ (string)\Illuminate\Support\Str::uuid() }}"><input type="hidden" name="points_cost" value="{{ $reward->points_cost }}"><input type="hidden" name="discount_rm" value="{{ $reward->discount_rm }}"><label class="rewards-check"><input type="checkbox" name="confirm" value="1" required @disabled($reward->stock<1||$wallet['balance']<$reward->points_cost)> Spend {{ number_format($reward->points_cost) }} points for this @if($reward->discount_rm!==null)RM{{ number_format($reward->discount_rm,2) }} off @endif voucher.</label><button type="submit" class="solid-button" @disabled($reward->stock<1||$wallet['balance']<$reward->points_cost)>{{ $reward->stock<1?'Out of stock':($wallet['balance']<$reward->points_cost?'Earn more points':'Claim reward →') }}</button></form>
+@if($user->isPassenger())<form method="post" action="{{ url('carbon/rewards/'.$reward->id.'/redeem') }}">@csrf<input type="hidden" name="request_key" value="{{ (string)\Illuminate\Support\Str::uuid() }}"><input type="hidden" name="points_cost" value="{{ $reward->points_cost }}"><input type="hidden" name="discount_rm" value="{{ $reward->discount_rm }}"><label class="rewards-check"><input type="checkbox" name="confirm" value="1" required @disabled($reward->stock<1||$wallet['balance']<$reward->points_cost)> Spend {{ number_format($reward->points_cost) }} points for this @if($reward->discount_rm!==null)RM{{ number_format($reward->discount_rm,2) }} off @endif voucher.</label><button type="submit" class="solid-button" @disabled($reward->stock<1||$wallet['balance']<$reward->points_cost)>{{ $reward->stock<1?'Out of stock':($wallet['balance']<$reward->points_cost?'Earn more points':'Claim reward') }}</button></form>
 @elseif($user->isAdmin())
 <details><summary>Edit discount & points</summary><form method="post" action="{{ url('carbon/rewards/catalog/'.$reward->id.'/settings') }}">@csrf<div class="rewards-form-grid"><label>Discount amount (RM off)<input name="discount_rm" type="number" min="0.01" max="999999.99" step="0.01" value="{{ $reward->discount_rm }}" required placeholder="e.g. 5.00"></label><label>Points required to claim<input name="points_cost" type="number" min="1" max="1000000" step="1" value="{{ $reward->points_cost }}" required></label></div><p class="rewards-small">Set the discount to match the voucher codes and provider terms. Changes apply to future claims; previous receipts keep their original value and points cost.</p><button class="solid-button" type="submit">Save voucher settings</button></form></details>
 <form method="post" action="{{ url('carbon/rewards/catalog/'.$reward->id.'/availability') }}">@csrf<input type="hidden" name="active" value="{{ $reward->active?0:1 }}"><button class="outline-button" type="submit">{{ $reward->active?'Pause reward':'Activate reward' }}</button></form>
@@ -32,20 +33,45 @@
 <section class="content-card" id="rewardTrips"><span class="section-kicker">YOUR JOURNEYS</span><h2>Trip comparisons & points</h2><p class="rewards-small">Confirm your own travel alternative before or after the ride. This does not change your ride booking. Showing your latest 30 eligible shared trips.</p>
 @forelse($trips as $trip)
 @php
- $mine=$declarations->get($trip->ride_id);$snapshot=$settled->get($trip->ride_id);$report=$reports->get($trip->ride_id);
+ $confirmed=$declarations->get($trip->ride_id,collect())->keyBy('user_id');
+ $mine=$confirmed->get($user->user_id);$snapshot=$settled->get($trip->ride_id);$report=$reports->get($trip->ride_id);
  $people=\App\Services\CarbonRewards::participants($trip);$maxCars=$people[(int)$user->user_id]??1;
+ $missing=\App\Services\CarbonRewards::missingConfirmations($people,$confirmed);
+ $needsConfirmation=!$mine||$mine->cars>$maxCars;
+ $completed=$trip->ride_status==='completed';
+ $credits=(int)$tripCredits->get($trip->ride_id,0);
  $defaultDistance=null;
  if((int)$trip->driver_id===(int)$user->user_id){$ends=(new \App\Services\RoutePlanner)->endpoints($trip);if($ends)$defaultDistance=round((new \App\Services\RoutePlanner)->distance($ends),3);}
  else{$ownBooking=$trip->bookings->firstWhere('passenger_id',$user->user_id);$defaultDistance=$ownBooking?->journey_distance_km;}
- $comparison=$snapshot?null:\App\Services\CarbonRewards::compare($trip,$report?(float)$report->shared_kg:null);
+ $comparison=$snapshot||!$report||$missing?null:\App\Services\CarbonRewards::compare($trip,(float)$report->shared_kg,$confirmed);
+ $rewardStatus=match(true) {
+     (bool)$snapshot => $user->isDriver()?'Finalised':number_format($credits).' points earned',
+     $needsConfirmation => 'Your confirmation needed',
+     $missing>0 => $missing.' '.\Illuminate\Support\Str::plural('confirmation',$missing).' remaining',
+     !$completed => 'Waiting for trip completion',
+     !$report => 'Trip footprint needed',
+     $comparison['status']==='unavailable' => 'No points available',
+     default => 'Points calculation pending',
+ };
 @endphp
-<details class="rewards-trip" id="reward-trip-{{ $trip->ride_id }}"><summary><span>#{{ $trip->ride_id }} · {{ \App\Services\LocationLabel::short($trip->pickup_point) }} → {{ \App\Services\LocationLabel::short($trip->destination) }}</span><span class="rewards-badge">{{ $snapshot?'Finalised':($mine?'Waiting for completion / confirmations':'Confirm alternative') }}</span></summary>
+<details class="rewards-trip" id="reward-trip-{{ $trip->ride_id }}"><summary><span>#{{ $trip->ride_id }} · {{ \App\Services\LocationLabel::short($trip->pickup_point) }} → {{ \App\Services\LocationLabel::short($trip->destination) }}</span><span class="rewards-badge">{{ $rewardStatus }}</span></summary>
 <p>{{ ucwords(str_replace('_',' ',$trip->ride_status)) }} · {{ $trip->completed_at?->format('j M Y, g:i A') ?? $trip->departure_at->format('j M Y, g:i A') }}</p>
 @if($snapshot)<p><b>{{ number_format($snapshot->saved_kg,3) }} kg CO₂e</b> estimated trip savings · {{ number_format($snapshot->remaining_percent,1) }}% of separate-car emissions.</p><p class="rewards-small">Finalised once using the saved report and confirmed inputs. Later footprint corrections do not rewrite the points snapshot. Your personal credit is listed in points history.</p>
 @else
-@if($comparison['status']==='unavailable')<p class="rewards-small">{{ $report?$comparison['reason']:'A saved completed-trip footprint is required before points can be issued.' }}</p>@else<p>{{ number_format($comparison['saved_kg'],3) }} kg estimated trip savings. Points are issued only after completion.</p>@endif
+@if($missing)<p class="rewards-small">{{ $missing }} {{ \Illuminate\Support\Str::plural('confirmation',$missing) }} remaining. @if($needsConfirmation) Confirm your own travel alternative below. @endif</p>@endif
+@if($completed && !$report)
+  <p class="rewards-small">A saved trip footprint is needed to calculate points.
+    @if($user->isDriver())
+      <a class="text-link" href="{{ route('carbon',['month'=>$trip->completed_at?->format('Y-m')]) }}#carbon-trip-{{ $trip->ride_id }}">Save the trip footprint</a>
+    @else
+      Ask your driver to save it under Carbon reports.
+    @endif
+  </p>
+@endif
+@if($comparison && $comparison['status']==='unavailable')<p class="rewards-small">{{ $comparison['reason'] }}</p>
+@elseif($comparison)<p>{{ number_format($comparison['saved_kg'],3) }} kg estimated trip savings. Save your confirmation again to retry the points calculation.</p>@endif
 <form class="rewards-declaration" method="post" action="{{ url('carbon/rewards/trips/'.$trip->ride_id.'/declaration') }}">@csrf
-<label>Without this shared ride, how would you travel?<select name="alternative" data-reward-alternative required><option value="separate_car" @selected(($mine->alternative??'')==='separate_car')>I / my group would use separate car(s)</option><option value="no_separate_car" @selected(($mine->alternative??'')==='no_separate_car')>No separate car replaced (walk, bus, no trip, etc.)</option></select></label>
+<label>Without this shared ride, how would you travel?<select name="alternative" data-reward-alternative required><option value="" @selected(!$mine) disabled>Choose your travel alternative</option><option value="separate_car" @selected(($mine->alternative??'')==='separate_car')>I / my group would use separate car(s)</option><option value="no_separate_car" @selected(($mine->alternative??'')==='no_separate_car')>No separate car replaced (walk, bus, no trip, etc.)</option></select></label>
 <div class="rewards-form-grid" data-reward-car-fields>
 <label>Cars replaced, for your party only<input name="cars" type="number" min="1" max="{{ $maxCars }}" value="{{ ($mine->cars??0) ?: 1 }}"></label>
 <label>Your separate-car distance (km)<input name="distance_km" type="number" min="0.001" max="500" step="0.001" value="{{ $mine->distance_km??$defaultDistance }}"></label>
@@ -56,7 +82,7 @@
 @empty<div class="rewards-empty"><p>Your accepted shared rides will appear here. Cancelled rides do not earn points.</p></div>@endforelse
 </section>
 <div class="rewards-columns"><section class="content-card"><h2>Points history</h2><div class="rewards-table-scroll"><table><thead><tr><th>Date</th><th>Activity</th><th>Points</th></tr></thead><tbody>@forelse($ledger as $line)<tr><td>{{ \Carbon\Carbon::parse($line->created_at)->format('j M Y') }}</td><td>{{ $line->kind==='earn'?'Trip #'.$line->ride_id.' · '.number_format($line->saved_kg,3).' kg allocated savings':'Reward claim #'.$line->redemption_id }}</td><td>{{ $line->points>0?'+':'' }}{{ number_format($line->points) }}</td></tr>@empty<tr><td colspan="3">No points activity yet.</td></tr>@endforelse</tbody></table></div></section>
-<section class="content-card"><h2>Your claimed rewards</h2>@forelse($receipts as $receipt)<p><b>{{ $receipt->title }}</b><br>@if($receipt->discount_rm!==null)RM{{ number_format($receipt->discount_rm,2) }} off · @endif{{ $receipt->points_cost }} points · <a href="{{ url('carbon/rewards/receipts/'.$receipt->id) }}">View your voucher →</a></p>@empty<p class="rewards-small">Your voucher receipts appear here after redemption.</p>@endforelse</section></div>
+<section class="content-card"><h2>Your claimed rewards</h2>@forelse($receipts as $receipt)<p><b>{{ $receipt->title }}</b><br>@if($receipt->discount_rm!==null)RM{{ number_format($receipt->discount_rm,2) }} off · @endif{{ $receipt->points_cost }} points · <a href="{{ url('carbon/rewards/receipts/'.$receipt->id) }}">View your voucher</a></p>@empty<p class="rewards-small">Your voucher receipts appear here after redemption.</p>@endforelse</section></div>
 @elseif($allReceipts->isNotEmpty())<section class="content-card"><h2>Recent reward claims</h2><div class="rewards-table-scroll"><table><thead><tr><th>Receipt</th><th>Passenger ID</th><th>Reward</th><th>Points spent</th><th>Claimed</th></tr></thead><tbody>@foreach($allReceipts as $receipt)<tr><td>#{{ $receipt->id }}</td><td>{{ $receipt->user_id }}</td><td>{{ $receipt->title }}</td><td>{{ $receipt->points_cost }}</td><td>{{ $receipt->created_at }}</td></tr>@endforeach</tbody></table></div></section>@endif
 @endif
 </div>

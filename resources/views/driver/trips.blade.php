@@ -36,14 +36,17 @@
 
                 @if ($plan = $routePlans[$ride->ride_id] ?? null)
                   <div class="route-plan"><b>{{ $plan['algorithm'] === 'nearest_pickup' ? 'Nearest-first pickup order' : ($plan['algorithm'] === 'astar_stop_order' ? 'A* planned stop order' : 'Suggested stop order') }}</b><ol>@foreach ($plan['points'] as $point)<li>{{ $point['label'] }}@if(isset($point['passenger'])) · {{ $point['passenger'] }} ({{ $point['seats'] }} seats)@endif · ≈ {{ $point['elapsedMinutes'] }} min from departure</li>@endforeach</ol><small>{{ $plan['distanceKm'] }} km estimated · @if($plan['algorithm']==='nearest_pickup')Closest remaining pickup at each stop, based on pin distance. Everyone is picked up before the shared drop-off. @else Unoptimized stop order {{ $plan['baselineKm'] }} km. @endif Two-minute stop allowance included. Check road directions before travel.</small>
-                  <a href="{{ url('driver/route/'.$ride->ride_id) }}" class="text-link">View road route & prediction →</a></div>
+                  <a href="{{ url('driver/route/'.$ride->ride_id) }}" class="text-link">View road route & prediction</a></div>
                 @endif
-                @if($ride->pool_seat_capacity && $ride->ride_status==='scheduled')<p class="pool-route-note">@if($ride->available_seats>0)<a href="{{ url('driver/requests') }}">Add passengers for this drop-off →</a><br>@endif Start pickups when ready, even if the car is not full. Starting closes the car to new requests.</p>@endif
-                @if($ride->ride_status === 'completed')<a class="text-link" href="{{ url('carbon#carbon-trip-'.$ride->ride_id) }}">Record / view carbon estimate →</a>@endif
+                @if($ride->pool_seat_capacity && $ride->ride_status==='scheduled')<p class="pool-route-note">@if($ride->available_seats>0)<a href="{{ url('driver/requests') }}">Add passengers for this drop-off</a><br>@endif Start pickups when ready, even if the car is not full. Starting closes the car to new requests.</p>@endif
+                @if($ride->ride_status === 'completed')
+                  <a class="text-link" href="{{ url('carbon#carbon-trip-'.$ride->ride_id) }}">Record / view carbon estimate</a>
+                  @if($ride->bookings->contains('booking_status','accepted'))<a class="text-link" href="{{ route('carbon.rewards') }}#rewardTrips">Check passenger points</a>@endif
+                @endif
                 <span class="ride-status {{ $ride->ride_status }}">{{ ucwords(str_replace('_', ' ', $ride->ride_status)) }}</span>
 
                 <div class="ride-actions">
-                  @if($ride->ride_status==='in_progress')<a class="ride-action-button" href="{{ url('trips/'.$ride->ride_id.'/map') }}">Open live journey map →</a>@endif
+                  @if($ride->ride_status==='in_progress')<a class="ride-action-button" href="{{ url('trips/'.$ride->ride_id.'/map') }}">Open live journey map</a>@endif
                   @if ($ride->ride_status === 'scheduled')
                     <form method="post" action="{{ url('driver.php') }}">
                       @csrf
@@ -51,7 +54,7 @@
                       <input type="hidden" name="ride_id" value="{{ $ride->ride_id }}">
                       <input type="hidden" name="next_status" value="in_progress">
                       <button class="ride-action-button" type="submit">{{ $ride->pool_seat_capacity?'Start pickups':'Start trip' }}</button>
-                      <small class="trip-gps-hint">{{ \App\Services\TripTest::enabled()?'Trip ujian · the car drives automatically.':'Live GPS starts automatically during your trip.' }}</small>
+                      <small class="trip-gps-hint">Start the trip to open the journey map.</small>
                     </form>
                     <form method="post" action="{{ url('driver.php') }}">
                       @csrf

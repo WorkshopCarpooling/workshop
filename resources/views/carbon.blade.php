@@ -2,7 +2,7 @@
 @push('styles')<link rel="stylesheet" href="{{ asset('css/carbon-impact.css') }}?v={{ is_file(public_path('css/carbon-impact.css'))?filemtime(public_path('css/carbon-impact.css')):'footprint' }}">@endpush
 @section('content')
 <div class="carbon-page">
-  <p><a class="solid-button" href="{{ url('carbon/rewards') }}">Carbon Rewards · points, all-time leaderboard & rewards →</a></p>
+  <p><a class="solid-button" href="{{ url('carbon/rewards') }}">Carbon Rewards · points, all-time leaderboard & rewards</a></p>
   @include('partials.carbon-impact')
   <section class="content-card footprint-explainer">
     <span class="carbon-section-label">CALCULATED AS YOU CARPOOL</span><h2>How your footprint is estimated</h2>

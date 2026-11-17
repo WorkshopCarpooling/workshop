@@ -8,9 +8,9 @@
       <p class="schedule-robot-location" data-robot-location></p>
       <p class="schedule-robot-time" data-robot-time></p>
     </div>
-    <a class="schedule-robot-primary" data-robot-link href="{{ url('timetable') }}">My timetable <span aria-hidden="true">↗</span></a>
+    <a class="schedule-robot-primary" data-robot-link href="{{ url('timetable') }}">My timetable</a>
     <div class="schedule-robot-controls" data-robot-controls hidden><button type="button" data-robot-snooze>Snooze 5 min</button><button type="button" data-robot-dismiss>Dismiss</button></div>
-    <button class="schedule-robot-next" type="button" data-robot-next hidden>Next reminder →</button>
+    <button class="schedule-robot-next" type="button" data-robot-next hidden>Next reminder</button>
     <p class="schedule-robot-footnote">Reminders 30 &amp; 10 minutes before classes and ride appointments, plus driver-search updates while RideUTeM is open.</p>
   </section>
   <button class="schedule-robot-launcher" type="button" data-robot-toggle aria-label="Open schedule reminders" aria-controls="scheduleRobotCard" aria-expanded="false">

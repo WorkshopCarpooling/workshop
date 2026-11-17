@@ -10,16 +10,55 @@
   if(sidebar) {
     const navs=[...sidebar.querySelectorAll(':scope > .side-nav')];
     if(navs.length) {
-      const toggle=document.createElement('button');toggle.type='button';toggle.className='mobile-nav-toggle';toggle.textContent='Menu ☰';
-      navs.forEach((nav,i)=>{nav.id=nav.id||`deviceNavigation${i}`;});
-      toggle.setAttribute('aria-controls',navs.map(nav=>nav.id).join(' '));toggle.setAttribute('aria-expanded','false');
-      toggle.setAttribute('aria-label','Open navigation menu');sidebar.querySelector('.app-brand')?.after(toggle);
-      const openMenu=open=>{sidebar.dataset.mobileNavOpen=String(open);toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Close ×':'Menu ☰';toggle.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');};
-      toggle.addEventListener('click',()=>openMenu(sidebar.dataset.mobileNavOpen!=='true'));
-      sidebar.addEventListener('keydown',e=>{if(e.key==='Escape'){openMenu(false);toggle.focus();}});
-      navs.forEach(nav=>nav.addEventListener('click',e=>{if(e.target.closest('a'))openMenu(false);}));
-      matchMedia('(min-width:761px)').addEventListener('change',()=>openMenu(false));
-      openMenu(false);document.body.classList.add('nav-ready');
+      const workspaceToggle = sidebar.querySelector('[data-workspace-mobile-toggle]');
+      const toggle = workspaceToggle || document.createElement('button');
+      if (!workspaceToggle) {
+        toggle.type = 'button';
+        toggle.className = 'mobile-nav-toggle';
+        sidebar.querySelector('.app-brand')?.after(toggle);
+      }
+      navs.forEach((nav, index) => { nav.id ||= `deviceNavigation${index}`; });
+      toggle.setAttribute('aria-controls', navs.map(nav => nav.id).join(' '));
+
+      let menuOpen = false;
+      const mobile = matchMedia('(max-width:760px)');
+      const profile = sidebar.querySelector('[data-profile-menu]');
+      const setMenuOpen = open => {
+        menuOpen = open;
+        sidebar.dataset.mobileNavOpen = String(open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+        if (!workspaceToggle) toggle.textContent = open ? 'Close ×' : 'Menu ☰';
+      };
+      toggle.addEventListener('click', () => {
+        setMenuOpen(!menuOpen);
+        if (menuOpen && workspaceToggle) {
+          if (profile) profile.open = false;
+          navs[0].querySelector('a')?.focus();
+        }
+      });
+      document.addEventListener('focusin', event => {
+        if (menuOpen && workspaceToggle && !toggle.contains(event.target) && !navs[0].contains(event.target)) setMenuOpen(false);
+      });
+      document.addEventListener('click', event => {
+        if (menuOpen && !toggle.contains(event.target) && !navs.some(nav => nav.contains(event.target))) setMenuOpen(false);
+      });
+      sidebar.addEventListener('keydown', event => {
+        if (event.key !== 'Escape' || !menuOpen) return;
+        setMenuOpen(false);
+        toggle.focus();
+        event.preventDefault();
+      });
+      navs.forEach(nav => nav.addEventListener('click', event => {
+        if (!menuOpen || !event.target.closest('a')) return;
+        setMenuOpen(false);
+        toggle.focus();
+      }));
+      mobile.addEventListener('change', () => setMenuOpen(false));
+      window.addEventListener('pageshow', () => setMenuOpen(false));
+      if (mobile.matches && workspaceToggle && profile) profile.open = false;
+      setMenuOpen(false);
+      document.body.classList.add('nav-ready');
     }
   }
   // Retire only the installable-web-app worker previously shipped by RideUTeM.

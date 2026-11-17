@@ -17,7 +17,7 @@
   <main class="main-area">
     <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> Schedule</div></header>
     <div class="page-content">
-      <div class="welcome-row"><div><div class="date-line"><span class="date-dot"></span> A RIDE, ON YOUR TIME</div><h1>Book a ride appointment.</h1><p class="subtitle">Choose where and when. We’ll start looking for your driver at your selected time.</p></div><a class="outline-button" href="{{ url('findride.php') }}">Need a ride now? →</a></div>
+      <div class="welcome-row"><div><div class="date-line"><span class="date-dot"></span> A RIDE, ON YOUR TIME</div><h1>Book a ride appointment.</h1><p class="subtitle">Choose where and when. We’ll start looking for your driver at your selected time.</p></div><a class="outline-button" href="{{ url('findride.php') }}">Need a ride now?</a></div>
       @if(session('appointmentNotice'))<div class="driver-notice" role="status">{{ session('appointmentNotice') }}</div>@endif
       @if($errors->any())<div class="validation-errors" role="alert">{{ $errors->first() }}</div>@endif
       <section class="content-card now-search-card">
@@ -29,7 +29,7 @@
             <label for="appointmentTime">Pickup time<input id="appointmentTime" name="pickup_time" type="time" value="{{ old('pickup_time','09:00') }}" required></label>
             <label for="appointmentPassengers">Passengers<select id="appointmentPassengers" name="seats_requested">@for($i=1;$i<=3;$i++)<option value="{{ $i }}" @selected((int)old('seats_requested',1)===$i)>{{ $i }} {{ $i===1?'passenger':'passengers' }}</option>@endfor</select></label>
           </div>
-          <div class="now-search-actions"><p class="journey-status">All times are Malaysia time (GMT+8).</p><button class="solid-button" id="appointmentReview" type="submit">Review appointment →</button></div>
+          <div class="now-search-actions"><p class="journey-status">All times are Malaysia time (GMT+8).</p><button class="solid-button" id="appointmentReview" type="submit">Review appointment</button></div>
         </form>
         <p class="journey-status" id="appointmentFormStatus" role="status">Choose your locations, date, time and passenger count to continue.</p>
       </section>
@@ -37,7 +37,7 @@
         <div class="now-card-head"><div><span class="now-kicker">YOUR APPOINTMENT</span><h2 id="appointmentQuoteWhen"></h2></div><strong class="now-quote-total" id="appointmentQuoteTotal"></strong></div>
         <p id="appointmentQuoteRoute"></p><p class="journey-status" id="appointmentQuoteDetails"></p>
         <p class="journey-status">We’ll automatically send your request to approved drivers at the booked time. Your robot reminds you 30 and 10 minutes beforehand while RideUTeM is open. A driver must accept before a car is confirmed.</p>
-        <button class="solid-button" id="appointmentConfirm" type="button">Confirm appointment →</button>
+        <button class="solid-button" id="appointmentConfirm" type="button">Confirm appointment</button>
       </section>
       <section class="content-card appointment-list-card" aria-labelledby="appointmentsTitle">
         <div class="section-head"><div><span class="now-kicker">SAVED FOR LATER</span><h2 id="appointmentsTitle">My ride appointments</h2></div><span id="appointmentCount">{{ count($appointments ?? []) }} appointments</span></div>

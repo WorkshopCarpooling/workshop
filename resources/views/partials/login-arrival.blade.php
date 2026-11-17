@@ -37,7 +37,7 @@
       </svg>
     </div>
     <div class="arrival-whitewash" aria-hidden="true"></div>
-    <button type="button" class="arrival-skip">Skip animation <span aria-hidden="true">↗</span></button>
+    <button type="button" class="arrival-skip">Skip animation</button>
   </section>
 </template>
 <script src="{{ asset('js/login-arrival.js') }}?v={{ filemtime(public_path('js/login-arrival.js')) }}" defer></script>

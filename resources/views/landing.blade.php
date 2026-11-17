@@ -18,7 +18,7 @@
   <main class="entrance-stage" id="main">
     <div class="entrance-copy">
       <h1 class="system-title" aria-label="RideUTeM">ride<span>UTeM</span><span class="title-period" aria-hidden="true">.</span></h1>
-      <a class="landing-button" id="startJourney" href="{{ url('login.php') }}">Let’s ride together <span aria-hidden="true">↗</span></a>
+      <a class="landing-button" id="startJourney" href="{{ url('login.php') }}">Let’s ride together</a>
     </div>
 
     <div class="welcome-display" role="img" aria-label="A cinematic display of the orange classic car">

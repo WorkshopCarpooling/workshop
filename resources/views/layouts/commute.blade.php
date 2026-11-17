@@ -16,7 +16,7 @@
   <main class="main-area">
     <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> Timetable</div></header>
     <div class="page-content">
-      <div class="welcome-row"><div><div class="date-line"><span class="date-dot"></span> YOUR WEEK, CONNECTED</div><h1>{{ $title }}</h1><p class="subtitle">{{ $subtitle }}</p></div><a class="outline-button" href="{{ url('passenger/schedule') }}">My ride appointments →</a></div>
+      <div class="welcome-row"><div><div class="date-line"><span class="date-dot"></span> YOUR WEEK, CONNECTED</div><h1>{{ $title }}</h1><p class="subtitle">{{ $subtitle }}</p></div><a class="outline-button" href="{{ url('passenger/schedule') }}">My ride appointments</a></div>
       @if(session('commuteNotice'))<p class="driver-notice success" role="status">{{ session('commuteNotice') }}</p>@endif
       @if($errors->any())<div class="validation-errors" role="alert">{{ $errors->first() }}</div>@endif
       @yield('content')

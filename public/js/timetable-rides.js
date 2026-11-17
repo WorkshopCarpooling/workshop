@@ -37,7 +37,7 @@
       get('commuteReviewTiming').textContent=`About ${data.timing.travelMinutes} minutes of travel + ${data.timing.arrivalBuffer} minutes to arrive early + ${data.timing.driverAllowance} minutes to find a driver. ${quote.distanceSource==='google_routes_api'?'Based on a road route.':'Based on an approximate route estimate.'} All times are Malaysia time.`;
       get('weeklyConsentLabel').hidden=!weekly;
       get('weeklyConsentText').textContent=weekly?`Create a ride appointment for this session every week from ${fields.starts_on} through ${fields.ends_on}, using this route, passenger count and reviewed contribution. Changes to a weekly plan update its future unconfirmed appointments.`:'';
-      confirm.textContent=weekly?'Enable weekly rides →':'Confirm next-session ride →';confirm.disabled=weekly;
+      confirm.textContent=weekly?'Enable weekly rides':'Confirm next-session ride';confirm.disabled=weekly;
       get('timetableRideReview').hidden=false;
       status.textContent='Review the session date, suggested search time and contribution below.';
       expiry=setTimeout(()=>{invalidate();status.textContent='Your quote expired. Calculate and review the ride again.';},Math.max(0,Date.parse(quote.expiresAt)-Date.now()));

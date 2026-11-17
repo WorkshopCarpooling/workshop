@@ -31,7 +31,7 @@
           <h1>Live trip tracking <span class="wave">⌖</span></h1>
           <p class="subtitle">A driver shares location only while a confirmed journey is active.</p>
         </div>
-        <a class="outline-button tracking-back" href="{{ url('dashboard.php') }}">← Back to dashboard</a>
+        <a class="outline-button tracking-back" href="{{ url('dashboard.php') }}">Back to dashboard</a>
       </div>
       <div class="simulation-banner">
         <span>i</span>
@@ -85,7 +85,7 @@
             <div class="tracking-metric"><span>Last location update</span><b id="updateValue">—</b></div>
             <div class="tracking-metric"><span>Route progress</span><b id="progressValue">—</b></div>
             <div class="tracking-actions">
-              <button class="solid-button" id="startPreview">Start movement preview <span>→</span></button>
+              <button class="solid-button" id="startPreview">Start movement preview</button>
               <button class="outline-button" id="endPreview" disabled>End preview</button>
             </div>
             <div class="tracking-footnote"><span>ⓘ</span> Preview movement is generated in this browser only.</div>

@@ -35,7 +35,7 @@
           resolve(window.google.maps);
         };
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places,geometry&callback=${callbackName}`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places,geometry&language=en&region=MY&callback=${callbackName}`;
         script.async = true;
         script.defer = true;
         script.onerror = () => {

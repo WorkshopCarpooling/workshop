@@ -131,7 +131,7 @@ class DriverLocationController extends Controller
                 'unsupported' => 'The driver browser does not support device location.',
                 'page_closed' => 'Driver page closed or left. Showing the last received location.',
                 'live' => 'Receiving device GPS.',
-                'simulated' => 'Automatic driving synchronized with the driver and passenger.',
+                'simulated' => null,
             ];
             return [
                 'id' => $ride->ride_id, 'driver' => $ride->driver->full_name,

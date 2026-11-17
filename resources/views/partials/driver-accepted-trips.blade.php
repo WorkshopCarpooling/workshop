@@ -16,11 +16,11 @@
           <input type="hidden" name="action" value="update_status">
           <input type="hidden" name="ride_id" value="{{ $trip->ride_id }}">
           <input type="hidden" name="next_status" value="in_progress">
-          <button type="submit" class="solid-button">Start trip & open map →</button>
+          <button type="submit" class="solid-button">Start trip & open map</button>
         </form>
-        <p>{{ \App\Services\TripTest::enabled()?'Trip ujian · the car drives automatically to each stop.':'Starting opens your pickup map and closes this trip to new passengers.' }}</p>
+        <p>Starting opens your pickup map and closes this trip to new passengers.</p>
       @else
-        <a class="solid-button" href="{{ url('trips/'.$trip->ride_id.'/map') }}">Open driver map →</a>
+        <a class="solid-button" href="{{ url('trips/'.$trip->ride_id.'/map') }}">Open driver map</a>
       @endif
       </div>
     </article>

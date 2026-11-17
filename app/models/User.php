@@ -38,6 +38,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password_hash',
         'avatar_path',
+        'driver_license_path',
+        'application_review',
     ];
 
     /**
@@ -48,6 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'removed_at' => 'datetime',
         'access_version' => 'integer',
+        'application_review' => 'array',
         'email_verified' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -85,6 +88,31 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->account_status === 'active' && $this->removed_at === null;
+    }
+
+    public function applicationVersion(): string
+    {
+        return hash('sha256', $this->driver_license_path ?? '');
+    }
+
+    public function applicationStatus(): string
+    {
+        $decision = $this->application_review['decision'] ?? null;
+        if ($this->account_status === 'suspended' && $decision === 'declined') {
+            return 'declined';
+        }
+        if ($this->account_status === 'pending' && $decision === 'resubmit'
+            && $this->application_review['version'] === $this->applicationVersion()) {
+            return 'resubmit';
+        }
+
+        return $this->account_status;
+    }
+
+    public function canUploadLicense(): bool
+    {
+        return $this->isDriver() && !$this->removed_at && $this->account_status === 'pending'
+            && (!$this->driver_license_path || $this->applicationStatus() === 'resubmit');
     }
 
     public function vehicles()

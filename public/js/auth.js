@@ -2,19 +2,21 @@
   const form = document.getElementById('authForm');
   if (!form) return;
 
-  const driverPhotoField = document.getElementById('driverPhotoField');
-  if (driverPhotoField) {
+  const driverFields = document.querySelectorAll('[data-driver-upload]');
+  if (driverFields.length) {
     const accountType = document.getElementById('accountType');
-    const photo = document.getElementById('avatar');
-    const updateDriverPhoto = () => {
-      const isPassenger = accountType.value === 'passenger';
-      driverPhotoField.hidden = isPassenger;
-      photo.disabled = isPassenger;
-      photo.required = accountType.value === 'driver';
+    const updateDriverUploads = () => {
+      const isDriver = accountType.value === 'driver';
+      for (const field of driverFields) {
+        const input = field.querySelector('input');
+        field.hidden = !isDriver;
+        input.disabled = !isDriver;
+        input.required = isDriver;
+      }
     };
-    accountType.addEventListener('change', updateDriverPhoto);
-    window.addEventListener('pageshow', updateDriverPhoto);
-    updateDriverPhoto();
+    accountType.addEventListener('change', updateDriverUploads);
+    window.addEventListener('pageshow', updateDriverUploads);
+    updateDriverUploads();
   }
 
   document.querySelectorAll('[data-password-toggle]').forEach((button) => {
@@ -56,13 +58,5 @@
         return;
       }
     }
-  });
-
-
-  document.getElementById('forgotLink')?.addEventListener('click', (event) => {
-    event.preventDefault();
-    const message = document.getElementById('formMessage');
-    message.className = 'form-message';
-    message.textContent = 'Password recovery will be available when email verification is connected.';
   });
 })();

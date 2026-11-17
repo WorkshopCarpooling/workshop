@@ -1,7 +1,7 @@
 <section class="content-card driver-now-requests {{ ($section??'')==='overview'?'driver-home-requests':'' }}" id="driverPassengerRequests" aria-labelledby="ride-now-requests-title">
   <div class="section-head"><div><span class="section-kicker">PASSENGER REQUESTS</span><h2 id="ride-now-requests-title">Passengers looking for a driver</h2></div><span class="driver-count" id="nowDriverRequestCount">Checking…</span></div>
   <p class="driver-intro">Press Accept to confirm a pickup, then Start trip to open your driver map here. You can accept directly without opening a route first.</p>
-  <p id="poolSummary" class="pool-summary" hidden></p><a id="poolSchedule" class="text-link" href="#driverAcceptedTrips" hidden>View accepted passengers / start trip →</a>
+  <p id="poolSummary" class="pool-summary" hidden></p><a id="poolSchedule" class="text-link" href="#driverAcceptedTrips" hidden>View accepted passengers / start trip</a>
   <p class="journey-status" role="status" id="nowDriverFeedStatus">{{ ($onDemandReady ?? false) ? ($approvedVehicles->isEmpty() ? 'You need an approved vehicle to accept ride requests.' : 'Checking passenger requests…') : 'Ride requests are temporarily unavailable.' }}</p>
   <div class="now-driver-list" id="nowDriverRequests"></div>
   @if($approvedVehicles->isNotEmpty())

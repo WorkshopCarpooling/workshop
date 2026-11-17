@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Services\MemberAccess;
 
 class AdminController extends Controller
@@ -23,7 +24,8 @@ class AdminController extends Controller
 
         $pendingMembers = (clone $currentMembers)->where('account_status', 'pending')
             ->orderBy('created_at')
-            ->get();
+            ->get()
+            ->filter(fn (User $member) => $member->applicationStatus() === 'pending');
 
         $pendingVehicles = Vehicle::where('verification_status', 'pending')
             ->when($directoryReady,fn($q)=>$q->whereHas('user',fn($u)=>$u->whereNull('removed_at')))
@@ -80,13 +82,13 @@ class AdminController extends Controller
         $action = $request->input('action');
 
         return match ($action) {
-            'approve_member' => $this->approveMember($request),
+            'approve_member', 'decline_member', 'request_licence' => $this->reviewMember($request, $action),
             'approve_vehicle', 'reject_vehicle' => $this->reviewVehicle($request),
             default => redirect('admin.php')->with('memberNotice', 'That action is not valid.')->with('memberNoticeType', 'error'),
         };
     }
 
-    protected function approveMember(Request $request)
+    private function reviewMember(Request $request, string $action)
     {
         $memberId = filter_var($request->input('user_id'), FILTER_VALIDATE_INT);
 
@@ -94,17 +96,87 @@ class AdminController extends Controller
             return redirect('admin/members')->with('memberNotice', 'That account could not be identified.')->with('memberNoticeType', 'error');
         }
 
-        $approved = DB::transaction(function()use($memberId){
-            $user=User::where('user_id',$memberId)->where('account_status','pending')->where('role','student')
-                ->when(MemberAccess::ready(),fn($query)=>$query->whereNull('removed_at'))->lockForUpdate()->first();
-            if(!$user)return false;
-            $user->update(['account_status'=>'active']);return true;
-        },3);
-        if (!$approved) {
-            return redirect('admin/members')->with('memberNotice', 'This account is no longer pending.')->with('memberNoticeType', 'error');
+        $decision = match ($action) {
+            'approve_member' => 'approved',
+            'decline_member' => 'declined',
+            'request_licence' => 'resubmit',
+        };
+        $reason = $decision === 'approved' ? null : $request->validate([
+            'review_reason' => ['required', 'string', 'max:500'],
+        ])['review_reason'];
+
+        $error = DB::transaction(function () use ($request, $memberId, $decision, $reason) {
+            $member = User::whereKey($memberId)->where('role', 'student')->lockForUpdate()->first();
+            if (!$member || $member->removed_at || $member->applicationStatus() !== 'pending') {
+                return 'This account is no longer awaiting review.';
+            }
+
+            if ($decision === 'resubmit' && !$member->isDriver()) {
+                return 'A replacement licence can only be requested from a driver.';
+            }
+            if ($member->isDriver()) {
+                if ($request->input('licence_version') !== $member->applicationVersion()) {
+                    return 'The driver licence changed. Reopen the application before submitting a decision.';
+                }
+                if ($decision === 'approved' && (!$request->boolean('licence_checked')
+                    || !$member->driver_license_path
+                    || !Storage::disk('local')->exists($member->driver_license_path))) {
+                    return 'Open and verify the submitted driving licence before approving this driver.';
+                }
+            }
+
+            $member->account_status = match ($decision) {
+                'approved' => 'active',
+                'declined' => 'suspended',
+                'resubmit' => 'pending',
+            };
+            $member->application_review = [
+                'decision' => $decision,
+                'reason' => $reason,
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now()->toIso8601String(),
+                'version' => $member->applicationVersion(),
+            ];
+            $member->save();
+
+            return null;
+        }, 3);
+
+        if ($error) {
+            return redirect('admin/members')->with('memberNotice', $error)->with('memberNoticeType', 'error');
         }
 
-        return redirect('admin/members')->with('memberNotice', 'Account approved. The member can now log in.')->with('memberNoticeType', 'success');
+        $message = match ($decision) {
+            'approved' => 'Account approved. The member can now log in.',
+            'declined' => 'Application declined. The applicant can see the reason when they sign in.',
+            'resubmit' => 'Replacement licence requested. The driver can upload it from their application page.',
+        };
+
+        return redirect('admin/members')->with('memberNotice', $message)->with('memberNoticeType', 'success');
+    }
+
+    public function licence(int $member, string $version)
+    {
+        abort_unless(Auth::user()?->isAdmin() && Auth::user()->isActive(), 403);
+        $driver = User::whereKey($member)->where('role', 'student')->where('account_type', 'driver')->firstOrFail();
+        abort_unless(!$driver->removed_at && $driver->applicationStatus() === 'pending'
+            && $driver->driver_license_path && $driver->applicationVersion() === $version, 404);
+
+        $type = match (pathinfo($driver->driver_license_path, PATHINFO_EXTENSION)) {
+            'jpg', 'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            default => abort(404),
+        };
+        $image = Storage::disk('local')->get($driver->driver_license_path);
+        abort_if($image === null, 404);
+
+        return response($image, 200, [
+            'Content-Type' => $type,
+            'Cache-Control' => 'private, no-store',
+            'X-Content-Type-Options' => 'nosniff',
+            'Referrer-Policy' => 'no-referrer',
+        ]);
     }
 
     protected function reviewVehicle(Request $request)

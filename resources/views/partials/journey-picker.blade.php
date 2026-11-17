@@ -35,5 +35,5 @@
   <p class="journey-status" data-map-status role="status">{{ $autoPickup ? 'Type a destination and choose a search result, or click the map to set its pin. Drag either pin to adjust it.' : 'Select pickup or drop-off, then click the map. You can also search a place name.' }}</p>
   <div class="journey-map" data-journey-map aria-label="Map for choosing pickup and drop-off"></div>
   <div class="journey-route-summary" data-route-summary aria-live="polite">Choose both locations to preview the journey.</div>
-  <a data-directions hidden target="_blank" rel="noopener noreferrer">Open driving directions ↗</a>
+  <a data-directions hidden target="_blank" rel="noopener noreferrer">Open driving directions</a>
 </div>

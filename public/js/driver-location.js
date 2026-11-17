@@ -77,7 +77,7 @@
       lastSent = Date.now();
       try {
         await request('/location', 'POST', fix);
-        if (running && current === generation) status.textContent = `Sharing with confirmed passengers and admin · updated ${new Date().toLocaleTimeString()} · GPS accuracy ±${Math.round(fix.accuracy)} m.`;
+        if (running && current === generation) status.textContent = `Sharing with confirmed passengers and admin · updated ${new Date().toLocaleTimeString('en-MY')} · GPS accuracy ±${Math.round(fix.accuracy)} m.`;
       } catch (error) {
         if (!running || current !== generation) return;
         if ([401, 403, 404, 409, 419, 429].includes(error.status)) await stop('Sharing ended. Reload to check your trip and session.');

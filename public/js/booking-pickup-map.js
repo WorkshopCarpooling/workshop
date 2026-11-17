@@ -58,7 +58,7 @@
         <b>Google Routes API:</b>
         <span>${distanceInfo}</span>
       </div>
-      <a class="google-route-link" href="${directionsUrl}" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>
+      <a class="google-route-link" href="${directionsUrl}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
     `;
 
     const canvasWrap = document.createElement('div');

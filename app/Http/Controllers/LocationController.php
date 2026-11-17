@@ -47,13 +47,13 @@ class LocationController extends Controller
         }
         if ($results) return response()->json(['results' => array_map(fn($place)=>array_replace($place,['label'=>\App\Services\LocationLabel::short($place['label'])]),$results)]);
         try {
-            $results = Cache::remember('place:' . sha1(mb_strtolower($query)), 86400, function () use ($query) {
+            $results = Cache::remember('place:en:' . sha1(mb_strtolower($query)), 86400, function () use ($query) {
                 $key = config('services.google_maps.api_key');
                 if ($key) {
-                    $response = Http::timeout(7)->get('https://maps.googleapis.com/maps/api/geocode/json', ['address' => $query, 'components' => 'country:MY', 'key' => $key])->throw()->json();
+                    $response = Http::timeout(7)->get('https://maps.googleapis.com/maps/api/geocode/json', ['address' => $query, 'components' => 'country:MY', 'language' => 'en', 'key' => $key])->throw()->json();
                     return array_map(fn ($p) => ['label' => $p['formatted_address'], 'lat' => $p['geometry']['location']['lat'], 'lng' => $p['geometry']['location']['lng']], $response['results'] ?? []);
                 }
-                $response = Http::timeout(7)->get('https://photon.komoot.io/api/', ['q' => $query, 'lat' => 2.27, 'lon' => 102.28, 'limit' => 5])->throw()->json();
+                $response = Http::timeout(7)->get('https://photon.komoot.io/api/', ['q' => $query, 'lat' => 2.27, 'lon' => 102.28, 'limit' => 5, 'lang' => 'en'])->throw()->json();
                 return array_values(array_map(function ($p) {
                     $v = $p['properties'];
                     return ['label' => implode(', ', array_unique(array_filter([$v['name'] ?? '', $v['street'] ?? '', $v['city'] ?? '', $v['state'] ?? '', $v['country'] ?? '']))), 'lat' => $p['geometry']['coordinates'][1], 'lng' => $p['geometry']['coordinates'][0]];

@@ -7,7 +7,7 @@
   const steps=document.getElementById('tracking-carbon-steps');
   const close=document.getElementById('tracking-carbon-close');
   const palette={low:'#3c9366',medium:'#ce9929',high:'#cb5653',unknown:'#85918a'};
-  const labels={low:'Low / Rendah',medium:'Medium / Sederhana',high:'High / Tinggi',unknown:'Unavailable / Belum tersedia'};
+  const labels={low:'Low',medium:'Medium',high:'High',unknown:'Unavailable'};
   let current=new Map(),openId=null,lastContent='';
   const el=(tag,text,className)=>{const node=document.createElement(tag);node.textContent=text;if(className)node.className=className;return node;};
   const carbonOf=ride=>{
@@ -74,7 +74,7 @@
           box.append(el('small',p.distance_basis==='road_estimate'?'Road-route estimate':'Planned-route approximation','live-carbon-basis'));
         }else box.append(el('small','Whole-trip distance unavailable.'));
       }else box.append(el('small',c.reason));
-      if(dialog){const button=el('button','Lihat kiraan');button.type='button';button.dataset.carbonRide=String(ride.id);button.addEventListener('click',()=>open(ride.id));box.append(button);}
+      if(dialog){const button=el('button','View calculation');button.type='button';button.dataset.carbonRide=String(ride.id);button.addEventListener('click',()=>open(ride.id));box.append(button);}
       card.append(box);
     },
     refresh(rides){current=new Map(rides.map(ride=>[ride.id,ride]));if(dialog?.open)fillDialog();}

@@ -13,7 +13,7 @@
       <label>Day<select name="weekday">@foreach(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] as $day=>$name)<option value="{{ $day }}" @selected((int)old('weekday',1)===$day)>{{ $name }}</option>@endforeach</select></label>
       <label>Building / location<input name="location" maxlength="180" value="{{ old('location') }}" placeholder="e.g. FTMK Main Campus" required></label>
       <div class="commute-pair"><label>Starts at<input name="starts_at" type="time" value="{{ old('starts_at') }}" required></label><label>Ends at<input name="ends_at" type="time" value="{{ old('ends_at') }}" required></label></div>
-      <button class="solid-button" type="submit">Add session →</button>
+      <button class="solid-button" type="submit">Add session</button>
     </form>
     <p class="commute-help">After adding a session, choose “Plan my ride” to set its pickup and destination.</p>
   </section>
@@ -31,12 +31,12 @@
           <div class="session-plan"><b>{{ $plan->is_enabled?'Weekly rides enabled':($plan->ends_on->copy()->endOfDay()->isPast()?'Weekly plan ended':'Weekly rides paused') }}</b><span>{{ $plan->pickup_label }} → {{ $plan->dropoff_label }}</span><small>{{ $plan->seats_requested }} passenger(s) · RM {{ number_format((float)$plan->fare_per_seat*$plan->seats_requested,2) }} total · through {{ $plan->ends_on->format('j M Y') }}</small></div>
         @endif
         @if($next)
-          <a class="session-next" href="{{ url('passenger/schedule#appointment-'.$next->request_id) }}"><span>Next ride appointment</span><b>{{ $next->scheduled_for->format('D, j M · g:i A') }}</b><small>View in Schedule →</small></a>
+          <a class="session-next" href="{{ url('passenger/schedule#appointment-'.$next->request_id) }}"><span>Next ride appointment</span><b>{{ $next->scheduled_for->format('D, j M · g:i A') }}</b><small>View in Schedule</small></a>
         @elseif(!$plan)
           <p class="commute-help">Connect this session to a ride so your trip is planned before class.</p>
         @endif
         <div class="session-actions">
-          @if($commuteReady)<a class="solid-button" href="{{ url('timetable/'.$event->id.'/ride') }}">{{ $plan?'Review ride plan':'Plan my ride' }} →</a>@endif
+          @if($commuteReady)<a class="solid-button" href="{{ url('timetable/'.$event->id.'/ride') }}">{{ $plan?'Review ride plan':'Plan my ride' }}</a>@endif
           @if($plan && !$plan->ends_on->copy()->endOfDay()->isPast())
             <form method="post" action="{{ url('timetable/'.$event->id.'/weekly') }}">@csrf<input type="hidden" name="enabled" value="{{ $plan->is_enabled?0:1 }}"><button class="outline-button" type="submit">{{ $plan->is_enabled?'Pause future weekly rides':'Resume weekly rides' }}</button></form>
           @endif

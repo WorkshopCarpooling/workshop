@@ -1,5 +1,7 @@
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 @switch($icon)
+  @case('home')<path d="m3 10 9-7 9 7v10H3V10Zm7 10v-6h4v6"/>@break
+  @case('menu')<path d="M4 6h16M4 12h16M4 18h16"/>@break
   @case('car')<path d="m5 7 2-4h10l2 4m-15 2 1-2h14l1 2v9H4V9Zm0 4h16M7 18v3m10-3v3M7 10h1m8 0h1"/>@break
   @case('location')<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>@break
   @case('calendar')<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4m8-4v4M4 11h16m-11 5h2"/>@break

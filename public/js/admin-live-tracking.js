@@ -22,9 +22,9 @@
     mapElement.textContent = 'Map could not load. Driver locations and GPS status are available in the list. Reload to retry the map.';
     mapElement.style.padding = '24px';
   }
-  const carIcon = () => {
+  const carIcon = (src = root.dataset.carIconUrl) => {
     const holder=document.createElement('div'),body=document.createElement('div'),image=document.createElement('img'),label=document.createElement('span');
-    body.className='live-car';image.src=root.dataset.carIconUrl;image.alt='';image.draggable=false;body.append(image);
+    body.className='live-car';image.src=src;image.alt='';image.draggable=false;body.append(image);
     label.className='car-state-label';holder.append(body,label);return holder;
   };
   const ageOf = (ride) => ride.location ? ride.location.ageSeconds + (performance.now() - receivedAt) / 1000 : null;
@@ -39,6 +39,12 @@
     markers.forEach((entry) => { entry.path = null; });
     if (routeStatus) routeStatus.textContent = 'Select a driver to view their planned route.';
   };
+  window.TripAssistance?.admin(map, L, () => carIcon(root.dataset.mechanicIconUrl), () => {
+    following = null;
+    initialViewChosen = true;
+    fitted = true;
+    clearRoute();
+  });
   const updateRemainingRoute = (entry, point, force = false) => {
     if (!activeRoute || activeRoute.id !== entry.id || !entry.path || !geometry) return;
     const now = performance.now();
@@ -228,7 +234,7 @@
       entry.marker.getElement()?.classList.toggle('stale', state === 'stale');
       entry.marker.getElement()?.classList.toggle('planned', state === 'waiting');
       const stateLabel = entry.marker.getElement()?.querySelector('.car-state-label');
-      if (stateLabel) stateLabel.textContent = state === 'waiting' ? 'Starting point · waiting for GPS' : state === 'stale' ? 'Last known' : state==='simulated'?'Live simulation':'';
+      if (stateLabel) stateLabel.textContent = state === 'waiting' ? 'Starting point · waiting for GPS' : state === 'stale' ? 'Last known' : state==='simulated'?'Estimated position':'';
     });
     [...markers.keys()].forEach((id) => { if (!ids.has(id)) remove(id); });
     if (!fitted && markers.size) { fit(); fitted = true; }
@@ -251,17 +257,18 @@
     let live = 0;
     rides.forEach((ride) => {
       const state = stateOf(ride);
-      if (['live','simulated'].includes(state)) live++;
+      if (state === 'live') live++;
       const card = el('article', '', 'tracking-driver');
       card.classList.toggle('selected', selected === ride.id);
-      card.append(el('span', state === 'simulated' ? '● Live simulation · synced with driver' : state === 'live' ? '● Live GPS' : state === 'stale' ? '● Last known location' : '○ Awaiting GPS', `tracking-state ${state}`));
+      card.append(el('span', state === 'simulated' ? '● Estimated position' : state === 'live' ? '● Live GPS' : state === 'stale' ? '● Last known location' : '○ Awaiting GPS', `tracking-state ${state}`));
       card.append(el('b', ride.driver));
       window.LiveCarbon?.renderCard(card, ride);
       card.append(el('small', `${ride.vehicle || 'Vehicle'} · ${ride.plate || 'Plate not recorded'}`));
       card.append(el('small', `${ride.origin} → ${ride.destination}`));
       if (ride.gpsMessage && state !== 'live') card.append(el('small', ride.gpsMessage, 'tracking-gps-issue'));
       if (state !== 'waiting') {
-        card.append(el('small', state==='simulated'?`Shared trip clock · updated ${Math.floor(ageOf(ride))}s ago`:`Updated ${Math.floor(ageOf(ride))}s ago · accuracy ±${Math.round(ride.location.accuracy)} m`));
+        const updated = `Updated ${Math.floor(ageOf(ride))}s ago`;
+        card.append(el('small', ride.source === 'simulation' ? updated : `${updated} · accuracy ±${Math.round(ride.location.accuracy)} m`));
         card.append(el('small', `Latitude ${ride.location.lat.toFixed(5)} · Longitude ${ride.location.lng.toFixed(5)}`));
         const button = el('button', 'Follow car');
         button.type = 'button';
@@ -274,10 +281,10 @@
       } else {
         card.append(el('small', 'Waiting for device GPS. A car marker appears after the first latitude and longitude update.'));
       }
-      if(ride.previewUrl){const preview=el('a','Open 3-view live preview','text-link');preview.href=ride.previewUrl;card.append(preview);}
+      if(ride.previewUrl){const preview=el('a','Open trip monitor','text-link');preview.href=ride.previewUrl;card.append(preview);}
       list.append(card);
     });
-    if (!rides.length) list.append(el('div', connected ? 'No active student trips. Trips appear when the driver presses Start trip. Automatic driving is shared immediately; GPS trips appear after the first location fix.' : 'Waiting for the server. Active trips cannot be confirmed.', 'tracking-empty'));
+    if (!rides.length) list.append(el('div', connected ? 'No active student trips. Trips appear once drivers start them.' : 'Waiting for the server. Active trips cannot be confirmed.', 'tracking-empty'));
     count.textContent = connected ? `${live} live · ${rides.length} active trips` : 'Connection interrupted';
     if (focused) list.querySelector(`[data-follow-ride="${focused}"]`)?.focus({ preventScroll: true });
     if (focusedCarbon) list.querySelector(`[data-carbon-ride="${focusedCarbon}"]`)?.focus({ preventScroll: true });
@@ -305,7 +312,7 @@
       receivedAt = performance.now();
       syncMarkers();
       renderList();
-      status.textContent = `Connected · last checked ${new Date().toLocaleTimeString()}`;
+      status.textContent = `Connected · last checked ${new Date().toLocaleTimeString('en-MY')}`;
     } catch (error) {
       connected = false;
       if (!stopped) { syncMarkers(); renderList(); }

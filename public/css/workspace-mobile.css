@@ -1,0 +1,234 @@
+.workspace-mobile-nav {
+  display: none;
+}
+
+@media screen and (max-width: 760px) {
+  html:has(.nav-ready .workspace-sidebar) {
+    scroll-padding-bottom: calc(76px + var(--safe-bottom));
+  }
+
+  .app-page .workspace-sidebar {
+    --mobile-nav-height: 64px;
+    gap: 0 12px;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
+    background: #fff;
+    border: 0;
+    border-bottom: 1px solid #dce6df;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .app-page.nav-ready .workspace-sidebar {
+    z-index: 1100;
+  }
+
+  .app-page .workspace-sidebar :is(.app-brand, .campus-wordmark, .campus-wordmark > span) {
+    color: var(--brand-ink);
+  }
+
+  .app-page .workspace-sidebar .app-brand {
+    min-height: 44px;
+    min-width: 0;
+    font-size: 21px;
+  }
+
+  .app-page .workspace-sidebar .account-nav {
+    order: 1;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .app-page .workspace-sidebar .profile-trigger {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    min-height: 44px;
+    padding: 2px;
+    border-radius: 50%;
+  }
+
+  .app-page .workspace-sidebar .profile-trigger .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .app-page .workspace-sidebar .profile-trigger .account-nav-name,
+  .app-page .workspace-sidebar .profile-trigger .profile-chevron {
+    display: none;
+  }
+
+  .app-page .workspace-sidebar .profile-trigger:is(:hover, :focus-visible) {
+    background: #e4f2e9;
+  }
+
+  .app-page .workspace-sidebar .profile-menu-panel {
+    width: min(240px, calc(100vw - 32px));
+  }
+
+  .app-page .workspace-sidebar .side-nav .side-link {
+    font-size: 14px;
+    color: var(--brand-ink);
+  }
+
+  .app-page .workspace-sidebar .side-nav .side-link > span {
+    color: inherit;
+  }
+
+  .app-page .workspace-sidebar .side-nav .side-link .nav-link-label {
+    text-align: left;
+  }
+
+  .app-page .workspace-sidebar .side-nav .side-link:is(:hover, .active) {
+    color: #12432c;
+    background: #e4f2e9;
+    box-shadow: none;
+  }
+
+  .app-page.nav-ready .workspace-sidebar > .side-nav {
+    position: fixed;
+    inset: auto max(12px, env(safe-area-inset-right)) calc(var(--mobile-nav-height) + var(--safe-bottom) + 8px) max(12px, env(safe-area-inset-left));
+    width: auto;
+    max-height: calc(100dvh - var(--mobile-nav-height) - var(--safe-bottom) - env(safe-area-inset-top, 0px) - 24px);
+    padding: 8px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border: 1px solid #dce6df;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 36px #102c1e25;
+  }
+
+  .app-page.nav-ready .workspace-mobile-nav {
+    position: fixed;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: calc(var(--mobile-nav-height) + var(--safe-bottom));
+    padding: 4px max(8px, env(safe-area-inset-right)) calc(4px + var(--safe-bottom)) max(8px, env(safe-area-inset-left));
+    background: #fff;
+    border-top: 1px solid #dce6df;
+    box-shadow: 0 -4px 20px #102c1e0d;
+  }
+
+  .workspace-mobile-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 52px;
+    padding: 3px 2px;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    color: #52675d;
+    font: 600 11px/1.2 'DM Sans', sans-serif;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .workspace-mobile-item:is([aria-current='page'], [aria-expanded='true'], :hover, :focus-visible) {
+    color: #12432c;
+  }
+
+  .workspace-mobile-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 28px;
+    border-radius: 16px;
+  }
+
+  .workspace-mobile-item:is([aria-current='page'], [aria-expanded='true'], :hover, :focus-visible) .workspace-mobile-icon {
+    background: #e4f2e9;
+  }
+
+  .workspace-mobile-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .app-page.nav-ready .workspace-sidebar + .main-area {
+    padding-bottom: calc(64px + var(--safe-bottom));
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot {
+    bottom: calc(76px + var(--safe-bottom));
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot .schedule-robot-launcher {
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+    width: auto;
+    min-height: 44px;
+    padding-inline: 7px 12px;
+    border-radius: 24px;
+    background: #fff !important;
+    box-shadow: 0 2px 10px #102c1e26 !important;
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot .schedule-robot-launcher img {
+    width: 32px;
+    height: 32px;
+    animation: none;
+    filter: none;
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot .schedule-robot-launcher-label {
+    margin: 0;
+    padding: 0;
+    color: var(--brand-ink);
+    font-size: 11px;
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot :is(.schedule-robot-halo, .schedule-robot-launcher-label i) {
+    display: none;
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .schedule-robot .schedule-robot-badge {
+    inset: -5px -4px auto auto;
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar) .connection-status {
+    bottom: calc(76px + var(--safe-bottom));
+  }
+
+  .app-page.nav-ready:has(.workspace-sidebar):has(.connection-status:not([hidden])) .schedule-robot {
+    bottom: calc(166px + var(--safe-bottom));
+  }
+
+  .app-page .workspace-sidebar + .main-area > .topbar::after {
+    content: none;
+  }
+
+  .passenger-overview .overview-intro :is(.overview-eyebrow, .overview-date, .overview-subtitle) {
+    display: none;
+  }
+
+  .passenger-overview .overview-intro-actions > .overview-primary {
+    width: 100%;
+    min-height: 52px;
+    justify-content: space-between;
+    padding-inline: 16px;
+    border-radius: 13px;
+    font-size: 15px;
+  }
+
+  .passenger-overview .overview-metric {
+    min-height: 88px;
+    padding-inline: 10px;
+  }
+
+  .passenger-overview .overview-metric .metric-label {
+    min-height: 2lh;
+    font-size: 11px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+}

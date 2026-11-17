@@ -17,7 +17,7 @@
       <label>Start from<input name="starts_on" type="date" value="{{ old('starts_on',isset($plan)?$plan->starts_on->format('Y-m-d'):now()->format('Y-m-d')) }}"></label>
       <label>Repeat weekly until<input name="ends_on" type="date" min="{{ now()->format('Y-m-d') }}" value="{{ old('ends_on',isset($plan)?$plan->ends_on->format('Y-m-d'):'') }}"></label>
     </div>
-    <button class="solid-button" id="reviewTimetableRide" type="submit">Calculate & review ride →</button>
+    <button class="solid-button" id="reviewTimetableRide" type="submit">Calculate & review ride</button>
   </form>
   <p class="commute-help" id="timetableRideStatus" role="status">Your suggested time will include the route estimate, your arrival buffer and 10 minutes to find a driver.</p>
 </section>
@@ -27,9 +27,9 @@
   <p id="commuteReviewRoute"></p><p id="commuteReviewFare"></p><p class="commute-help" id="commuteReviewTiming"></p>
   <label class="commute-consent" id="weeklyConsentLabel" hidden><input id="weeklyRideConsent" type="checkbox"> <span id="weeklyConsentText"></span></label>
   <p class="commute-help">Times are estimates. A car is confirmed after a driver accepts. Your robot will remind you before the ride appointment.</p>
-  <button class="solid-button" id="confirmTimetableRide" type="button">Confirm ride appointment →</button>
+  <button class="solid-button" id="confirmTimetableRide" type="button">Confirm ride appointment</button>
 </section>
-<p class="commute-help"><a href="{{ url('timetable') }}">← Back to my timetable</a></p>
+<p class="commute-help"><a href="{{ url('timetable') }}">Back to my timetable</a></p>
 @endsection
 @section('scripts')
 @php($timetableRideConfig=['url'=>url('timetable/'.$session->id.'/ride'),'csrf'=>csrf_token()])

@@ -37,8 +37,8 @@
           <div class="ride-request-price"><span>Your contribution</span><p id="rideRequestFare"></p></div>
           <p id="rideRequestDriver" class="ride-request-driver" hidden></p>
           <p id="rideSharedSummary" class="pool-passenger-summary" hidden></p>
-          <a class="solid-button" id="rideNavigationLink" hidden>View live journey map →</a>
-          <div class="now-request-actions"><button class="outline-button ride-cancel-button" type="button" id="cancelRideRequest" hidden>Cancel find ride</button><a class="solid-button" id="rideRequestBooking" href="{{ url('passenger/bookings') }}" hidden>View booking →</a></div>
+          <a class="solid-button" id="rideNavigationLink" hidden>View live journey map</a>
+          <div class="now-request-actions"><button class="outline-button ride-cancel-button" type="button" id="cancelRideRequest" hidden>Cancel find ride</button><a class="solid-button" id="rideRequestBooking" href="{{ url('passenger/bookings') }}" hidden>View booking</a></div>
           <p class="ride-waiting-hint" id="rideWaitingHint" hidden>You can cancel while no driver has accepted.</p>
         </div>
       </section>
@@ -46,7 +46,7 @@
         <div class="now-card-head"><div><span class="now-kicker">PICKUP & DROP-OFF</span><h2>Your journey</h2></div><span class="now-badge"><i></i> Ride now</span></div>
         <form id="rideNowForm" method="get" action="{{ url('findride.php') }}">
           @include('partials.journey-picker', ['autoPickup'=>true])
-          <div class="now-search-actions"><label for="nowPassengers">Passengers<select id="nowPassengers" name="seats_requested">@for($i=1;$i<=3;$i++)<option value="{{ $i }}" @selected((int)old('seats_requested',1)===$i)>{{ $i }} {{ $i===1 ? 'passenger' : 'passengers' }}</option>@endfor</select></label><button class="solid-button find-submit" type="submit" id="findDriversButton">Search for a ride →</button></div>
+          <div class="now-search-actions"><label for="nowPassengers">Passengers<select id="nowPassengers" name="seats_requested">@for($i=1;$i<=3;$i++)<option value="{{ $i }}" @selected((int)old('seats_requested',1)===$i)>{{ $i }} {{ $i===1 ? 'passenger' : 'passengers' }}</option>@endfor</select></label><button class="solid-button find-submit" type="submit" id="findDriversButton">Search for a ride</button></div>
         </form>
         <p class="journey-status" id="nowSearchStatus" role="status" tabindex="-1">Choose both locations and search to send your request straight to campus drivers.</p>
         <noscript><p>Enable JavaScript to choose locations and request a ride.</p></noscript>

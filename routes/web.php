@@ -7,6 +7,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverLocationController;
 use App\Http\Controllers\FindRideController;
 use App\Http\Controllers\OnDemandRideController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RideAppointmentController;
 use App\Http\Controllers\TimetableController;
@@ -44,6 +45,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('signup', 'showSignup');
     Route::post('signup.php', 'signup');
     Route::post('signup', 'signup');
+    Route::get('application', 'showApplication')->name('application.show');
+    Route::post('application/licence', 'resubmitLicense')->middleware('throttle:10,1,licence:')->name('application.licence');
 
     Route::post('logout.php', 'logout')->name('logout');
     Route::post('logout', 'logout');
@@ -57,6 +60,13 @@ Route::middleware('auth')->controller(ProfileController::class)->group(function 
     Route::patch('profile', 'update')->name('profile.update');
     Route::patch('profile/password', 'updatePassword')->middleware('throttle:6,1,profile-password:')->name('profile.password');
     Route::get('profile/avatar', 'avatar')->name('profile.avatar');
+});
+
+Route::middleware('guest')->controller(PasswordResetController::class)->group(function () {
+    Route::get('forgot-password', 'showRequest')->name('password.request');
+    Route::post('forgot-password', 'sendLink')->middleware('throttle:6,1,forgot-password:')->name('password.email');
+    Route::get('reset-password/{token}', 'showReset')->where('token', '[a-f0-9]{64}')->name('password.reset');
+    Route::post('reset-password', 'reset')->middleware('throttle:10,1,reset-password:')->name('password.update');
 });
 
 // Commuter / Passenger Routes
@@ -121,6 +131,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin.php', [AdminController::class, 'index'])->name('admin');
     Route::get('admin', [AdminController::class, 'index']);
     Route::post('admin/members/{member}/remove',[\App\Http\Controllers\AdminMemberController::class,'remove'])->whereNumber('member');
+    Route::get('admin/members/{member}/licence/{version}', [AdminController::class, 'licence'])
+        ->whereNumber('member')->where('version', '[a-f0-9]{64}')->name('admin.members.licence');
     Route::post('admin/members/{member}/restore',[\App\Http\Controllers\AdminMemberController::class,'restore'])->whereNumber('member');
     Route::post('admin.php', [AdminController::class, 'handleAction']);
     Route::post('admin', [AdminController::class, 'handleAction']);

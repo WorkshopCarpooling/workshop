@@ -6,6 +6,7 @@ use App\Models\Ride;
 use App\Models\RideBooking;
 use App\Models\Vehicle;
 use App\Services\CarbonEstimate;
+use App\Services\CarbonRewards;
 use App\Services\AutomaticCarbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +60,8 @@ class CarbonController extends Controller
             if ($existing) DB::table('ride_carbon_reports')->where('ride_id',$ride)->update($record);
             else DB::table('ride_carbon_reports')->insert($record+['ride_id'=>$ride,'created_at'=>now()]);
         });
-        return redirect('carbon')->with('carbonNotice','Trip footprint saved. Emissions are allocated equally across the driver and accepted passenger seats.');
+        CarbonRewards::finalize($ride);
+        return redirect('carbon')->with('carbonNotice','Trip footprint saved. Check Carbon Rewards for the status of passenger points.');
     }
 
     public function vehicle(Request $request, int $vehicle)

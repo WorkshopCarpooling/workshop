@@ -30,12 +30,12 @@
     estimate();
   }
   function estimate(){
-    get('navigationEstimateLabel').textContent=passenger?'To destination · estimate':config.testTrip?'Test arrival':state.next?.kind==='pickup'?'To pickup · estimate':'To drop-off · estimate';
+    get('navigationEstimateLabel').textContent=passenger?'To destination · estimate':state.next?.kind==='pickup'?'To pickup · estimate':'To drop-off · estimate';
     if(routeTarget!==state.next?.key||!path.points.length){get('navigationEstimate').textContent=state.allDroppedOff?'Arrived':'Updating…';return;}
     const projection=carPosition&&path.points.length>1?G.project(path,carPosition):null;
     const fraction=animated()?1-testFraction:projection&&projection.distance<75&&path.total?Math.max(0,1-projection.along/path.total):1;
     const distance=road.distanceMeters*fraction,minutes=Math.round(road.durationSeconds*fraction/60);
-    get('navigationEstimate').textContent=animated()?`${Math.ceil((state.simulation?.durationSeconds||0)*fraction)} sec · ${(distance/1000).toFixed(1)} km`:`${minutes<1?'<1':minutes} min · ${(distance/1000).toFixed(1)} km`;
+    get('navigationEstimate').textContent=`${minutes<1?'<1':minutes} min · ${(distance/1000).toFixed(1)} km`;
   }
   function place(point){
     carPosition=point;car.setOpacity(1);car.setLatLng([point.lat,point.lng]);const body=car.getElement()?.querySelector('.navigation-car-body');if(body)body.style.transform=`rotate(${point.heading||0}deg)`;
@@ -74,6 +74,8 @@
   function freshLocation(){const fix=state.location;return fix&&state.gps==='live'&&Date.now()/1000-fix.capturedAt<=30;}
   function updateTestLocation(){
     cancelAnimationFrame(frame);const simulation=state.simulation;if(!simulation||!path.points.length)return;
+    get('navigationUpdatedLabel').textContent='Position source';
+    get('navigationUpdated').textContent='Route estimate';
     const base=testClock.serverNow,received=testClock.at,start=simulation.startedAt,duration=simulation.durationSeconds;
     function step(time){
       if(stopped)return;
@@ -82,19 +84,15 @@
       if(changed)render();
       if(passenger){
         const finished=simulation.destinationReached??arrived;
-        get('navigationMode').textContent=finished?'DESTINATION REACHED':'YOUR JOURNEY';
+        get('navigationMode').textContent='ESTIMATED TRIP PROGRESS';
         get('navigationState').textContent=finished?'You have arrived':'Your journey is in progress';
-        get('navigationGps').textContent=finished?'Your car has reached the destination. Waiting for the driver to complete the trip.':arrived?'Your driver has paused along the journey. The car will continue when the driver moves.':'Following the same car position as your driver.';
-        get('navigationUpdated').textContent='Animation';
-        get('navigationHint').textContent=finished?'You have reached your destination.':'Sit back and follow your journey.';
+        get('navigationGps').textContent=finished?'Waiting for the driver to complete the trip.':arrived?'Waiting for a trip update from the driver.':'Following your route to the destination.';
+        get('navigationHint').textContent=finished?'The estimated route ends here.':'Follow your journey to the destination.';
         place(path.points.length>1?G.at(path,path.total*testFraction):{...path.points[0],heading:0});
         if(!arrived)frame=requestAnimationFrame(step);return;
       }
-      get('navigationMode').textContent='TRIP UJIAN · AUTOMATIC DRIVING';
-      get('navigationGps').textContent=arrived?'Test car has arrived. Confirm this stop to continue.':'Simulated car is following the road. Device location is not used.';
-      get('navigationUpdated').textContent='Simulation';
-      if(state.allDroppedOff){get('navigationGps').textContent='All test stops confirmed. Finish the test trip.';}
-      else get('navigationHint').textContent=arrived?'Car stopped. Confirm '+(state.next?.kind==='pickup'?'passenger on board.':'passenger drop-off.'):'Car driving automatically to '+(state.next?.kind==='pickup'?'pickup.':'drop-off.');
+      get('navigationMode').textContent='ESTIMATED TRIP PROGRESS';
+      get('navigationGps').textContent=state.allDroppedOff?'All stops confirmed. You can complete the trip.':arrived?'Confirm this stop once the passenger is on board or has been dropped off.':'Follow the route to your next stop.';
       place(path.points.length>1?G.at(path,path.total*testFraction):{...path.points[0],heading:0});
       if(!arrived)frame=requestAnimationFrame(step);
     }
@@ -103,9 +101,10 @@
   function updateLocation(){
     if(stopped)return;
     if(animated()){updateTestLocation();return;}
+    get('navigationUpdatedLabel').textContent='Last GPS update';
     const fix=state.location,fresh=freshLocation();
     get('navigationMode').textContent=fresh?'LIVE GPS':fix?'LAST KNOWN LOCATION':'WAITING FOR DRIVER GPS';
-    get('navigationUpdated').textContent=fix?new Date(fix.capturedAt*1000).toLocaleTimeString():'—';
+    get('navigationUpdated').textContent=fix?new Date(fix.capturedAt*1000).toLocaleTimeString('en-MY'):'—';
     const gpsState=state.isDriver&&window.isSecureContext===false?'insecure_context':state.gpsState;
     const problems={insecure_context:state.isDriver?'GPS is blocked on this HTTP address. Open this trip on localhost below, or use HTTPS.':'Your driver needs to open the trip on a GPS-capable address.',permission_denied:state.isDriver?'Location access is blocked. Allow Location for this site in your browser, then press Retry GPS below.':'Your driver needs to allow location access.',unavailable:state.isDriver?'Your device could not get a location. Check device location services and keep this page open.':'The driver device cannot get a location right now.',unsupported:'The driver browser does not support device location.',page_closed:'The driver page is closed or paused. Waiting for the driver to reopen the trip.'};
     const problem=problems[gpsState];

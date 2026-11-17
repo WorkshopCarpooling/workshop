@@ -43,7 +43,7 @@
                       @if ($request->arrive_by)<b>Arrive by:</b> {{ $request->arrive_by->format('d M, g:i A') }}<br>@endif
                       @if ($request->compatibility_score !== null)<b>Compatibility:</b> {{ $request->compatibility_score }}%<br>@endif
                       @if ($request->pickup_latitude !== null && $request->dropoff_latitude !== null)
-                        <a href="https://www.google.com/maps/dir/?api=1&amp;origin={{ $request->pickup_latitude }},{{ $request->pickup_longitude }}&amp;destination={{ $request->dropoff_latitude }},{{ $request->dropoff_longitude }}&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open passenger driving directions ↗</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&amp;origin={{ $request->pickup_latitude }},{{ $request->pickup_longitude }}&amp;destination={{ $request->dropoff_latitude }},{{ $request->dropoff_longitude }}&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open passenger driving directions</a>
                       @endif
                     </span>
                   </div>

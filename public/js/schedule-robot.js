@@ -43,7 +43,7 @@
       node('location').textContent = '';
       node('time').textContent = '';
       node('link').href = root.dataset.scheduleUrl || 'passenger/schedule';
-      node('link').textContent = 'Book a ride appointment ↗';
+      node('link').textContent = 'Book a ride appointment';
       return;
     }
     const minutes = Math.max(1, Math.ceil((start(event) - now()) / 60000));
@@ -59,9 +59,9 @@
     }
     node('location').textContent = `${event.kind === 'ride' || event.kind === 'appointment' ? 'Pickup: ' : 'Location: '}${event.location}${event.kind === 'appointment' ? ' · ' + event.passengers + ' passenger' + (event.passengers===1?'':'s') : ''}`;
     try { node('time').textContent = new Intl.DateTimeFormat('en-MY', {timeZone:timezone, weekday:'short', day:'numeric', month:'short', hour:'numeric', minute:'2-digit'}).format(new Date(start(event))) + ' · Malaysia time'; }
-    catch (_) { node('time').textContent = new Date(start(event)).toLocaleString(); }
+    catch (_) { node('time').textContent = new Date(start(event)).toLocaleString('en-MY'); }
     node('link').href = event.url;
-    node('link').textContent = `${event.action} ↗`;
+    node('link').textContent = event.action;
   }
   function check() {
     const event = available().find(event => start(event) - now() <= 30 * 60000 && status(event).notifiedTier !== tier(event));

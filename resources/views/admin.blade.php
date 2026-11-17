@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{ asset('css/journey.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   @if($section==='live')<link rel="stylesheet" href="{{ asset('vendor/maplibre/maplibre-gl.css') }}?v=6.16.0">@endif
+  <link rel="stylesheet" href="{{ asset('css/trip-assistance.css') }}?v={{ filemtime(public_path('css/trip-assistance.css')) }}">
   <link rel="stylesheet" href="{{ asset('css/live-tracking.css') }}?v={{ filemtime(public_path('css/live-tracking.css')) }}">
 <link rel="stylesheet" href="{{ asset('css/workspace-pages.css') }}?v=20261027-pages-carbon">
 @include('partials.device-head')
@@ -39,11 +40,17 @@
           <p class="subtitle">Manage the UTeM student carpool community.</p>
         </div>
         <div class="admin-actions">
-          <a class="outline-button" href="{{ url('carbon') }}">Carbon reports ↗</a>
-          <button class="solid-button" id="printReport">Print summary <span>↗</span></button>
+          <a class="outline-button" href="{{ url('carbon') }}">Carbon reports</a>
+          <button class="solid-button" id="printReport">Print summary</button>
         </div>
       </div>
 
+      @unless($section === 'live')
+        <section class="trip-assistance" id="admin-assistance-notice" data-feed-url="{{ route('assistance.admin.feed') }}" hidden>
+          <strong role="status"></strong>
+          <a class="text-link" href="{{ url('admin/live') }}#admin-assistance">View assistance reports</a>
+        </section>
+      @endunless
       @include('admin.'.$section)
   <footer class="dashboard-footer">
         <span>RideUTeM admin · Member approvals are active</span>
@@ -59,6 +66,7 @@
 <script src="{{ asset('js/trip-navigation-geometry.js') }}?v={{ filemtime(public_path('js/trip-navigation-geometry.js')) }}" defer></script>
 @if($section==='live')<script src="{{ asset('js/live-carbon.js') }}?v={{ is_file(public_path('js/live-carbon.js'))?filemtime(public_path('js/live-carbon.js')):'live-carbon' }}" defer></script>@endif
 @if($section==='live')<script src="{{ asset('js/admin-driver-map.js') }}?v={{ filemtime(public_path('js/admin-driver-map.js')) }}" defer></script>@endif
+<script src="{{ asset('js/trip-assistance.js') }}?v={{ filemtime(public_path('js/trip-assistance.js')) }}" defer></script>
 <script src="{{ asset('js/admin-live-tracking.js') }}?v={{ filemtime(public_path('js/admin-live-tracking.js')) }}" defer></script>
 @include('partials.device-tools')
 </body>

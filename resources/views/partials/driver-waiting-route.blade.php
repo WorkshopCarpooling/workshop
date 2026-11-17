@@ -14,10 +14,10 @@
     <details class="waiting-route-picker" open><summary>Your starting point & destination</summary>
       @include('partials.journey-picker',['autoPickup'=>false,'pickerValues'=>['pickup_label'=>'UTeM Main Campus','pickup_latitude'=>2.3139,'pickup_longitude'=>102.3183]])
     </details>
-    <div class="waiting-form-actions"><label for="driverWaitingVehicle">Your vehicle<select id="driverWaitingVehicle" name="vehicle_id" required>@foreach($approvedVehicles as $vehicle)<option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->vehicle_color }} {{ $vehicle->vehicle_type }} · {{ $vehicle->vehicle_plate }}</option>@endforeach</select></label><button type="submit" class="solid-button" id="driverWaitingOpen">Open ride now →</button></div>
+    <div class="waiting-form-actions"><label for="driverWaitingVehicle">Your vehicle<select id="driverWaitingVehicle" name="vehicle_id" required>@foreach($approvedVehicles as $vehicle)<option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->vehicle_color }} {{ $vehicle->vehicle_type }} · {{ $vehicle->vehicle_plate }}</option>@endforeach</select></label><button type="submit" class="solid-button" id="driverWaitingOpen">Open ride now</button></div>
   </form>
   <p id="driverWaitingMessage" class="journey-status" role="status" aria-live="polite">{{ $waitingBusy ? 'Manage your current passengers in My schedule. You can open a new route when that trip is complete.' : 'Keep this page open while waiting. Going offline stops new matches and keeps accepted bookings.' }}</p>
-  <p class="waiting-help">Going later? <a href="{{ url('driver/offer') }}">Offer a scheduled ride with a departure date and time →</a></p>
+  <p class="waiting-help">Going later? <a href="{{ url('driver/offer') }}">Offer a scheduled ride with a departure date and time</a></p>
 </section>
 <script>window.driverWaiting = @json($waitingConfig);</script>
 <script src="{{ asset('js/driver-waiting-route.js') }}?v={{ filemtime(public_path('js/driver-waiting-route.js')) }}" defer></script>
