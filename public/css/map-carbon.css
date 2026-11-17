@@ -1,0 +1,6 @@
+.navigation-car-body,.preview-car-body{position:relative;isolation:isolate;--map-carbon-colour:#85918a}
+[data-carbon-level="low"]{--map-carbon-colour:#3c9366}
+[data-carbon-level="medium"]{--map-carbon-colour:#ce9929}
+[data-carbon-level="high"]{--map-carbon-colour:#cb5653}
+:is(.navigation-car-body,.preview-car-body)::after{content:"";position:absolute;inset:0;background:var(--map-carbon-colour);mix-blend-mode:multiply;mask:url('../images/tracking-car-3d.png') center/contain no-repeat;-webkit-mask:url('../images/tracking-car-3d.png') center/contain no-repeat;pointer-events:none}
+.map-carbon-caption{font-size:12px;line-height:1.6;color:#52665b}

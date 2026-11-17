@@ -1,0 +1,186 @@
+.profile-shell {
+  max-width: 1120px;
+}
+
+.app-page .welcome-row h1 {
+  font-weight: 800;
+}
+
+.app-page .profile-identity.content-card {
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.profile-cover {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: clamp(120px, 15vw, 185px);
+  padding: 16px 22px;
+  background: #254b39 url("../images/utem-campus-aerial.png") center 49% / cover;
+}
+
+.profile-cover span {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--brand-deep);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profile-identity-details {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(12px, 3vw, 20px);
+  min-width: 0;
+  padding: 0 clamp(16px, 4vw, 28px) 18px;
+}
+
+.app-page .profile-identity-details .user-avatar {
+  align-self: flex-start;
+  width: clamp(76px, 10vw, 106px);
+  height: clamp(76px, 10vw, 106px);
+  margin-top: -32px;
+  border: 4px solid #fff;
+  box-shadow: 0 3px 10px #14251e29;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+}
+
+.profile-identity-details > div {
+  min-width: 0;
+  padding-top: 12px;
+}
+
+.app-page .profile-identity-details h2 {
+  margin: 0;
+  font: 800 clamp(20px, 3vw, 30px)/1.18 Manrope, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.app-page .profile-identity-details p {
+  margin: 3px 0 0;
+  color: var(--brand-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-form {
+  display: grid;
+  gap: 17px;
+  min-width: 0;
+  padding: clamp(16px, 3vw, 26px);
+}
+
+#change-password {
+  scroll-margin-top: 90px;
+}
+
+.profile-form-heading {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--brand-line);
+}
+
+.app-page .profile-form-heading h2 {
+  margin: 0 0 4px;
+  font: 800 20px/1.25 Manrope, sans-serif;
+}
+
+.app-page .profile-form-heading p {
+  margin: 0;
+  color: var(--brand-muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.profile-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.profile-field label {
+  font-weight: 800;
+}
+
+.profile-field small {
+  color: var(--brand-muted);
+  font-weight: 600;
+}
+
+.profile-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #9eafa4;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--brand-ink);
+  font: inherit;
+  font-weight: 600;
+}
+
+.profile-field input[readonly] {
+  background: #eef2ea;
+}
+
+.profile-field input[aria-invalid="true"] {
+  border-color: #a23126;
+}
+
+.profile-field .profile-error {
+  color: #a23126;
+  font-weight: 700;
+}
+
+.profile-field input[type="file"] {
+  padding: 4px;
+}
+
+.profile-field input::file-selector-button {
+  min-height: 34px;
+  margin-right: 8px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  font: inherit;
+  cursor: pointer;
+}
+
+.profile-form .solid-button {
+  justify-self: start;
+  min-height: 44px;
+  padding-inline: 18px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.app-page .profile-status {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #e4efe5;
+  color: #254b39;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 960px) {
+  .profile-settings {
+    grid-template-columns: 1fr;
+  }
+}

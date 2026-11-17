@@ -1,0 +1,15 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const control=()=>({value:'',disabled:false,required:false,listeners:{},addEventListener(event,fn){this.listeners[event]=fn;}});
+const mode=control(), fields={hidden:false}, cars=control(),fuel=control(),consumption=control(), driver=control(), distance=control();
+fields.querySelectorAll=()=>[cars,fuel,consumption];
+const baseline={querySelector:selector=>selector==='[data-baseline-mode]'?mode:fields};
+const driverForm={querySelector:selector=>selector==='[name="driver_would_travel"]'?driver:distance};
+vm.runInNewContext(fs.readFileSync('public/js/carbon-forms.js','utf8'),{document:{querySelectorAll:selector=>selector==='[data-carbon-baseline]'?[baseline]:[driverForm]}});
+let checks=0;const check=(value,label)=>{assert.ok(value,label);checks++;console.log('PASS: '+label);};
+check(fields.hidden && cars.disabled && !cars.required,'unknown modes do not require invented car details');
+mode.value='drive_alone';mode.listeners.change();check(!fields.hidden && [cars,fuel,consumption].every(input=>input.required&&!input.disabled),'separate-car baselines request car count, fuel and consumption');
+mode.value='walk_cycle';mode.listeners.change();check(fields.hidden && [cars,fuel,consumption].every(input=>input.disabled),'switching to walking removes car values from form submission');
+check(distance.disabled && !distance.required,'original driver distance is optional until the alternative is known');
+driver.value='yes';driver.listeners.change();check(!distance.disabled && distance.required,'a driver who would travel anyway must supply original-route kilometres');
+driver.value='no';driver.listeners.change();check(distance.disabled && !distance.required,'a driver who would not travel does not submit an old baseline distance');
+console.log(`${checks} carbon form checks passed; no browser GPS or network used.`);

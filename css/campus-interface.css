@@ -1,0 +1,109 @@
+/* Reference-inspired campus mobility interface. Scoped to authenticated pages. */
+body.app-page{--ink:#20392f;--muted:#758177;background:#f2f4ef;color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:clip}
+.app-page *{box-sizing:border-box}
+.app-page .app-shell{display:block;min-height:100dvh;background:transparent}
+.app-page .sidebar{display:flex!important;position:relative;inset:auto;width:100%;height:auto;min-height:80px;padding:16px clamp(18px,4vw,64px);flex-direction:row;align-items:center;gap:34px;background:#f8faf6;border:0;border-bottom:1px solid #e0e6dc;box-shadow:none;z-index:20}
+.app-page .app-brand{display:flex;align-items:center;flex-shrink:0;padding:0;font-size:22px;letter-spacing:-1px;gap:4px}
+.app-page .app-brand .mini-car{display:grid;place-items:center;width:33px;height:33px;border-radius:50%;background:#254d3b;color:white;font-size:21px;margin-right:6px}
+.app-page .app-brand>span:last-child{display:inline}
+.app-page .sidebar-label,.app-page .sidebar-bottom{display:none}
+.app-page .side-nav{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:0}
+.app-page .side-link{display:flex;min-height:40px;padding:10px 16px;gap:8px;font-size:12px;border-radius:24px;white-space:nowrap;transition:background .2s,transform .2s}
+.app-page .side-link>span{font-size:16px}
+.app-page .side-link.active{background:#244b39;color:#fff;box-shadow:0 4px 10px #244b3915}
+.app-page .side-link:hover{transform:translateY(-2px);background:#dfe9dc;color:#244b39}
+.app-page .main-area{margin:0!important;min-width:0;min-height:calc(100dvh - 80px)}
+.app-page .topbar{display:flex!important;position:relative;min-height:66px;height:auto;padding:12px clamp(18px,4vw,64px);background:transparent;border:0;gap:14px;flex-wrap:wrap}
+.app-page .breadcrumb{font-size:11px;color:#748271}
+.app-page .top-actions{margin-left:auto}
+.app-page .page-content{width:100%;max-width:1480px;margin:auto;padding:8px clamp(18px,4vw,64px) 28px}
+.app-page .welcome-row{margin-bottom:24px;gap:16px}
+.app-page .welcome-row h1{font-size:clamp(23px,2.3vw,34px);letter-spacing:-1.2px;font-weight:700}
+.app-page .date-line{font-size:9px;letter-spacing:1.8px}
+.app-page .wave{display:none}
+.app-page .subtitle{font-size:12px;color:#748171}
+.journey-hero{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:390px;border:1px solid #e2e7dc;border-radius:26px;overflow:hidden;background:#fafbf8;margin-bottom:26px;isolation:isolate;animation:journey-enter .7s both}
+.journey-copy{padding:clamp(28px,4vw,58px);z-index:2;align-self:center}
+.journey-eyebrow{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:1.8px;font-weight:700;color:#6c7e65}
+.journey-eyebrow i{width:6px;height:6px;border-radius:50%;background:#719b54;box-shadow:0 0 0 4px #719b5414}
+.journey-copy h2{font-family:Manrope,sans-serif;font-size:clamp(32px,3.8vw,57px);line-height:1.08;letter-spacing:-2.8px;margin:22px 0 18px;color:#203b2c}
+.journey-copy p{max-width:330px;font-size:13px;line-height:1.8;color:#778272;margin:0 0 24px}
+.journey-cta{display:inline-flex;align-items:center;gap:28px;padding:13px 20px;border-radius:30px;background:#244b39;color:#fff;text-decoration:none;font-size:12px;font-weight:700;transition:transform .2s,box-shadow .2s}
+.journey-cta:hover{transform:translateY(-3px);box-shadow:0 9px 24px #244b3930}
+.journey-cta span{font-size:20px;line-height:1}
+.journey-tags{display:flex;gap:15px;flex-wrap:wrap;font-size:9px;color:#788573;margin-top:23px}
+.journey-scene{position:relative;min-height:390px;overflow:hidden;background:linear-gradient(100deg,#f1f3ed,#e5ebdf)}
+.journey-road{position:absolute;top:-15%;bottom:-15%;left:17%;width:42%;background:#d8ddd4;border-inline:9px solid #f9fbf6;transform:rotate(12deg);box-shadow:12px 0 30px #526e4710}
+.journey-road:after{content:'';position:absolute;left:49%;top:0;height:100%;width:2px;background:repeating-linear-gradient(to bottom,#fafcf6 0 25px,transparent 25px 52px);animation:road-flow 8s linear infinite}
+.journey-route{position:absolute;left:34%;height:100%;width:5px;background:#89a96f;box-shadow:0 0 0 5px #89a96f16}
+.journey-pin{position:absolute;left:calc(34% - 12px);top:19%;width:30px;height:30px;display:grid;place-items:center;border:3px solid #f5f8f0;border-radius:50%;background:#74975e;color:white;font-size:20px;z-index:2}
+.journey-car{position:absolute;top:36%;left:calc(34% - 43px);width:90px;filter:drop-shadow(12px 17px 9px #273d3338);z-index:2;animation:car-drift 5s ease-in-out infinite}
+.journey-car svg{display:block;width:100%;height:auto}
+.journey-floating{position:absolute;right:6%;top:34%;width:205px;padding:21px;background:#ffffffed;box-shadow:0 20px 40px #3c55301a;border:1px solid #fff;border-radius:16px;z-index:3;animation:journey-enter .9s .15s both}
+.journey-card-label{font-size:7px;letter-spacing:1.2px;color:#89957f}
+.journey-floating>b{display:block;font:800 17px Manrope,sans-serif;margin:9px 0 18px;letter-spacing:-.5px}
+.journey-stop{display:flex;align-items:center;gap:10px;font-size:10px;position:relative;padding-bottom:20px;color:#7c8775}
+.journey-stop i{width:8px;height:8px;border:2px solid #88a96c;border-radius:50%}
+.journey-stop:not(.destination):after{content:'';position:absolute;height:19px;border-left:1px dashed #a3b399;left:3px;top:11px}
+.journey-stop.destination{padding-bottom:15px;color:#294d36;font-weight:700}
+.journey-stop.destination i{background:#88a96c}
+.journey-card-foot{display:block;border-top:1px solid #edf0e8;padding-top:12px;font-size:8px;color:#8a9581}
+.journey-tree{position:absolute;width:110px;height:110px;border-radius:45% 55% 55% 45%;background:radial-gradient(circle at 35% 30%,#e5ebdc,#bccbb1 65%,#a8bc9c);filter:drop-shadow(12px 16px 11px #44623815);opacity:.7}
+.tree-one{right:-25px;top:-22px;width:170px;height:170px}.tree-two{right:-30px;bottom:-35px;width:150px;height:150px}.tree-three{left:-45px;bottom:35px;width:95px;height:95px}
+.journey-scene-label{position:absolute;bottom:22px;left:22px;font-size:7px;letter-spacing:1.4px;color:#839277}
+.app-page .content-card,.app-page .find-search-card,.app-page .ride-result-card,.app-page .map-card,.app-page .trip-detail-card,.app-page .stat-card{background:#fdfefa;border:1px solid #e0e6d9;border-radius:19px;box-shadow:0 6px 24px #32472a04}
+.app-page .content-card,.app-page .find-search-card{padding:24px}
+.app-page .section-head h2,.app-page .find-search-heading h2{font-size:19px;letter-spacing:-.6px}
+.app-page .section-kicker{color:#8a987e;letter-spacing:1.4px;font-size:8px}
+.app-page .empty-state{min-height:160px}.app-page .empty-state>b{font-size:13px}.app-page .empty-state>p{font-size:11px}
+.app-page .driver-ride{border-radius:12px;background:#f5f7f0;border-color:#e2e8db}
+.app-page input,.app-page select,.app-page textarea{max-width:100%;border-radius:10px}
+.app-page .solid-button,.app-page .find-submit,.app-page .approve-button{background:#244b39;color:white;border-radius:24px;box-shadow:none}
+.app-page :is(a,button,input,select,textarea):focus-visible{outline:3px solid #86a870;outline-offset:4px}
+.app-page .dashboard-footer{font-size:9px;padding-top:18px;color:#88947e}
+.app-page section[id]{scroll-margin-top:20px}
+.app-page .content-card{animation:journey-enter .65s .1s both}
+@keyframes journey-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes car-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes road-flow{to{transform:translateY(52px)}}
+@media(min-width:1500px){.journey-hero{min-height:440px}.journey-scene{min-height:440px}}
+@media(max-width:1000px){.app-page .sidebar{gap:18px;flex-wrap:wrap}.app-page .side-link{padding:9px 12px}.journey-floating{right:4%;width:175px;padding:16px}.journey-copy{padding:30px}.journey-copy h2{letter-spacing:-1.8px}.app-page .sidebar .side-nav:last-of-type:not(:first-of-type){display:none}}
+@media(max-width:700px){.app-page .sidebar{padding:16px 18px;gap:15px}.app-page .side-nav{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.app-page .side-link{font-size:11px;flex-shrink:0;min-height:40px}.app-page .app-brand{font-size:21px}.app-page .topbar{padding:10px 18px;min-height:54px}.app-page .breadcrumb{font-size:10px}.app-page .top-actions .live-rides-badge,.app-page .driver-live-label{display:none}.app-page .page-content{padding:10px 16px 24px}.app-page .welcome-row{flex-wrap:wrap;margin-bottom:20px}.app-page .welcome-row .outline-button{margin:0}.journey-hero{grid-template-columns:1fr;border-radius:20px}.journey-copy{padding:30px}.journey-copy h2{font-size:40px}.journey-copy p{max-width:100%}.journey-scene{min-height:280px}.journey-road{left:22%;width:33%}.journey-floating{right:8%;top:22%;width:185px}.journey-car{top:32%;width:75px;left:calc(34% - 36px)}.journey-scene-label{font-size:6px;bottom:16px}.app-page .content-card,.app-page .find-search-card{padding:19px}.app-page .section-head{gap:12px;flex-wrap:wrap}.app-page .top-actions{gap:8px}.app-page .content-grid,.app-page .admin-grid,.app-page .tracking-grid{grid-template-columns:minmax(0,1fr)}.app-page .profile-chip>span:nth-child(2){display:none}.app-page .driver-ride-route{flex-wrap:wrap}.app-page .dashboard-footer{gap:8px;line-height:1.6}}
+@media(prefers-reduced-motion:reduce){.app-page *,.app-page *:before,.app-page *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:700px){.app-page .sidebar .side-nav{justify-content:flex-start;align-items:center}.app-page .sidebar .side-link{flex:0 0 auto;flex-direction:row;gap:7px;min-width:max-content;text-align:left}.app-page .main-area{padding-bottom:0}.journey-copy h2{font-size:36px;letter-spacing:-1.8px}}
+
+/* Match the established authentication-page logo without loading auth page styles. */
+.app-page .app-brand{gap:10px;font:800 18px Manrope,sans-serif;letter-spacing:-.7px;text-decoration:none;color:#1d302b}
+.app-page .app-brand .brand-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#e4eee0;color:#355e4d;flex:none}
+.app-page .app-brand .brand-mark svg{width:23px;height:23px;fill:currentColor}
+.app-page .app-brand .campus-wordmark{display:inline;white-space:nowrap}
+.app-page .app-brand .campus-wordmark>span{font-weight:500;opacity:.75}
+
+/* The car stays in frame while the road and air pass at a constant speed. */
+.journey-road:after{top:-52px;height:calc(100% + 104px);animation:campus-road-travel .65s linear infinite;will-change:background-position;transform:none}
+.journey-route{background:repeating-linear-gradient(to bottom,#89a96f 0 34px,#b3c69f 34px 52px);animation:campus-road-travel .65s linear infinite}
+.journey-car{animation:campus-body-vibration .28s linear infinite;will-change:transform}
+.journey-car:before,.journey-car:after{content:'';position:absolute;top:86%;width:2px;height:72px;z-index:-1;border-radius:50%;background:linear-gradient(#fff9,transparent);transform-origin:top;animation:campus-slipstream .8s linear infinite;pointer-events:none}
+.journey-car:before{left:14%}.journey-car:after{right:14%;animation-delay:-.4s}
+.journey-wind{position:absolute;inset:-100px 0;transform:rotate(12deg);pointer-events:none;z-index:1;overflow:hidden}
+.journey-wind i{position:absolute;top:-90px;width:2px;height:65px;border-radius:10px;background:linear-gradient(transparent,#ffffffb3,transparent);animation:campus-wind-pass 1.25s linear infinite}
+.journey-wind i:nth-child(1){left:16%;animation-delay:-.2s}.journey-wind i:nth-child(2){left:36%;height:40px;animation-delay:-.8s}.journey-wind i:nth-child(3){left:59%;height:85px;animation-delay:-.5s}.journey-wind i:nth-child(4){left:77%;height:50px;animation-delay:-1s}
+@keyframes campus-road-travel{from{background-position:0 0}to{background-position:0 52px}}
+@keyframes campus-body-vibration{0%,100%{transform:translate(0,0)}25%{transform:translate(.3px,-.65px)}50%{transform:translate(0,-.2px)}75%{transform:translate(-.3px,-.65px)}}
+@keyframes campus-slipstream{from{transform:scaleY(.55);opacity:.15}50%{opacity:.6}to{transform:scaleY(1.1);opacity:.15}}
+@keyframes campus-wind-pass{from{top:-90px}to{top:100%}}
+
+/* Passenger bookings have no date column, unlike the driver ride list. */
+.passenger-dashboard #upcoming{min-width:0;width:100%}
+.passenger-dashboard #upcoming .section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:nowrap}
+.passenger-dashboard #upcoming .section-head>div{min-width:0;flex:1}
+.passenger-dashboard #upcoming .section-head h2{white-space:nowrap}
+.passenger-dashboard #upcoming .text-link{flex-shrink:0;white-space:nowrap}
+.passenger-dashboard #upcoming .driver-ride{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;padding:18px;margin-bottom:10px}
+.passenger-dashboard #upcoming .driver-ride-main{grid-column:1;grid-row:1;padding:0;min-width:0}
+.passenger-dashboard #upcoming .ride-status{grid-column:2;grid-row:1;align-self:start;margin:0;font-size:10px}
+.passenger-dashboard #upcoming .driver-ride-route{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+.passenger-dashboard #upcoming .driver-ride-route b{font-size:13px;overflow-wrap:break-word;word-break:normal}
+.passenger-dashboard #upcoming .driver-ride-meta{font-size:11px;line-height:1.6;gap:6px 18px;overflow-wrap:break-word}
+@media(max-width:600px){.passenger-dashboard #upcoming .section-head{align-items:flex-start;flex-wrap:wrap}.passenger-dashboard #upcoming .section-head>div{flex-basis:100%}.passenger-dashboard #upcoming .text-link{font-size:11px}.passenger-dashboard #upcoming .driver-ride{gap:10px;padding:14px;grid-template-columns:minmax(0,1fr)}.passenger-dashboard #upcoming .ride-status{grid-column:1;grid-row:2;justify-self:start}.passenger-dashboard #upcoming .driver-ride-meta{gap:6px 14px}.passenger-dashboard #upcoming .empty-state{padding:24px 4px}.passenger-dashboard #upcoming .empty-state p{max-width:100%;line-height:1.7}}
+@media(prefers-reduced-motion:reduce){.journey-wind,.journey-car:before,.journey-car:after{display:none}}

@@ -1,0 +1,104 @@
+.carbon-page {
+  --carbon-line: 24px;
+  --carbon-gap: 24px;
+  display: grid;
+  gap: var(--carbon-gap);
+  color: #36533f;
+  font-size: 13px;
+  line-height: var(--carbon-line);
+}
+.carbon-page .content-card {
+  padding: 24px !important;
+  margin: 0 !important;
+  background: #fff;
+  border: 1px solid #dfe7dc;
+  border-radius: 16px;
+  box-shadow: none;
+}
+.carbon-page :is(p, small, summary, label, th, td, .impact-metrics span) { line-height: var(--carbon-line) !important; }
+.app-page.research-page:has(.carbon-page) .subtitle { margin-top: 8px; font-size: 13px; line-height: 24px; }
+.carbon-page p { margin: 0; font-size: 13px; color: #62735e; }
+.carbon-page p + p { margin-top: 16px; }
+.carbon-page :is(a, a:hover, a:focus, a:visited) { text-decoration: none !important; }
+.carbon-page a { color: #285b3b; font-weight: 600; }
+.carbon-page a:not(.solid-button):not(.outline-button):hover { color: #193f28; }
+.carbon-page :is(b, strong) { font-weight: 600; }
+.carbon-page :is(em, i) { font-style: normal; }
+.carbon-page h2 { margin: 0; font-size: 20px !important; font-weight: 600; line-height: 28px; letter-spacing: -.4px !important; }
+.carbon-section-label { display: block; margin: 0 0 8px; font-size: 10px; font-weight: 600; line-height: 24px; letter-spacing: .08em; color: #708268; }
+.impact-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.impact-heading > div { min-width: 0; }
+.impact-heading h2 + p { margin-top: 8px; }
+.carbon-page .impact-month-form { display: flex; align-items: flex-end; gap: 12px; flex-shrink: 0; margin: 0; }
+.carbon-page .impact-month-form label { display: grid; gap: 8px; margin: 0; font-size: 12px; font-weight: 500; }
+.carbon-page .impact-month-form input { min-width: 150px; }
+.carbon-page :is(input, select) { box-sizing: border-box; min-height: 44px; padding: 10px 12px; border: 1px solid #d5dfd0; border-radius: 10px; background: #fff; color: #31543b; font: inherit; }
+.carbon-page :is(.solid-button, .outline-button) { min-height: 44px; margin: 0; padding: 10px 16px; font-size: 12px; line-height: 24px; font-weight: 600; text-align: center; }
+.carbon-page a.solid-button { color: #fff; }
+.impact-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+.impact-metrics article { display: flex; flex-direction: column; gap: 8px; padding: 20px; min-width: 0; border: 1px solid #e1e8de; border-radius: 12px; background: #fafcf8; }
+.carbon-page .impact-metrics small { display: block; min-height: 48px; color: #61755b; font-size: 10px; line-height: 24px; letter-spacing: .04em; }
+.impact-metrics strong { display: block; margin: 0; color: #2d513a; font: 600 32px/40px Manrope, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.7px; overflow-wrap: anywhere; }
+.impact-metrics em { display: inline-block; margin-left: 6px; color: #62755c; font: 400 12px/24px 'DM Sans', sans-serif; letter-spacing: 0; }
+.impact-metrics span { display: block; color: #6b7c64; font-size: 12px; line-height: var(--carbon-line); }
+.impact-coverage { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px; background: #f0f5eb; border-radius: 12px; }
+.impact-coverage b { font-size: 13px; line-height: var(--carbon-line); color: #3b603e; }
+.impact-coverage p { margin-top: 8px; font-size: 12px; }
+.impact-coverage progress { flex-shrink: 0; width: 160px; max-width: 100%; height: 6px; border: 0; border-radius: 4px; accent-color: #6e925a; background: #dce7d3; }
+.impact-coverage progress::-webkit-progress-bar { background: #dce7d3; border-radius: 4px; }
+.impact-coverage progress::-webkit-progress-value { background: #6e925a; border-radius: 4px; }
+.carbon-page .impact-footnote { margin: 16px 0 0; font-size: 12px !important; line-height: var(--carbon-line) !important; color: #708168; }
+.impact-downloads { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 24px; }
+.impact-downloads .text-link { padding: 10px 0; font-size: 12px; line-height: var(--carbon-line); }
+.carbon-page .impact-empty { margin-top: 24px; padding: 16px; background: #f4f7f0; border-radius: 10px; }
+.footprint-explainer > h2 { margin-bottom: 24px; }
+.footprint-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.carbon-page .footprint-steps p { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 20px; background: #fafcf8; border: 1px solid #e1e8de; border-radius: 12px; }
+.footprint-steps b { display: block; color: #3b5d42; font-size: 13px; line-height: var(--carbon-line); }
+.footprint-steps span { display: block; font-size: 13px; line-height: var(--carbon-line); color: #6a7b63; }
+.footprint-example { margin-top: 24px; padding: 20px; background: #f0f5eb; border-radius: 12px; }
+.footprint-example > b { display: block; font-size: 12px; line-height: var(--carbon-line); color: #55704a; }
+.footprint-example p { margin-top: 8px; }
+.footprint-explainer > p, .footprint-explainer > details { margin-top: 24px; }
+.carbon-page details > summary { padding: 12px 0; font-size: 13px; font-weight: 500; line-height: var(--carbon-line); color: #416448; cursor: pointer; }
+.carbon-page details[open] > summary { margin-bottom: 12px; }
+.carbon-page details p { font-size: 13px; line-height: var(--carbon-line); }
+.carbon-page details p + p { margin-top: 16px; }
+.impact-table-scroll { max-width: 100%; overflow-x: auto; margin-top: 24px; border: 1px solid #e1e8de; border-radius: 12px; }
+.impact-table-scroll table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.impact-table-scroll th { padding: 12px; background: #f5f8f1; color: #64775b; font-size: 11px; font-weight: 500; text-align: left; vertical-align: top; }
+.impact-table-scroll td { padding: 16px 12px; border-top: 1px solid #e6ece2; color: #3e5b42; vertical-align: middle; white-space: normal; }
+.carbon-page .impact-table-scroll :is(th, td) small { display: block; margin: 0; color: #7a8973; font-size: 11px; line-height: var(--carbon-line); }
+.impact-table-scroll td:first-child a { display: inline-block; padding: 0 6px; margin-left: -6px; border-radius: 5px; color: #315f3b; }
+.impact-table-scroll td:first-child a:hover { background: #edf3e6; }
+.footprint-status { display: inline-block; padding: 2px 9px; border-radius: 20px; background: #edf4e7; color: #4a6d43; font-size: 11px; line-height: var(--carbon-line); white-space: nowrap; }
+.footprint-status.pending { background: #f8f1e3; color: #876b3e; }
+.footprint-status.footprint-high { background: #fae7e5; color: #8d2927; font-weight: 700; }
+.footprint-trip { margin-top: 0; padding: 16px 0; border-bottom: 1px solid #e6ece2; scroll-margin-top: 24px; }
+.footprint-trip:first-of-type { margin-top: 16px; }
+.footprint-trip:last-child { padding-bottom: 0; border-bottom: 0; }
+.footprint-trip > summary { overflow-wrap: anywhere; }
+.carbon-page .footprint-trip form { display: grid; gap: 16px; margin: 16px 0 0; }
+.carbon-page .carbon-form-grid { gap: 16px; }
+.carbon-page .footprint-trip form label { display: grid; gap: 8px; font-size: 12px; font-weight: 500; }
+.carbon-page .footprint-trip form .impact-footnote { margin: 0; }
+.footprint-demo-banner { padding: 12px 20px; background: #edf4e7; color: #3f5d38; text-align: center; font: 500 12px/24px 'DM Sans', sans-serif; }
+@media(max-width:1050px) {
+  .impact-heading { align-items: flex-start; flex-direction: column; }
+  .impact-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .carbon-page .impact-month-form { width: 100%; }
+  .impact-coverage { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .impact-coverage progress { width: 100%; }
+}
+@media(max-width:700px) { .footprint-steps { grid-template-columns: 1fr; } }
+@media(max-width:600px) {
+  .carbon-page .content-card { padding: 20px !important; }
+  .impact-metrics { gap: 12px; }
+  .impact-metrics article { padding: 16px; }
+  .impact-metrics strong { font-size: 28px; }
+  .carbon-page .impact-month-form label { flex: 1; min-width: 0; }
+  .carbon-page .impact-month-form input { min-width: 0; }
+  .impact-downloads { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .footprint-steps p { padding: 16px; }
+}
+@media(max-width:380px) { .impact-metrics { grid-template-columns: 1fr; } .carbon-page .impact-metrics small { min-height: 0; } }

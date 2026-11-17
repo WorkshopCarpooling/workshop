@@ -1,0 +1,124 @@
+/* Shared RideUTeM palette. Loaded after page styles; colors only, no layout changes. */
+:root {
+  --brand-forest:#254B39;
+  --brand-cream:#F4F5EC;
+  --brand-orange:#C98148;
+  --brand-sage:#CBD8BD;
+  --brand-deep:#14251E;
+  --brand-ink:#20382A;
+  --brand-muted:#5F705D;
+  --brand-surface:#FFFEF8;
+  --brand-soft:#E9EEDD;
+  --brand-line:#D9E0CE;
+  --brand-focus:#A56838;
+  --ink:var(--brand-ink);--muted:var(--brand-muted);--green:var(--brand-forest);
+  --deep:var(--brand-deep);--paper:var(--brand-cream);--line:var(--brand-line);
+  --card:var(--brand-surface);--peach:#F5E5D5;--blue:var(--brand-soft);--gold:#F1E7D1;
+  --app-green:var(--brand-forest);
+  accent-color:var(--brand-forest);
+}
+::selection{background:var(--brand-sage);color:var(--brand-deep)}
+:is(a,button,input,select,textarea,summary):focus-visible{outline-color:var(--brand-focus)}
+
+/* Welcome and cinematic sequence. */
+body.landing-page,.landing-page .entrance-stage{background:var(--brand-cream);color:var(--brand-forest)}
+.landing-page .entrance-stage:before{background:radial-gradient(ellipse at 52% 44%,#FFFEF8 0%,var(--brand-cream) 48%,#E5EBD9 100%)}
+.landing-page .system-title{color:var(--brand-forest)}
+.landing-page .system-title>span{color:#697C60}
+.landing-page .system-title .title-period{color:var(--brand-orange)}
+.landing-page .landing-button{background:var(--brand-forest);border-color:var(--brand-forest);color:var(--brand-cream)}
+.landing-page .landing-button:hover{background:#355F47;box-shadow:0 7px 22px #254B391C}
+.landing-page .welcome-display-halo{background:radial-gradient(ellipse,#CBD8BD86,transparent 67%)}
+.landing-page .cinema-scene{background:radial-gradient(ellipse at 53% 37%,#506747 0%,#254B39 47%,var(--brand-deep) 100%)}
+.landing-page .cinema-bar{background:#101F18}
+.landing-page .cinema-exit{background:var(--brand-cream)}
+
+/* Passenger, driver, admin, timetable, research, carbon and tracking. */
+body.app-page{--ink:var(--brand-ink);--muted:var(--brand-muted);background:var(--brand-cream);color:var(--brand-ink)}
+.app-page .sidebar{background:#F8F9F0;border-bottom-color:var(--brand-line)}
+.app-page :is(.app-brand,.campus-wordmark,.profile-trigger,.profile-menu-link,.logout-button){color:var(--brand-forest)}
+.app-page .app-brand .brand-mark{background:var(--brand-soft);color:var(--brand-forest)}
+.app-page .app-brand .campus-wordmark>span{color:var(--brand-muted)}
+.app-page .side-link{color:var(--brand-muted)}
+.app-page .side-link>span{color:#718367}
+.app-page .side-link:hover{background:var(--brand-soft);color:var(--brand-forest)}
+.app-page .side-link.active{background:var(--brand-forest);color:var(--brand-cream);box-shadow:0 4px 10px #254B3915}
+.app-page .side-link.active>span{color:var(--brand-sage)}
+.app-page :is(h1,h2,h3,h4){color:var(--brand-ink)}
+.app-page :is(.subtitle,.breadcrumb,.driver-intro,.journey-status,.journey-help,.status-copy,.dashboard-footer,.account-nav-name small,.profile-menu-label){color:var(--brand-muted)}
+.app-page :is(.date-line,.section-kicker,.stat-label,.journey-eyebrow,.journey-card-label){color:#697A5E}
+.app-page :is(.date-dot,.journey-eyebrow i){background:var(--brand-orange)}
+.app-page :is(.content-card,.stat-card,.admin-stat,.workspace-tile,.find-search-card,.ride-result-card,.map-card,.trip-status-card,.privacy-card,.route-steps-card,.profile-trigger,.profile-menu-panel,.complaint-card,.members-card){background:var(--brand-surface);border-color:var(--brand-line)}
+.app-page :is(.driver-ride,.workspace-stats article,.research-stats>div,.route-plan,.journey-route-summary,.journey-current-location,.vehicle-review-row,.carbon-baseline-fields){background:var(--brand-soft);border-color:var(--brand-line);color:var(--brand-forest)}
+.app-page :is(.workspace-stats strong,.research-stats b,.workspace-tile b,.match-score,.student-fare-amount,.ride-price b){color:var(--brand-forest)}
+.app-page :is(.workspace-stats small,.workspace-tile small,.research-stats small,.vehicle-picker-help,.vehicle-status-help){color:var(--brand-muted)}
+.app-page .workspace-tile:hover{background:#EEF1E3;border-color:#B6C7A5}
+.app-page .journey-hero{background:var(--brand-surface);border-color:var(--brand-line)}
+.app-page .journey-copy h2{color:var(--brand-forest)}
+.app-page .journey-copy p,.app-page .journey-tags{color:var(--brand-muted)}
+.app-page :is(.solid-button,.find-submit,.approve-button,.search-button,.journey-cta,.join-button,.schedule-robot-primary){background:var(--brand-forest);border-color:var(--brand-forest);color:var(--brand-cream);box-shadow:none}
+.app-page :is(.solid-button,.find-submit,.approve-button,.search-button,.journey-cta,.join-button,.schedule-robot-primary):hover{background:#355F47;color:var(--brand-cream)}
+.app-page :is(.outline-button,.ride-action-button,.review-button,.journey-picker button,.research-page button,.vehicle-fuel-form button){background:var(--brand-surface);border-color:#BDCCAD;color:var(--brand-forest)}
+.app-page :is(.outline-button,.ride-action-button,.review-button,.journey-picker button,.research-page button):hover{background:var(--brand-soft)}
+.app-page .journey-picker button[aria-pressed=true]{background:var(--brand-forest);border-color:var(--brand-forest);color:var(--brand-cream)}
+.app-page .research-page button,.app-page.research-page .page-content button[type=submit]{background:var(--brand-forest);border-color:var(--brand-forest);color:var(--brand-cream)}
+.app-page .ride-action-button.quiet-action{background:#F5E5D5;border-color:#E4C9AC;color:#7B4B2C}
+.app-page :is(.text-link,.calendar-link,.empty-action,.location-access-link),.app-page a:not([class]){color:var(--brand-forest)}
+.app-page :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea){background-color:var(--brand-surface);border-color:#BAC9AC;color:var(--brand-ink);accent-color:var(--brand-forest)}
+.app-page :is(input,textarea)::placeholder{color:#73816B}
+.app-page :is(input,select,textarea):focus{border-color:#7D986C}
+.app-page :is(a,button,input,select,textarea,summary):focus-visible{outline-color:var(--brand-focus)}
+.app-page :is(.profile-menu-link:hover,.profile-menu-link.active,.profile-menu-panel .logout-button:hover){background:var(--brand-soft);color:var(--brand-forest)}
+.app-page .profile-menu-panel .logout-form{border-top-color:var(--brand-line)}
+.app-page .user-avatar{background:var(--brand-sage);color:var(--brand-forest)}
+.app-page :is(.table-status.scheduled,.ride-status.scheduled,.ride-status.accepted,.ride-status.completed,.trip-state.is-active,.live-status.fresh,.table-status.completed){background:var(--brand-soft);color:var(--brand-forest)}
+.app-page :is(.ride-status.in_progress,.table-status.in_progress,.blue-icon,.green-icon,.match-score){background:var(--brand-sage);color:var(--brand-forest)}
+.app-page :is(.ride-status.pending,.table-status.pending,.queue-count,.alert-count,.carbon-pending){background:#F5E5D5;color:#7B4B2C}
+.app-page :is(.peach-icon,.yellow-icon){background:#F5E5D5;color:#8A522B}
+.app-page :is(.driver-notice.success,.carbon-result:not(.negative)){background:var(--brand-soft);border-color:#BDCCAD;color:var(--brand-forest)}
+.app-page .schedule-robot-card{background:var(--brand-surface);border-color:var(--brand-line)}
+.app-page :is(.schedule-robot-label,.schedule-robot-time,.schedule-robot-location){color:var(--brand-muted)}
+.app-page :is(.schedule-robot-badge,.schedule-robot-card-head i){background:var(--brand-orange)}
+.app-page .global-driver-gps{background:var(--brand-soft);border-color:#BDCCAD}
+.app-page .global-driver-gps summary{color:var(--brand-forest)}
+.app-page .connection-status{background:var(--brand-deep);border-color:#78936A;color:var(--brand-cream)}
+.app-page .toast{background:var(--brand-deep);color:var(--brand-cream)}
+
+/* Authentication: the same palette on dark green over the supplied UTeM photo. */
+:root:has(body.campus-auth-page){background:var(--brand-deep);scrollbar-color:#7E956F var(--brand-deep)}
+body.campus-auth-page{--auth-blue:#D5E3C9;--auth-muted:#B4C2AE;--auth-line:#CBD8BD22;background:var(--brand-deep);color:var(--brand-cream);accent-color:var(--brand-sage)}
+.campus-auth-page .campus-shade{background:linear-gradient(105deg,#10251D91,#14251E73 40%,#13251B94),linear-gradient(0deg,#0B1D1678,transparent 50%,#20392440)}
+.campus-auth-page .auth-brand{color:var(--brand-cream)}
+.campus-auth-page .auth-brand>span{color:var(--brand-sage)}
+.campus-auth-page .auth-brand>i{color:var(--brand-orange)}
+.campus-auth-page .auth-identity p{color:#F4F5ECD1;text-shadow:0 1px 6px #14251E70}
+.campus-auth-page .auth-card{background:linear-gradient(145deg,#14251EF5,#102118F5);border-color:#CBD8BD26;box-shadow:0 24px 70px #07140C66,0 1px 0 #F4F5EC06 inset}
+.campus-auth-page .auth-card-heading h1{color:var(--brand-cream)}
+.campus-auth-page :is(.auth-card-heading p,.checkbox-row,.switch-prompt){color:#B4C2AE}
+.campus-auth-page .field>label{color:#E2E9D9}
+.campus-auth-page .input-wrap :is(input,select){background-color:#0B1B1478;border-color:#CBD8BD33;color:var(--brand-cream)}
+.campus-auth-page .input-wrap input::placeholder{color:#9BAA93}
+.campus-auth-page .input-wrap :is(input,select):focus{background-color:#1A3023;border-color:#A8BF95;box-shadow:0 0 0 3px #CBD8BD16}
+.campus-auth-page .input-wrap select{background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%23B4C2AE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.campus-auth-page .input-wrap select option{background:var(--brand-deep);color:var(--brand-cream)}
+.campus-auth-page .show-password{color:var(--brand-sage)}
+.campus-auth-page .show-password:hover{color:var(--brand-cream)}
+.campus-auth-page .checkbox-row input{accent-color:var(--brand-sage)}
+.campus-auth-page .submit-button{background:var(--brand-forest);border-color:#78956C;color:var(--brand-cream);box-shadow:0 3px 12px #07140C33}
+.campus-auth-page .submit-button:hover{background:#355F47}
+.campus-auth-page .form-message:not(.error):not(.success){color:#EDC39A;background:#C9814812;border-color:#C9814833}
+.campus-auth-page .form-message.success{color:#D5E3C9;background:#CBD8BD10;border-color:#CBD8BD33}
+.campus-auth-page .approval-note{color:#A6B79B}
+.campus-auth-page :is(.form-options>a,.switch-prompt a){color:#D5E3C9}
+.campus-auth-page :is(a,button):focus-visible{outline-color:var(--brand-orange)}
+.campus-auth-page .connection-status{background:#14251EF5;border-color:#CBD8BD55;color:var(--brand-cream)}
+/* Tracking controls and route markers keep the same brand colors. */
+.app-page :is(.tracking-pill,.status-icon,.journey-location-icon){background:var(--brand-sage);color:var(--brand-forest)}
+.app-page :is(.tracking-driver,.tracking-empty,.tracking-map-legend){background:var(--brand-surface);border-color:var(--brand-line)}
+.app-page :is(.tracking-intro,.tracking-note,.tracking-driver small,.driver-ride-meta){color:var(--brand-muted)}
+.app-page .tracking-driver button{background:var(--brand-forest);color:var(--brand-cream)}
+.app-page .journey-marker{background:var(--brand-forest);color:var(--brand-cream)}
+.app-page .journey-marker.dropoff{background:var(--brand-orange);color:var(--brand-deep)}
+.app-page .route-progress{stroke:var(--brand-forest)}
+.app-page .route-base{stroke:#A8BD98}
+.app-page :is(.driver-step,.step-number){color:#8A522B}

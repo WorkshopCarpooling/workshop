@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class EnsureDriver
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if (!Auth::check()) {
+            return redirect()->guest('login.php');
+        }
+
+        $user = Auth::user();
+
+        if ($user->isAdmin()) {
+            return redirect('admin.php');
+        }
+
+        if (!$user->isDriver()) {
+            return redirect('dashboard.php');
+        }
+
+        return $next($request);
+    }
+}

@@ -1,0 +1,24 @@
+/* One incoming slide avoids capturing and compositing both full documents. */
+@view-transition { navigation: none; }
+:root { --page-motion-distance: 18px; }
+.motion-enter .app-page .page-content,
+.motion-enter .auth-page .form-wrap {
+  animation: page-motion-in 240ms cubic-bezier(.22, 1, .36, 1) backwards;
+}
+.motion-login { --page-motion-distance: 24px; }
+.motion-login.motion-enter .app-page .page-content { animation-duration: 300ms; }
+@keyframes page-motion-in {
+  from { opacity: .6; transform: translateX(var(--page-motion-distance)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (max-width: 760px) {
+  :root { --page-motion-distance: 12px; }
+  .motion-login { --page-motion-distance: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-enter .app-page .page-content,
+  .motion-enter .auth-page .form-wrap { animation: none !important; }
+}
+@media print {
+  .motion-enter .page-content, .motion-enter .form-wrap { animation: none !important; }
+}

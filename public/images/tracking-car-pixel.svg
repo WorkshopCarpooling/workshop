@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="192" viewBox="0 0 32 48" shape-rendering="crispEdges" role="img" aria-labelledby="title description">
+  <title id="title">RideUTeM pixel car tracking marker</title>
+  <desc id="description">A green car viewed from above, facing north. Pixel art with a transparent background, dark tyres, blue windows and a white silhouette for visibility on maps.</desc>
+  <!-- Integer coordinates keep the pixel grid sharp. The front faces up. -->
+  <path fill="#f5faf6" d="M12 0h8v2h4v4h2v4h2v12h-2v6h2v14h-2v4h-4v2H10v-2H6v-4H4V28h2v-6H4V10h2V6h2V2h4z"/>
+  <path fill="#14362a" d="M12 2h8v2h4v6h2v10h-2v10h2v10h-2v4h-4v2h-8v-2H8v-4H6V30h2V20H6V10h2V4h4z"/>
+  <!-- Four square-edged tyres. -->
+  <g fill="#132721">
+    <path d="M4 12h4v10H4zM24 12h4v10h-4zM4 32h4v10H4zM24 32h4v10h-4z"/>
+  </g>
+  <g fill="#53665c"><path d="M4 14h2v6H4zM26 14h2v6h-2zM4 34h2v6H4zM26 34h2v6h-2z"/></g>
+  <!-- Stepped body, bonnet and side highlights. -->
+  <path fill="#42965f" d="M12 4h8v2h2v4h2v30h-2v2h-2v2h-8v-2h-2v-2H8V10h2V6h2z"/>
+  <path fill="#80ce96" d="M12 6h8v6h-8zM10 10h2v28h-2z"/>
+  <path fill="#246b45" d="M20 10h2v28h-2zM12 12h8v2h-8z"/>
+  <path fill="#c7ead0" d="M12 6h2v4h-2z"/>
+  <!-- Bright headlights distinguish the front from the red rear lights. -->
+  <path fill="#fff0a3" d="M10 8h2v4h-2zM20 8h2v4h-2z"/>
+  <path fill="#173d35" d="M10 14h12v10H10z"/>
+  <path fill="#8ed3e6" d="M12 16h8v6h-8z"/>
+  <path fill="#d8f4f8" d="M12 16h2v4h-2zM14 16h4v2h-4z"/>
+  <!-- Roof and small side mirrors. -->
+  <path fill="#57b175" d="M12 24h8v8h-8z"/>
+  <path fill="#82cf99" d="M12 24h2v6h-2z"/>
+  <path fill="#205f3e" d="M6 22h4v4H6zM22 22h4v4h-4zM10 32h12v2H10z"/>
+  <path fill="#173d35" d="M10 34h12v6H10z"/>
+  <path fill="#8ed3e6" d="M12 34h8v4h-8z"/>
+  <path fill="#d8f4f8" d="M12 34h2v4h-2z"/>
+  <path fill="#ee6a57" d="M10 40h4v2h-4zM18 40h4v2h-4z"/>
+  <path fill="#bfd0c5" d="M14 42h4v2h-4z"/>
+</svg>

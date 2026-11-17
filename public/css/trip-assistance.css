@@ -1,0 +1,278 @@
+.trip-assistance {
+  --assistance-accent: #a72d2a;
+  --assistance-tint: #fff2f0;
+  --assistance-line: #ecd9d5;
+  --assistance-muted: #655754;
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid var(--assistance-line);
+  border-radius: 16px;
+  background: #fffbf9;
+  color: #312321;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.navigation-panel .trip-assistance {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.trip-assistance p {
+  margin: 8px 0 0;
+}
+
+.trip-assistance p:empty {
+  display: none;
+}
+
+.assistance-emergency {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--assistance-line);
+  border-radius: 14px;
+  background: #fffbf9;
+  color: #822522;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.assistance-emergency:hover {
+  background: var(--assistance-tint);
+}
+
+.assistance-icon,
+.assistance-close {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.assistance-icon {
+  background: #fae1dd;
+  color: var(--assistance-accent);
+}
+
+.assistance-icon svg,
+.assistance-close svg,
+.assistance-arrow {
+  width: 20px;
+  height: 20px;
+}
+
+.assistance-dialog {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: clamp(18px, 5vw, 28px);
+  border: 1px solid var(--assistance-line);
+  border-radius: 24px;
+  background: #fff;
+  color: inherit;
+  box-shadow: 0 24px 80px #29181230;
+  overflow-y: auto;
+}
+
+.assistance-dialog::backdrop {
+  background: #14251e90;
+}
+
+.assistance-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.assistance-close {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--assistance-line);
+  background: #fff;
+  color: var(--assistance-muted);
+  cursor: pointer;
+}
+
+.assistance-close:hover {
+  background: var(--assistance-tint);
+}
+
+#assistance-dialog-title {
+  margin: 0;
+  font-size: clamp(22px, 5vw, 27px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.assistance-dialog p {
+  color: var(--assistance-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.assistance-dialog form {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.assistance-dialog fieldset {
+  display: grid;
+  min-inline-size: 0;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.assistance-dialog legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-weight: 700;
+}
+
+.assistance-option {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--assistance-line);
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.assistance-option:hover,
+.assistance-option:has(input:checked) {
+  border-color: var(--assistance-accent);
+  background: var(--assistance-tint);
+}
+
+.assistance-option input {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--assistance-accent);
+}
+
+.assistance-dialog .assistance-safety {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f5f3f1;
+  font-size: 13px;
+}
+
+.assistance-dialog .assistance-feedback {
+  margin: 0;
+  color: #822522;
+  font-weight: 600;
+}
+
+.assistance-submit {
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--assistance-accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assistance-submit:hover:enabled {
+  background: #89221f;
+}
+
+.trip-assistance > p[data-assistance-status]:not(:empty) {
+  padding: 10px 12px;
+  border: 1px solid var(--assistance-line);
+  border-radius: 12px;
+  background: #fffbf9;
+}
+
+.assistance-heading h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.assistance-report {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--assistance-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.assistance-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.assistance-report small {
+  display: block;
+  margin-top: 4px;
+  color: var(--assistance-muted);
+}
+
+.assistance-actions button {
+  min-height: 44px;
+}
+
+.assistance-map-marker span {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  width: max-content;
+  padding: 4px 8px;
+  border: 2px solid #fff;
+  border-radius: 9px;
+  background: #a73229;
+  color: #fff;
+  font: 700 11px/1.25 system-ui, sans-serif;
+  box-shadow: 0 2px 7px #0004;
+}
+
+.assistance-mechanic-marker {
+  pointer-events: none;
+}
+
+#admin-driver-map .assistance-mechanic-marker .live-car::after {
+  content: none;
+}
+
+.assistance-mechanic-marker .car-state-label {
+  top: auto;
+  bottom: 82px;
+  color: #fff;
+  background: #174a78;
+  border-color: #285f92;
+}
+
+.assistance-map-marker b {
+  font-size: 23px;
+}
